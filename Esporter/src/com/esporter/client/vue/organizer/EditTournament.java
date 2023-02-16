@@ -362,7 +362,7 @@ public class EditTournament extends JPanel{
 		btnCancel.setBackground(MasterFrame.COLOR_MASTER);
 		btnCancel.setAlignmentY(1.0f);
 		btnCancel.addActionListener(Controler.getInstance());
-		btnCancel.setActionCommand("MODIFY_TOURNAMENT_CANCEl");
+		btnCancel.setActionCommand("MODIFY_TOURNAMENT_CANCEL");
 		panelContainerButton.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
 		panelContainerButton.add(btnCancel);
 		
