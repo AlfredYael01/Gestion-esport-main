@@ -454,7 +454,7 @@ public class MasterFrame {
 	}
 	
 	public void fireError(Exception e,boolean persistant, boolean critical ) {
-		error.setState(e, false, critical);
+		error.setState(e, persistant, critical);
 		error.setVisible(true);
 		frame.repaint();
 		
