@@ -84,12 +84,8 @@ public class ErrorPanel extends JPanel{
 								e1.printStackTrace();
 							}
 						} else {
-							
-							if(persistent) {
-								
-							}
 							try {
-								Thread.sleep(10);
+								instance.wait();
 							} catch (InterruptedException e1) {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();
@@ -129,6 +125,9 @@ public class ErrorPanel extends JPanel{
 		} else {
 			progressBar.setVisible(false);
 			btnContinuer.setVisible(true);
+		}
+		synchronized (instance) {
+			instance.notify();
 		}
 		setTexte(e.getMessage());
 		setException(e);

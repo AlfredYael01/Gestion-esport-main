@@ -47,8 +47,8 @@ public class mainThread {
 			data = new Data();
 			initializeApp();
 			instance = this;
-			ServerSocket server = new ServerSocket(4000);
-			System.out.println("Serv d�marr�");
+			ServerSocket server = new ServerSocket(45000);
+			System.out.println("Serv démarré");
 			while(running) {
 				System.out.println("En attente d'une connexion");
 				Socket s = server.accept();
