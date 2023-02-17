@@ -14,7 +14,7 @@ public class TypesString implements Types, Serializable {
 		this.string = string;
 	}
 	
-	public String getEntier() {
+	public String getString() {
 		return string;
 	}
 }

@@ -5,7 +5,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.security.Timestamp;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JOptionPane;
 
@@ -24,6 +26,7 @@ import com.esporter.both.types.TypesPlayer;
 import com.esporter.both.types.TypesRanking;
 import com.esporter.both.types.TypesRegisterTeam;
 import com.esporter.both.types.TypesStable;
+import com.esporter.both.types.TypesString;
 import com.esporter.both.types.TypesTeam;
 import com.esporter.both.types.TypesTournament;
 import com.esporter.both.types.exception.ExceptionError;
@@ -42,9 +45,11 @@ public class CommunicationServer implements Runnable{
 	private volatile boolean run=true;
 	private static final String IP = "127.0.0.1"; //144.24.206.118
 	private static final int PORT = 45000;
+	private Map<Integer, Types> decodeId;
 	
 	public CommunicationServer(User user) throws UnknownHostException, IOException {
 		this.user = user;
+		this.decodeId = new HashMap<>();
 		connect();
 	}
 	
@@ -112,6 +117,20 @@ public class CommunicationServer implements Runnable{
 				}
 			}
 		}
+	}
+	
+	public Types waitSynhronousResponse(Command c) {
+		int id = 0;
+		c.getInfo().put(TypesID.INT, new TypesInteger(id));
+		this.decodeId.put(id, null);
+		send(c);
+		while(decodeId.get(id)==null) {
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+			}
+		}
+		return decodeId.get(id);
 	}
 	
 	public void deleteTournament(int t) {
@@ -209,6 +228,12 @@ public class CommunicationServer implements Runnable{
 	public void processInput(ResponseObject r) {
 		System.out.println(r.getName());
 		switch(r.getName()) {
+		case SYNCHRONIZED_COMMAND:
+			int id= ((TypesInteger)r.getInfoByID(TypesID.INT)).getInteger();
+			if(decodeId.containsKey(id)) {
+				decodeId.put(id, r.getInfoByID(TypesID.STRING));
+			}
+			break;
 		case ERROR_LOGIN:
 			user.getWaiting().setActualState(Response.ERROR_LOGIN);
 			break;

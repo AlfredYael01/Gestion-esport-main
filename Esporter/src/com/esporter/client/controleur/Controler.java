@@ -215,7 +215,9 @@ public class Controler implements ActionListener, MouseListener, KeyListener{
 					}else if(contractEndDate== null) {
 						JOptionPane.showMessageDialog(null, "Le champ date de fin du contrat n'est pas specifié","Erreur", JOptionPane.ERROR_MESSAGE);
 					}else if(image == null) {
-						JOptionPane.showMessageDialog(null, "Il y a une erreur avec la photo","Erreur", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Il y a une erreur avec la photo","Erreur", JOptionPane.ERROR_MESSAGE);	
+					}else if(this.getUser().chckUsernameUsed(jd.getTxtUsername().getText()).equals("1")){
+						JOptionPane.showMessageDialog(null, "Le nom d'utilisateur est déjà utilisé", "Erreur", JOptionPane.ERROR_MESSAGE);
 					}else {
 						try {
 							ByteArrayOutputStream blob = new ByteArrayOutputStream();
