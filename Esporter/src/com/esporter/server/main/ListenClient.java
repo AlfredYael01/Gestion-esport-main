@@ -39,6 +39,7 @@ import com.esporter.both.types.TypesRegisterTeam;
 import com.esporter.both.types.TypesStable;
 import com.esporter.both.types.TypesTeam;
 import com.esporter.both.types.TypesTournament;
+import com.esporter.client.vue.MasterFrame;
 import com.esporter.server.model.database.DatabaseAccess;
 import com.esporter.server.model.database.Query;
 import com.esporter.server.model.database.Query.typeRequete;
@@ -88,7 +89,7 @@ public class ListenClient implements Runnable{
 					break;
 				}
 				TypesRegisterTeam equipe = (TypesRegisterTeam) c.getInfoByID(TypesID.TEAM);
-				ajouterEquipe(equipe);
+				addTeam(equipe);
 				break;
 			case MODIFY_TEAM:
 				if(client.getRole()!=TypesPermission.STABLE) {
@@ -185,9 +186,6 @@ public class ListenClient implements Runnable{
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		
 		
@@ -209,8 +207,6 @@ public class ListenClient implements Runnable{
 			DatabaseAccess.getInstance().getData(q);
 			DatabaseAccess.getInstance().getData(new Query(Query.remplissagePoule(Pool, idTournoi, TypesGame.gameToInt(jeu), match.getWinner(), match.getTeam1(), match.getTeam2()),typeRequete.PROCEDURE));
 		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
@@ -336,9 +332,6 @@ public class ListenClient implements Runnable{
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				}
 			}
 			for(TypesRanking ranking : mainThread.getInstance().getData().getRanking().values()) {
@@ -366,33 +359,32 @@ public class ListenClient implements Runnable{
 		mainThread.getInstance().miseAJourData(m);
 	}
 
-	private void ajouterEquipe(TypesRegisterTeam equipe) {
+	//Process input of the client when it comes to adding a team
+	private void addTeam(TypesRegisterTeam team) {
 		Result res = null;
+		//Add the team in the database, but the team is attached to no player yet.
 		try {
-			Query r = new Query(Query.addTeam(TypesGame.gameToInt(equipe.getGame()), equipe.getIdStable()), typeRequete.FUNCTION);
+			Query r = new Query(Query.addTeam(TypesGame.gameToInt(team.getGame()), team.getIdStable()), typeRequete.FUNCTION);
 			res = DatabaseAccess.getInstance().getData(r);
 			if (res.isError()) {
-				error("Erreur dans la creation des equipes veuillez ressayer plus tard");
+				error("Erreur dans la création des équipes veuillez ressayer plus tard. Référence de l'erreur : TEAM1");
 			}
-		} catch (InterruptedException | SQLException e) {
+		} catch (InterruptedException e) {
 			e.printStackTrace();
-			error("Erreur dans la creation des equipes veuillez ressayer plus tard");
+			error("Erreur dans la création des équipes veuillez ressayer plus tard. Référence de l'erreur : TEAM2");
 			return;
 		}
+		
+		//We will add the player next
 		try {
-
-			Query temp = new Query(Query.getStableInfo(equipe.getIdStable()),typeRequete.QUERY);
-			Result tempRes = DatabaseAccess.getInstance().getData(temp);
-			ResultSet rs = tempRes.getResultSet();
-			rs.next();
-			BufferedImage bf1 = ImageIO.read(rs.getBinaryStream("logoecurie"));
-			TypesImage im1 = new TypesImage(bf1, "png");
-
-			TypesStable ecurie = new TypesStable(rs.getString("nomecurie"), im1, rs.getString("diminutifecurie"), equipe.getIdStable());
-			rs.close();
-			TypesTeam eq = new TypesTeam(equipe.getGame(), ecurie, null,res.getInteger());
+			//we get the stable who want to add a team
+			TypesStable stable = mainThread.getInstance().getData().getStables().get(team.getIdStable());
+			
+			//We create the team
+			TypesTeam eq = new TypesTeam(team.getGame(), stable, null,res.getInteger());
 			HashMap<Integer, TypesPlayer> joueurs = new HashMap<>();
-			for (TypesRegisterPlayer jou : equipe.getPlayers()) {
+			for (TypesRegisterPlayer jou : team.getPlayers()) {
+				//For every player of the list provided by the client
 				TypesPlayer joueur = jou.getPlayer();
 				Query reqJou = new Query(Query.addPlayer(jou.getLogin().getUsername(), jou.getLogin().getPassword(), joueur.getName(),joueur.getFirstName(), res.getInteger(), 1),typeRequete.INSERTPLAYER);
 				ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -400,12 +392,14 @@ public class ListenClient implements Runnable{
 				InputStream is = new ByteArrayInputStream(os.toByteArray());
 				reqJou.setInputStream(is);
 				reqJou.setDates(joueur.getBirthDate(), joueur.getContractStartDate(), joueur.getContractEndDate());
+				//INSERT ON DATABASE
 				Result resJou = DatabaseAccess.getInstance().getData(reqJou);
 				if (resJou.isError()) {
 					erreurAjoutEquipe(res.getInteger());
-					error("Erreur dans la creation des equipes veuillez ressayer plus tard");
+					error("Erreur dans la création des équipes veuillez ressayer plus tard. Référence de l'erreur : TEAM3");
 					return;
 				}
+				//We got the id from the database and can insert them in their team
 				joueur.setId(resJou.getInteger());
 				joueurs.put(resJou.getInteger(), joueur);
 			}
@@ -415,12 +409,12 @@ public class ListenClient implements Runnable{
 			m.put(TypesID.TEAM, eq);
 			mainThread.getInstance().miseAJourData(m);
 
-		} catch (InterruptedException | SQLException e) {
+		} catch (InterruptedException e) {
 			erreurAjoutEquipe(res.getInteger());
-			error("Erreur dans l'ajout de cette equipe, veuillez ressayer plus tard");
+			error("Erreur dans la création des équipes veuillez ressayer plus tard. Référence de l'erreur : TEAM4");
 		} catch (IOException e) {
 			erreurAjoutEquipe(res.getInteger());
-			error("Erreur dans l'ajout de cette equipe, veuillez ressayer plus tard");
+			error("Erreur dans la création des équipes veuillez ressayer plus tard. Référence de l'erreur : TEAM5");
 		}
 	}
 
@@ -431,7 +425,7 @@ public class ListenClient implements Runnable{
 
 			r = new Query(Query.removeTeam(idEquipe),typeRequete.QUERY);
 			DatabaseAccess.getInstance().getData(r);
-		} catch (InterruptedException | SQLException e) {
+		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -461,9 +455,6 @@ public class ListenClient implements Runnable{
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
 		}
 		mainThread.getInstance().getData().getStables().get(team.getStable().getId()).getTeams().put(team.getId(), team);
@@ -483,9 +474,6 @@ public class ListenClient implements Runnable{
 			}
 			mainThread.getInstance().deleteData(TypesID.TOURNAMENT, new TypesInteger(t));
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

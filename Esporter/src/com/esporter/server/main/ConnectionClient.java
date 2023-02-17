@@ -51,9 +51,6 @@ public class ConnectionClient {
 			}
 			System.out.println(r.getInteger());
 			return r.getInteger();
-		} catch (SQLException s) {
-			s.printStackTrace();
-			return -1;
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 			return -1;
@@ -79,10 +76,6 @@ public class ConnectionClient {
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return -1;
 		}
 		return 1;
 	}

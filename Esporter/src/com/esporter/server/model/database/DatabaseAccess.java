@@ -27,10 +27,15 @@ public class DatabaseAccess {
 	private Timer timerCheckAlive;
 	private OracleDataSource dataSource;
 	
-	private DatabaseAccess() throws SQLException {
+	private DatabaseAccess() {
 		in = new QueueDatabase<>(this);
 		out = new QueueDatabase<>(this);
-		connexion();
+		try {
+			connexion();
+		} catch (SQLException e3) {
+			System.out.println("Connection to database impossible");
+			System.exit(2);
+		}
 		DatabaseAccess database = this;	
 		
 		
@@ -261,7 +266,7 @@ public class DatabaseAccess {
 
     }
 	
-	public static DatabaseAccess getInstance() throws SQLException {
+	public static DatabaseAccess getInstance() {
 		if (instance==null)
 			instance = new DatabaseAccess();
 		return instance;
