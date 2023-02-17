@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.security.Timestamp;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -120,7 +121,7 @@ public class CommunicationServer implements Runnable{
 	}
 	
 	public Types waitSynhronousResponse(Command c) {
-		int id = 0;
+		int id = (int) new Date().getTime();
 		c.getInfo().put(TypesID.INT, new TypesInteger(id));
 		this.decodeId.put(id, null);
 		send(c);
