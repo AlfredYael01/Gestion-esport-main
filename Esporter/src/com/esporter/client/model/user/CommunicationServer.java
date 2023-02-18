@@ -121,7 +121,7 @@ public class CommunicationServer implements Runnable{
 	}
 	
 	public Types waitSynhronousResponse(Command c) {
-		int id = (int) new Date().getTime();
+		int id = (int) (new Date().getTime())/1000;
 		c.getInfo().put(TypesID.INT, new TypesInteger(id));
 		this.decodeId.put(id, null);
 		send(c);
