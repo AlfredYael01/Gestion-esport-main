@@ -60,8 +60,6 @@ public class Query {
 		return "select id_equipe from cmf4263a.Participer where id_tournois = "+id_tournoi;
 	}
 	
-	
-	
 	public static String getTournamentByID(int id) {
 		return "select id_jeux, id_tournois, DateLimiteInscription, nom, renommee from cmf4263a.Tournoi where id_tournois = "+id;
 	}
@@ -194,10 +192,10 @@ public class Query {
 	public static String setScore(int idUser, int idJeux, int score) {
 		return String.format("{ call cmf4263a.setscore(%d,%d,%d)}",score, idJeux, idUser);
 	}
-	
-	
-	
-	
+
+	public static String chckUsernameUsed(String usernameToCheck) {
+		return String.format("select count(username) from cmf4263a.utilisateur where username = '"+ usernameToCheck+"'");
+	}
 	
 	public String getQuery() {
 		return query;

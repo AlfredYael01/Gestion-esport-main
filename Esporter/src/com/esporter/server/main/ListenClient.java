@@ -37,6 +37,7 @@ import com.esporter.both.types.TypesRanking;
 import com.esporter.both.types.TypesRegisterPlayer;
 import com.esporter.both.types.TypesRegisterTeam;
 import com.esporter.both.types.TypesStable;
+import com.esporter.both.types.TypesString;
 import com.esporter.both.types.TypesTeam;
 import com.esporter.both.types.TypesTournament;
 import com.esporter.server.model.database.DatabaseAccess;
@@ -108,7 +109,6 @@ public class ListenClient implements Runnable{
 				desinscriptionTournoi(((TypesInteger)c.getInfoByID(TypesID.TOURNAMENT)).getInteger(), ((TypesInteger)c.getInfoByID(TypesID.PLAYER)).getInteger(), ((TypesInteger)c.getInfoByID(TypesID.GAME)).getInteger());
 				break;
 			case CALENDAR:
-
 				break;
 			case STABLE:
 				//register new Stable
@@ -123,6 +123,8 @@ public class ListenClient implements Runnable{
 			case SCORE:
 				changeScore(c);
 				break;
+			case SYNCHRONIZED_COMMAND:
+				synchronizedCommand(c);
 			default:
 			}
 
@@ -152,6 +154,39 @@ public class ListenClient implements Runnable{
 	}
 	
 	
+	private void synchronizedCommand(Command c) {
+		switch(c.getSm()) {
+			case CHECK_USERNAME:
+				int id = ((TypesInteger)c.getInfoByID(TypesID.INT)).getInteger();
+				String user = ((TypesString)c.getInfoByID(TypesID.STRING)).getString();
+				Query q = new Query(Query.chckUsernameUsed(user), typeRequete.QUERY);
+				
+			Result r;
+			try {
+				r = DatabaseAccess.getInstance().getData(q);
+				if(r.isError()) {
+					error("Impossible de récupérer l'identifiant");
+					return;
+				}
+				ResultSet rs = r.getResultSet();
+				rs.next();
+				String s = String.valueOf(rs.getInt(1));
+				System.out.println("Résultat chck "+s);
+				HashMap<TypesID, Types> m = new HashMap<>();
+				m.put(TypesID.STRING, new TypesString(s));
+				m.put(TypesID.INT, new TypesInteger(id));
+				ResponseObject res = new ResponseObject(Response.SYNCHRONIZED_COMMAND,m,null);
+				mainThread.getInstance().sendAll(res);
+			} catch (InterruptedException | SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+					
+				break;
+		}
+		
+	}
+
 	private void registerStable(Command c) {
 		TypesStable s = (TypesStable) c.getInfoByID(TypesID.STABLE);
 		TypesLogin l = (TypesLogin) c.getInfoByID(TypesID.LOGIN);
