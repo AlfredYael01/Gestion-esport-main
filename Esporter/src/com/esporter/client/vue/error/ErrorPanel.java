@@ -32,7 +32,14 @@ public class ErrorPanel extends JPanel {
 	private JPanel panel_4;
 	private JPanel panel_5;
 	private boolean running = true;
-
+	
+	
+	public void setRunning(boolean running) {
+		synchronized (instance) {
+			this.running = running;
+			} 
+		}
+	
 	public ErrorPanel() {
 		setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
 		this.setVisible(false);
@@ -60,7 +67,8 @@ public class ErrorPanel extends JPanel {
 		panel_5.setPreferredSize(new Dimension(200, 200));
 		panel_5.setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
 		t = new Thread(new Runnable() {
-
+			
+			
 			@Override
 			public void run() {
 
