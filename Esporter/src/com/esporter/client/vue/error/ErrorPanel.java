@@ -39,7 +39,7 @@ public class ErrorPanel extends JPanel {
 			this.running = running;
 			} 
 		}
-	
+	  
 	public ErrorPanel() {
 		setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
 		this.setVisible(false);
