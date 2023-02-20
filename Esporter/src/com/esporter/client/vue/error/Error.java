@@ -1,10 +1,12 @@
 package com.esporter.client.vue.error;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -13,72 +15,139 @@ import com.esporter.client.vue.MasterFrame;
 
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+
 import java.awt.Font;
 import java.awt.Point;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
-public class Error extends JDialog {
+import javax.swing.JTextPane;
+import javax.swing.JProgressBar;
+
+public class Error extends JFrame {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -1996527475653186651L;
 	private final JPanel contentPanel = new JPanel();
+	private JLabel lblTitle;
+	private JTextPane textPaneError;
+	private JProgressBar progressBar;
+	private static Error instance = null;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			Error dialog = new Error(new ExceptionInvalidPermission("Vous ne possedez pas la permission d'effectuer ceci"));
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
 	/**
 	 * Create the dialog.
 	 */
-	public Error(Exception e) {
-		Point p = MasterFrame.getInstance().getFrameCenter();
-		p.move(getWidth()/2, getHeight()/2);
-		setLocation(p);
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setModal(true);
-		setUndecorated(true);
-		setBounds(100, 100, 450, 300);
-		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		contentPanel.setLayout(new BorderLayout(0, 0));
-		{
-			JLabel lblTitle = new JLabel("Error : "+e.getClass().getSimpleName());
-			lblTitle.setFont(new Font("Tahoma", Font.BOLD, 19));
-			lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
-			contentPanel.add(lblTitle, BorderLayout.NORTH);
-		}
-		{
-			JLabel lblContent = new JLabel(e.getMessage());
-			lblContent.setHorizontalAlignment(SwingConstants.CENTER);
-			contentPanel.add(lblContent, BorderLayout.CENTER);
-		}
-		{
-			JPanel panelButton = new JPanel();
-			panelButton.setLayout(new FlowLayout(FlowLayout.RIGHT));
-			getContentPane().add(panelButton, BorderLayout.SOUTH);
-			{
-				JButton btnOK = new JButton("OK");
-				btnOK.setActionCommand("OK");
-				panelButton.add(btnOK);
-				getRootPane().setDefaultButton(btnOK);
+	public Error(String title, String message, int progress) {
+		super();
+		
+		addWindowListener(new WindowListener() {
+			
+			@Override
+			public void windowOpened(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
 			}
-			{
-				JButton btnCancel = new JButton("Cancel");
-				btnCancel.setActionCommand("Cancel");
-				panelButton.add(btnCancel);
+			
+			@Override
+			public void windowIconified(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
 			}
-		}
+			
+			@Override
+			public void windowDeiconified(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowDeactivated(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowClosing(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowClosed(WindowEvent e) {
+				System.exit(1);
+				
+			}
+			
+			@Override
+			public void windowActivated(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+		setTitle("Error");
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setMinimumSize(new Dimension(400,600));
+		this.setAlwaysOnTop(true);
+		getContentPane().setLayout(new BorderLayout(0, 0));
+		
+		JPanel panelNorth = new JPanel();
+		panelNorth.setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
+		getContentPane().add(panelNorth, BorderLayout.NORTH);
+		
+		lblTitle = new JLabel(title);
+		panelNorth.add(lblTitle);
+		
+		JPanel panelCenter = new JPanel();
+		panelCenter.setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
+		getContentPane().add(panelCenter, BorderLayout.CENTER);
+		
+		textPaneError = new JTextPane();
+		textPaneError.setText(message);
+		textPaneError.setEditable(false);
+		textPaneError.setMinimumSize(new Dimension(100,200));
+		panelCenter.add(textPaneError);
+		
+		
+		JPanel panelSouth = new JPanel();
+		panelSouth.setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
+		getContentPane().add(panelSouth, BorderLayout.SOUTH);
+		
+		progressBar = new JProgressBar();
+		progressBar.setForeground(MasterFrame.COLOR_MASTER);
+		progressBar.setValue(progress);
+		progressBar.setIndeterminate(true);
+		panelSouth.add(progressBar);
+		setVisible(true);
+		
+	}
+	
+	
+	public void addProgress(int progress) {
+		progressBar.setValue(progress);
+		
+		progressBar.paintImmediately(progressBar.getVisibleRect());
+		
+	}
+	
+	public void addMessage(String message) {
+		String existingMessage = textPaneError.getText();
+		textPaneError.setText(existingMessage+"\n"+message);
+		this.revalidate();
+		this.repaint();
+		
+	}
+	
+	public int getProgress() {
+		return progressBar.getValue();
+	}
+	
+	public void disappear() {
+		this.setVisible(false);
 	}
 
 }
