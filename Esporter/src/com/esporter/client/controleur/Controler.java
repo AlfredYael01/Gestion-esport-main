@@ -55,6 +55,7 @@ import com.esporter.client.vue.Stables;
 import com.esporter.client.vue.component.ContainerModifyPlayer;
 import com.esporter.client.vue.component.ContainerPlayer;
 import com.esporter.client.vue.component.DatePicker;
+import com.esporter.client.vue.component.DatePicker.FilterDate;
 import com.esporter.client.vue.component.RendererProgramMatch;
 import com.esporter.client.vue.organizer.CreateTournament;
 import com.esporter.client.vue.organizer.EditTournament;
@@ -246,7 +247,7 @@ public class Controler implements ActionListener, MouseListener, KeyListener{
 				case "ADD_PLAYER_MORE1":
 					final JFrame f = new JFrame();
 					//set text which is collected by date picker i.e. set date 
-					jd.getTxtBirthDate().setText(new DatePicker(f).setPickedDate());
+					jd.getTxtBirthDate().setText(new DatePicker(f, FilterDate.BEFORE_TODAY).setPickedDate());
 					break;
 				case "ADD_PLAYER_MORE2":
 					//create frame new object  f
