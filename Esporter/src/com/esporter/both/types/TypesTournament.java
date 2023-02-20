@@ -98,12 +98,9 @@ public class TypesTournament implements Types, Serializable, Comparable<TypesTou
 		registered.remove(Integer.valueOf(team));
 	}
 	
-	public int getNbInscrit() {
+	public int getNbPlayerRegistered() {
 		return registered.size();
 	}
-	
-	
-	
 	
 	public void setRegistered(ArrayList<Integer> inscris) {
 		this.registered = inscris;
