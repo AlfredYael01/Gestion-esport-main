@@ -68,11 +68,15 @@ public class ErrorPanel extends JPanel {
 		panel_5.setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
 		t = new Thread(new Runnable() {
 			
-			
+		
 			@Override
 			public void run() {
-
-				while (running) {
+				boolean run;
+				synchronized (instance) {
+					run = running;
+				}
+				
+				while (run) {
 					synchronized (instance) {
 						if (e == null) {
 							try {
@@ -96,7 +100,7 @@ public class ErrorPanel extends JPanel {
 
 						}
 					}
-					running = false;
+					run = running;
 				}
 				
 			}
@@ -105,7 +109,7 @@ public class ErrorPanel extends JPanel {
 	}
 
 	public void setException(Exception e) {
-		synchronized (this) {
+		synchronized (instance) {
 			this.e = e;
 			if (e != null) {
 				Controler.getInstance().openError();
