@@ -905,7 +905,11 @@ public class Controler implements ActionListener, MouseListener, KeyListener{
 	        //si l'utilisateur clique sur enregistrer dans Jfilechooser
 	        if(resultFile == JFileChooser.APPROVE_OPTION){
 	        	File selFile = fileE.getSelectedFile();
-	        	rs.setFile(selFile);
+	        	try {
+	        		rs.setFile(selFile);
+	        	} catch(Exception ee) {
+	        		JOptionPane.showMessageDialog(null, "Choisissez une image ayant un ratio de 1","Erreur", JOptionPane.ERROR_MESSAGE);
+	        	}
 	        }
 		default:
 			break;
