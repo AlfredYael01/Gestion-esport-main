@@ -199,7 +199,8 @@ public class LogIn extends JPanel{
 		btnRegisterStable.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		btnRegisterStable.setMargin(new Insets(2, 14, 20, 16));
 		btnRegisterStable.setBorder(null);
-		btnRegisterStable.setFont(new Font("Cambria", Font.ITALIC, 20));
+		btnRegisterStable.setPreferredSize(new Dimension(200,20));
+		btnRegisterStable.setFont(new Font("Cambria", Font.ITALIC, 17));
 		btnRegisterStable.setForeground(MasterFrame.COLOR_MASTER);
 		btnRegisterStable.setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
 		
