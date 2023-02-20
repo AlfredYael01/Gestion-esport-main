@@ -285,6 +285,7 @@ public class Controler implements ActionListener, MouseListener, KeyListener{
 					MasterFrame.getInstance().getUser().addTeam(team);
 					if (MasterFrame.getInstance().getUser().getWaiting().getActualState()==Response.UPDATE_TEAM) {
 						MasterFrame.getInstance().setPanel(com.esporter.client.vue.stable.TeamManagement.class, null);
+						state = State.STABLE_MANAGEMENT;
 					}
 					break;
 				}
