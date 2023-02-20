@@ -460,9 +460,8 @@ public class AddPlayer extends JDialog {
         fileExplorer.setCurrentDirectory(new File(System.getProperty("user.home")));
         //filtrer les fichiers
         FileFilter imageFilter = new FileNameExtensionFilter("Image files", ImageIO.getReaderFileSuffixes());
+        fileExplorer.removeChoosableFileFilter(fileExplorer.getAcceptAllFileFilter());
         fileExplorer.setFileFilter(imageFilter);
-		
-		
 		
 		
 		lblPlayerImageIcon = new JLabel("");
