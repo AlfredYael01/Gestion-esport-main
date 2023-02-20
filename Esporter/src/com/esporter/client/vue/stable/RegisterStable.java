@@ -211,11 +211,11 @@ public class RegisterStable extends JPanel {
 	public void setFile(File selFile) throws IllegalArgumentException {
 		try {
 			String path = selFile.getCanonicalPath();
-			lblPictureChooser.setIcon(new ImageIcon(path));
 			image = ImageIO.read(selFile);
 			if (image.getWidth() / image.getHeight() != 1) {
 				throw new IllegalArgumentException("L'image n'a pas le bon ratio (1)");
 			}
+			lblPictureChooser.setIcon(new ImageIcon(path));
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
