@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
 
 import com.esporter.both.socket.Response;
 import com.esporter.both.types.TypesPermission;
@@ -38,11 +39,25 @@ public class TestConnection {
 	@AfterEach
 	public void tearDown() throws Exception {
 		this.user = null;
+		this.controler=null;
+	}
+	
+	@Test
+	@DisplayName("Connection from the start to server")
+	public void testConnection() {
+
+		assertAll("Connected as visitor",
+				() -> assertEquals(Response.UPDATE_ALL, user.getWaiting().getActualState()),
+				() -> assertEquals(TypesPermission.VISITOR, user.getPermission()),
+				() -> assertEquals(null, user.getInfo())
+				);
+		
+		
 	}
 	
 	@Test
 	@DisplayName("Connection successful to server")
-	public void testConnection() throws ExceptionLogin, UnknownHostException, IOException {
+	public void testConnection1() throws ExceptionLogin {
 
 		assertAll("Connexion esporter",
 				() -> this.user.login("test", "mdpTest"),
@@ -78,9 +93,9 @@ public class TestConnection {
 	
 	@Test
 	@DisplayName("Connection unsuccessful to server")
-	public void testConnection2() throws UnknownHostException, IOException {
+	public void testConnection2() {
 
-		assertAll("Connexion esporter",
+		assertAll("Connexion non user",
 				() -> assertThrows(ExceptionLogin.class, () -> this.user.login("testeee", "mdpTest")),
 				() -> assertEquals(Response.ERROR_LOGIN, user.getWaiting().getActualState()),
 				() -> assertEquals(TypesPermission.VISITOR, user.getPermission()),
@@ -89,6 +104,9 @@ public class TestConnection {
 		
 		
 	}
+	
+	
+	
 	
 	
 
