@@ -1,5 +1,6 @@
 package com.esporter.client.controleur;
 
+import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -12,6 +13,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.net.UnknownHostException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -24,6 +26,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import com.esporter.both.data.Data;
 import com.esporter.both.socket.Response;
@@ -67,21 +70,30 @@ import com.esporter.client.vue.stable.ModifyTeam;
 import com.esporter.client.vue.stable.RegisterStable;
 import com.esporter.client.vue.stable.TeamManagement;
 import com.esporter.client.vue.stable.management.AddTeam;
+import com.esporter.client.vue.error.Error;
 
 public class Controler implements ActionListener, MouseListener, KeyListener{
 
-	private static Controler instance;
+	private static Controler instance = null;
+	private MasterFrame masterInstance = null;
 	private User user;
 	private State state = null;
 	private JDialog lastDialog = null;
 	private State stateBeforeLogin;
 	private State stateBeforeError;
 	private State stateBefore;
+	private Error errorWindowBeforeConnection = null;
 	
 	
 	private Controler(){
+		instance = this;
 		try {
 			user = new User();
+			SwingUtilities.invokeLater(new Runnable(){
+                public void run() {
+                	masterInstance = MasterFrame.getInstance();
+                }
+			});
 		} catch (UnknownHostException e) {
 			System.out.println("Impossible de se connecter au server");
 		} catch (IOException e) {
@@ -104,8 +116,21 @@ public class Controler implements ActionListener, MouseListener, KeyListener{
 		MasterFrame.getInstance().setMenu(type);
 	}
 	
-	public void fireError(Exception e, boolean critical) {
-		MasterFrame.getInstance().fireError(e, false, critical);
+	public void fireError(Exception e, boolean persistent, boolean critical) {
+		if(masterInstance != null) {
+			MasterFrame.getInstance().fireError(e, persistent, critical);
+		}else {
+			SwingUtilities.invokeLater(new Runnable(){
+                public void run() {
+					if (errorWindowBeforeConnection == null) {
+						errorWindowBeforeConnection = new Error("Error", e.getMessage(),0);
+					}else {
+						errorWindowBeforeConnection.addMessage(e.getMessage());
+						errorWindowBeforeConnection.addProgress(errorWindowBeforeConnection.getProgress()+20);
+					}
+                }
+			});
+		}
 	}
 	
 	public void openError() {
@@ -239,7 +264,7 @@ public class Controler implements ActionListener, MouseListener, KeyListener{
 							jd.dispose();
 							closeDialog();
 						} catch (IOException e1) {
-							fireError( new IllegalArgumentException("Il y a une erreur avec la photo"), false);
+							fireError( new IllegalArgumentException("Il y a une erreur avec la photo"),false, false);
 						} 
 						
 					}
@@ -273,7 +298,7 @@ public class Controler implements ActionListener, MouseListener, KeyListener{
 					JComboBox<TypesGame> jcombo = ((AddTeam)MasterFrame.getCurrentPanel()).getComboBox();
 					for (ContainerPlayer c : ((AddTeam)MasterFrame.getCurrentPanel()).getPlayerList()) {
 						if (c.getPlayer()==null) {
-							fireError(new ExceptionTeamNotFull("Erreur de creation de l'équipe"), false);
+							fireError(new ExceptionTeamNotFull("Erreur de creation de l'équipe"),false,  false);
 							return;
 						}
 					}
@@ -597,7 +622,7 @@ public class Controler implements ActionListener, MouseListener, KeyListener{
 							mp.getContainer().setPlayer(joueur);
 							mp.dispose();
 						} catch (IOException e1) {
-							fireError( new IllegalArgumentException("Il y a une erreur avec la photo"), false);
+							fireError( new IllegalArgumentException("Il y a une erreur avec la photo"), false, false);
 						} 
 					}
 					break;
@@ -626,7 +651,7 @@ public class Controler implements ActionListener, MouseListener, KeyListener{
 				case "MODIFY_TEAM_VALIDATE":
 					for (ContainerModifyPlayer c : ((ModifyTeam)MasterFrame.getCurrentPanel()).getPlayerList()) {
 						if (c.getPlayer()==null) {
-							fireError(new ExceptionTeamNotFull("Erreur de modification de l'équipe"), false);
+							fireError(new ExceptionTeamNotFull("Erreur de modification de l'équipe"), false, false);
 							return;
 						}
 					}
@@ -808,7 +833,7 @@ public class Controler implements ActionListener, MouseListener, KeyListener{
 							getUser().registerStable(st, l);
 							MasterFrame.getInstance().setPanel(com.esporter.client.vue.Calendar.class, user.getPermission());
 						} catch (IOException e1) {
-							fireError( new IllegalArgumentException("Il y a une erreur avec la photo"), false);
+							fireError( new IllegalArgumentException("Il y a une erreur avec la photo"), false, false);
 						} 
 					}
 					break;
