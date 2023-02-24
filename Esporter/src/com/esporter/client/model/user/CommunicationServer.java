@@ -76,13 +76,13 @@ public class CommunicationServer implements Runnable{
 		reconnect++;
 		if (reconnect>5) {
 			run=false;
-			MasterFrame.getInstance().fireError(new Exception("Impossible de se connecter au serveur, veuillez relancer l'application"), false, true);
+			Controler.getInstance().fireError(new Exception("Impossible de se connecter au serveur, veuillez relancer l'application"), false, true);
 			JOptionPane.showMessageDialog(null, "L'application va maintenant fermer","Erreur", JOptionPane.ERROR_MESSAGE);
 			System.exit(-2);
 		
 		}
 		reconnectTime*=2;
-		MasterFrame.getInstance().fireError(new Exception("Erreur de connexion au serveur \n Tentative de reconnexion n°"+reconnect+" dans "+reconnectTime+"s...."), true, false);
+		Controler.getInstance().fireError(new Exception("Erreur de connexion au serveur \n Tentative de reconnexion n°"+reconnect+" dans "+reconnectTime+"s...."), true, false);
 		String s = "Reconnecting number "+reconnect+" in "+reconnectTime+"s....";
 		System.out.println(s);
 		try {

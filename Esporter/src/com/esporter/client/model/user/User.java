@@ -152,7 +152,7 @@ public class User {
 	public void addTeam(TypesRegisterTeam team) {
 		if (permission != TypesPermission.STABLE) {
 			Controler.getInstance()
-					.fireError(new ExceptionInvalidPermission("Vous n'avez pas la permission de faire cette action"), false);
+					.fireError(new ExceptionInvalidPermission("Vous n'avez pas la permission de faire cette action"),false, false);
 		} else {
 			com.addTeam(team);
 			this.waiting.waitFor(Response.ERROR, Response.ERROR_PERMISSION, Response.UPDATE_TEAM);
@@ -162,7 +162,7 @@ public class User {
 	public void modifyTeam(TypesTeam team) {
 		if (permission != TypesPermission.STABLE) {
 			Controler.getInstance()
-					.fireError(new ExceptionInvalidPermission("Vous n'avez pas la permission de faire cette action"), false);
+					.fireError(new ExceptionInvalidPermission("Vous n'avez pas la permission de faire cette action"),false, false);
 		} else {
 			com.modifyTeam(team);
 			this.waiting.waitFor(Response.ERROR, Response.ERROR_PERMISSION, Response.UPDATE_TEAM);
