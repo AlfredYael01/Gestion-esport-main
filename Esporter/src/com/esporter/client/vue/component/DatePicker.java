@@ -5,12 +5,20 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+import com.esporter.client.vue.MasterFrame;
+
 //create class
 public class DatePicker 
 {
+	//Define the possible day to chose
+	public enum FilterDate {BEFORE_TODAY, AFTER_TODAY, TODAY}
+	
 	//define variables
       int month = java.util.Calendar.getInstance().get(java.util.Calendar.MONTH);
       int year = java.util.Calendar.getInstance().get(java.util.Calendar.YEAR);
+      int today = java.util.Calendar.getInstance().get(java.util.Calendar.DAY_OF_MONTH);
+      int monthToday = month;
+      int yearToday = year;
       //create object of JLabel with alignment
       JLabel l = new JLabel("", JLabel.CENTER);
       //define variable
@@ -19,10 +27,24 @@ public class DatePicker
       JDialog d;
       //create object of JButton
       JButton[] button = new JButton[49];
+      
+      boolean AcceptBefore = true;
+      boolean AcceptToday = true;
+      boolean AcceptAfter = true;
 
-      public DatePicker(JFrame parent)//create constructor 
+      public DatePicker(JFrame parent, FilterDate... filterDates)//create constructor 
       {
       	//create object
+    	  	  for(FilterDate fd : filterDates) {
+    			if (fd == FilterDate.BEFORE_TODAY) {
+    				AcceptBefore = false;
+    			}else if (fd == FilterDate.TODAY) {
+    				AcceptToday = false;
+    			}else if (fd == FilterDate.AFTER_TODAY) {
+    				AcceptAfter = false;
+    			}
+    			
+    		}
               d = new JDialog();
               //set modal true
               d.setModal(true);
@@ -118,25 +140,51 @@ public class DatePicker
               d.setVisible(true);
       }
 
-      public void displayDate() 
-      {
-      	for (int x = 7; x < button.length; x++)//for loop
-      	button[x].setText("");//set text
-    	        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");	
-              //create object of SimpleDateFormat 
-              java.util.Calendar cal = java.util.Calendar.getInstance();			
-              //create object of java.util.Calendar 
-      	cal.set(year, month, 1); //set year, month and date
-       	//define variables
-      	int dayOfWeek = cal.get(java.util.Calendar.DAY_OF_WEEK);
-      	int daysInMonth = cal.getActualMaximum(java.util.Calendar.DAY_OF_MONTH);
-      	//condition
-      	for (int x = 6 + dayOfWeek, day = 1; day <= daysInMonth; x++, day++)
-      	//set text
-      	button[x].setText("" + day);
-      	l.setText(sdf.format(cal.getTime()));
-      	//set title
-      	d.setTitle("Date Picker");
+      public void displayDate() {
+		for (int x = 7; x < button.length; x++) //for loop
+			button[x].setText("");//set text
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("MMMM yyyy");	
+        //create object of SimpleDateFormat 
+        java.util.Calendar cal = java.util.Calendar.getInstance();	
+        //create object of java.util.Calendar 
+		cal.set(year, month, 1); //set year, month and date
+		
+		java.util.Calendar calToday = java.util.Calendar.getInstance();
+		calToday.set(yearToday, monthToday, today);
+		//define variables
+		int dayOfWeek = cal.get(java.util.Calendar.DAY_OF_WEEK);
+		int daysInMonth = cal.getActualMaximum(java.util.Calendar.DAY_OF_MONTH);
+		//condition
+		for (int x = 6 + dayOfWeek, day = 1; day <= daysInMonth; x++, day++) {
+			cal.set(year, month, day);
+			if(calToday.compareTo(cal) == 0) {
+				if(!AcceptToday) {
+					button[x].setEnabled(false);
+				}else {
+					button[x].setEnabled(true);
+				}
+				button[x].setBackground(MasterFrame.COLOR_MASTER);
+			}else {
+				if(calToday.compareTo(cal) > 0 && !AcceptAfter) {
+					button[x].setEnabled(false);
+				}else if (calToday.compareTo(cal) < 0 && !AcceptBefore) {
+					button[x].setEnabled(false);
+				}else {
+					button[x].setEnabled(true);
+				}
+
+				button[x].setBackground(Color.white);
+			}
+			
+			button[x].setText("" + day);
+		}
+		//If the filter are on
+		
+		//set text
+		
+		l.setText(sdf.format(cal.getTime()));
+		//set title
+		d.setTitle("Date Picker");
       }
 
       public String setPickedDate() 
