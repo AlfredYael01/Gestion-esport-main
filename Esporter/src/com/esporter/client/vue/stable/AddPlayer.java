@@ -450,11 +450,13 @@ public class AddPlayer extends JDialog {
 		panelImage.setLayout(new BorderLayout(0, 0));
 
 		fileExplorer = new JFileChooser();
-		fileExplorer.setCurrentDirectory(new File(System.getProperty("user.home")));
-		// filtrer les fichiers
-		FileFilter imageFilter = new FileNameExtensionFilter("Image files", ImageIO.getReaderFileSuffixes());
-		fileExplorer.setFileFilter(imageFilter);
-
+        fileExplorer.setCurrentDirectory(new File(System.getProperty("user.home")));
+        //filtrer les fichiers
+        FileFilter imageFilter = new FileNameExtensionFilter("Image files", ImageIO.getReaderFileSuffixes());
+        fileExplorer.removeChoosableFileFilter(fileExplorer.getAcceptAllFileFilter());
+        fileExplorer.setFileFilter(imageFilter);
+		
+		
 		lblPlayerImageIcon = new JLabel("");
 
 		lblPlayerImageIcon.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.BLACK));
