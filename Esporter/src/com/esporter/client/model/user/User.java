@@ -2,22 +2,30 @@ package com.esporter.client.model.user;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.HashMap;
 
 import com.esporter.both.data.Data;
+import com.esporter.both.socket.Command;
+import com.esporter.both.socket.CommandName;
+import com.esporter.both.socket.ListSynchronzedCommand;
 import com.esporter.both.socket.Response;
 import com.esporter.both.types.Types;
+import com.esporter.both.types.TypesID;
 import com.esporter.both.types.TypesLogin;
 import com.esporter.both.types.TypesMatch;
 import com.esporter.both.types.TypesMenu;
 import com.esporter.both.types.TypesPermission;
+import com.esporter.both.types.TypesPlayer;
 import com.esporter.both.types.TypesRegisterTeam;
 import com.esporter.both.types.TypesStable;
+import com.esporter.both.types.TypesString;
 import com.esporter.both.types.TypesTeam;
 import com.esporter.both.types.TypesTournament;
 import com.esporter.both.types.WaitingFor;
 import com.esporter.both.types.exception.ExceptionInvalidPermission;
 import com.esporter.both.types.exception.ExceptionLogin;
 import com.esporter.client.controleur.Controler;
+import com.esporter.client.vue.MasterFrame;
 
 public class User {
 
@@ -144,7 +152,7 @@ public class User {
 	public void addTeam(TypesRegisterTeam team) {
 		if (permission != TypesPermission.STABLE) {
 			Controler.getInstance()
-					.fireError(new ExceptionInvalidPermission("Vous n'avez pas la permission de faire cette action"), false);
+					.fireError(new ExceptionInvalidPermission("Vous n'avez pas la permission de faire cette action"),false, false);
 		} else {
 			com.addTeam(team);
 			this.waiting.waitFor(Response.ERROR, Response.ERROR_PERMISSION, Response.UPDATE_TEAM);
@@ -154,7 +162,7 @@ public class User {
 	public void modifyTeam(TypesTeam team) {
 		if (permission != TypesPermission.STABLE) {
 			Controler.getInstance()
-					.fireError(new ExceptionInvalidPermission("Vous n'avez pas la permission de faire cette action"), false);
+					.fireError(new ExceptionInvalidPermission("Vous n'avez pas la permission de faire cette action"),false, false);
 		} else {
 			com.modifyTeam(team);
 			this.waiting.waitFor(Response.ERROR, Response.ERROR_PERMISSION, Response.UPDATE_TEAM);
@@ -191,6 +199,17 @@ public class User {
 		}
 		com.modifyTournament(t);
 		this.waiting.waitFor(Response.ERROR, Response.ERROR_PERMISSION, Response.UPDATE_TOURNAMENT);
+	}
+	
+	public String chckUsernameUsed(String p){
+		if (permission != TypesPermission.STABLE) {
+			MasterFrame.getInstance().fireError(new ExceptionInvalidPermission("Vous n'avez pas la permission de faire cette action"), false, false); 
+		}		
+		HashMap<TypesID, Types> m = new HashMap<>();
+		m.put(TypesID.STRING, new TypesString(p));
+		Command c = new Command(CommandName.SYNCHRONIZED_COMMAND,m, ListSynchronzedCommand.CHECK_USERNAME);
+		TypesString ts = (TypesString)com.waitSynhronousResponse(c);
+		return ts.getString();
 	}
 
 }

@@ -37,6 +37,7 @@ import com.esporter.both.types.TypesRanking;
 import com.esporter.both.types.TypesRegisterPlayer;
 import com.esporter.both.types.TypesRegisterTeam;
 import com.esporter.both.types.TypesStable;
+import com.esporter.both.types.TypesString;
 import com.esporter.both.types.TypesTeam;
 import com.esporter.both.types.TypesTournament;
 import com.esporter.server.model.database.DatabaseAccess;
@@ -102,13 +103,12 @@ public class ListenClient implements Runnable{
 				client.ajouterTournoi((TypesTournament)c.getInfoByID(TypesID.TOURNAMENT));
 				break;
 			case REGISTER_TOURNAMENT:
-				inscriptionTournoi(((TypesInteger)c.getInfoByID(TypesID.TOURNAMENT)).getInteger(), ((TypesInteger)c.getInfoByID(TypesID.PLAYER)).getInteger());
+				registerTournament(((TypesInteger)c.getInfoByID(TypesID.TOURNAMENT)).getInteger(), ((TypesInteger)c.getInfoByID(TypesID.PLAYER)).getInteger());
 				break;
 			case UNREGISTER_TOURNAMENT:
 				desinscriptionTournoi(((TypesInteger)c.getInfoByID(TypesID.TOURNAMENT)).getInteger(), ((TypesInteger)c.getInfoByID(TypesID.PLAYER)).getInteger(), ((TypesInteger)c.getInfoByID(TypesID.GAME)).getInteger());
 				break;
 			case CALENDAR:
-
 				break;
 			case STABLE:
 				//register new Stable
@@ -123,6 +123,8 @@ public class ListenClient implements Runnable{
 			case SCORE:
 				changeScore(c);
 				break;
+			case SYNCHRONIZED_COMMAND:
+				synchronizedCommand(c);
 			default:
 			}
 
@@ -152,6 +154,39 @@ public class ListenClient implements Runnable{
 	}
 	
 	
+	private void synchronizedCommand(Command c) {
+		switch(c.getSm()) {
+			case CHECK_USERNAME:
+				int id = ((TypesInteger)c.getInfoByID(TypesID.INT)).getInteger();
+				String user = ((TypesString)c.getInfoByID(TypesID.STRING)).getString();
+				Query q = new Query(Query.chckUsernameUsed(user), typeRequete.QUERY);
+				
+			Result r;
+			try {
+				r = DatabaseAccess.getInstance().getData(q);
+				if(r.isError()) {
+					error("Impossible de récupérer l'identifiant");
+					return;
+				}
+				ResultSet rs = r.getResultSet();
+				rs.next();
+				String s = String.valueOf(rs.getInt(1));
+				System.out.println("Résultat chck "+s);
+				HashMap<TypesID, Types> m = new HashMap<>();
+				m.put(TypesID.STRING, new TypesString(s));
+				m.put(TypesID.INT, new TypesInteger(id));
+				ResponseObject res = new ResponseObject(Response.SYNCHRONIZED_COMMAND,m,null);
+				mainThread.getInstance().sendAll(res);
+			} catch (InterruptedException | SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+					
+				break;
+		}
+		
+	}
+
 	private void registerStable(Command c) {
 		TypesStable s = (TypesStable) c.getInfoByID(TypesID.STABLE);
 		TypesLogin l = (TypesLogin) c.getInfoByID(TypesID.LOGIN);
@@ -492,38 +527,38 @@ public class ListenClient implements Runnable{
 	}
 
 
-	private void inscriptionTournoi(int id_Tournoi, int id_Joueur) {
+	private void registerTournament(int id_Tournament, int id_Player) {
 
 		try {
 			//Recuperer equipe
-			Query r = new Query(Query.getTeamByPlayer(id_Joueur),typeRequete.QUERY);
+			Query r = new Query(Query.getTeamByPlayer(id_Player),typeRequete.QUERY);
 			Result res = DatabaseAccess.getInstance().getData(r);
 			res.getResultSet().next();
-			int id_equipe = res.getResultSet().getInt("id_equipe");
+			int id_team = res.getResultSet().getInt("id_equipe");
 			res.getResultSet().close();
 
-			TypesTournament tournoi;
-			r = new Query(Query.getTournamentByID(id_Tournoi), typeRequete.QUERY);
+			TypesTournament tournament;
+			r = new Query(Query.getTournamentByID(id_Tournament), typeRequete.QUERY);
 			res = DatabaseAccess.getInstance().getData(r);
 			ResultSet rs = res.getResultSet();
 			rs.next();
-			tournoi = mainThread.getInstance().getData().getCalendar().get(id_Tournoi);
+			tournament = mainThread.getInstance().getData().getCalendar().get(id_Tournament);
 			rs.close();
-			Query requete = new Query(Query.getTeamGame(id_equipe), typeRequete.QUERY);
-			ResultSet resultset = DatabaseAccess.getInstance().getData(requete).getResultSet();
+			Query request = new Query(Query.getTeamGame(id_team), typeRequete.QUERY);
+			ResultSet resultset = DatabaseAccess.getInstance().getData(request).getResultSet();
 			resultset.next();
 
-			TypesGame jeuEquipe= TypesGame.intToGame(resultset.getInt("id_jeux"));
+			TypesGame gameTeam= TypesGame.intToGame(resultset.getInt("id_jeux"));
 			resultset.close();
 
-			System.out.println("Jeu tournoi :"+tournoi.getGame()+", jeux equipe : "+jeuEquipe);
-			if (tournoi.getGame() != jeuEquipe) {
+			System.out.println("Jeu tournoi :"+tournament.getGame()+", jeux equipe : "+gameTeam);
+			if (tournament.getGame() != gameTeam) {
 				error("Vous ne pouvez pas vous inscrire, ce jeu n'est celui de votre equipe");
 				return;
 			}
 
 			
-		r = new Query(Query.registerTournament(TypesGame.gameToInt(tournoi.getGame()), id_Tournoi, id_equipe), typeRequete.PROCEDURE);
+		r = new Query(Query.registerTournament(TypesGame.gameToInt(tournament.getGame()), id_Tournament, id_team), typeRequete.PROCEDURE);
 		res = DatabaseAccess.getInstance().getData(r);
 		if (res.isError()) {
 			error("Vous etes deja inscrit");
@@ -534,19 +569,19 @@ public class ListenClient implements Runnable{
 
 
 
-		tournoi.registerTeam(id_equipe);
-		if(tournoi.isFull()) {
+		tournament.registerTeam(id_team);
+		if(tournament.isFull()) {
 			//on charge le tournoi
 			System.out.println("Tournoi full, chargement de la poule");
 			TimeUnit.SECONDS.sleep(5);
-			tournoi.setPool(mainThread.getInstance().getPool(tournoi, TypesGame.gameToInt(tournoi.getGame())));
+			tournament.setPool(mainThread.getInstance().getPool(tournament, TypesGame.gameToInt(tournament.getGame())));
 		}
 
 		//Il manque le get Poule
 
-		mainThread.getInstance().getData().getCalendar().put(tournoi.getId(), tournoi);
+		mainThread.getInstance().getData().getCalendar().put(tournament.getId(), tournament);
 		HashMap<TypesID, Types> m = new HashMap<>();
-		m.put(TypesID.TOURNAMENT, tournoi);
+		m.put(TypesID.TOURNAMENT, tournament);
 		mainThread.getInstance().miseAJourData(m);
 
 	} catch (InterruptedException | SQLException e) {

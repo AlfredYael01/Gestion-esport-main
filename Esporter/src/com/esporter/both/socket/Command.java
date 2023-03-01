@@ -15,16 +15,28 @@ public class Command implements Serializable{
 	private static final long serialVersionUID = -8562553476003862463L;
 	private CommandName name;
 	private Map<TypesID,Types> info = new HashMap<>();
+	private ListSynchronzedCommand sm;
 	
 	
 	
 	public Command(CommandName name, Map<TypesID,Types> info) {
 		this.name = name;
 		this.info = info;
+		this.sm = null;
+	}
+	
+	public Command(CommandName name, Map<TypesID,Types> info, ListSynchronzedCommand sm) {
+		this.name = name;
+		this.info = info;
+		this.sm = sm;
 	}
 	
 	public CommandName getName() {
 		return name;
+	}
+	
+	public ListSynchronzedCommand getSm() {
+		return sm;
 	}
 
 	
