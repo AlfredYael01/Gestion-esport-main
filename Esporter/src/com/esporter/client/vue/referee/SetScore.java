@@ -1,26 +1,19 @@
 package com.esporter.client.vue.referee;
 
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.Dialog.ModalityType;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 
 import javax.swing.ButtonGroup;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JRadioButton;
-import javax.swing.JPanel;
 import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.SwingConstants;
 
 import com.esporter.both.types.TypesMatch;
-import com.esporter.client.controleur.Controler;
-import com.esporter.client.controleur.State;
+import com.esporter.client.controleur.ControlerAddScore;
+import com.esporter.client.controleur.MasterControler;
 
 public class SetScore extends JDialog{
 	
@@ -30,61 +23,9 @@ public class SetScore extends JDialog{
 
 	public SetScore(TypesMatch match) {
 		this.match = match;
-		
-		Controler.getInstance().openDialog(this, State.ADD_SCORE);
-		setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-		addWindowListener(new WindowListener() {
-			
-			@Override
-			public void windowOpened(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowIconified(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowDeiconified(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowDeactivated(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowClosing(WindowEvent e) {
-				Controler.getInstance().closeDialog();
-				dispose();
-				
-			}
-			
-			@Override
-			public void windowClosed(WindowEvent e) {
-				
-			}
-			
-			@Override
-			public void windowActivated(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
-		
-		
-		
+		MasterControler.openDialog(this);
 		setModalityType(ModalityType.APPLICATION_MODAL);
-		
-		
-		
-		
+
 		setSize(new Dimension(400,200));
 
         // add radio buttons to a ButtonGroup
@@ -98,24 +39,26 @@ public class SetScore extends JDialog{
         JPanel panelMain = new JPanel();
         getContentPane().add(panelMain);
         
-        rdbTeam1 = new JRadioButton(Controler.getInstance().getData().getTeams().get(match.getTeam1()).getStable().getNickname());
+        rdbTeam1 = new JRadioButton(MasterControler.getUser().getData().getTeams().get(match.getTeam1()).getStable().getNickname());
         group.add(rdbTeam1);
         panelMain.add(rdbTeam1);
         
-        rdbTeam2 = new JRadioButton(Controler.getInstance().getData().getTeams().get(match.getTeam2()).getStable().getNickname());
+        rdbTeam2 = new JRadioButton(MasterControler.getUser().getData().getTeams().get(match.getTeam2()).getStable().getNickname());
         group.add(rdbTeam2);
         panelMain.add(rdbTeam2);
         
         JPanel panelValidate = new JPanel();
         getContentPane().add(panelValidate);
         
+        ControlerAddScore controler = new ControlerAddScore();
+        
         JButton btnCancel = new JButton("Annuler");
-        btnCancel.addActionListener(Controler.getInstance());
+        btnCancel.addActionListener(controler);
         btnCancel.setActionCommand("ADD_SCORE_CANCEL");
         panelValidate.add(btnCancel);
         
         JButton btnValidate = new JButton("Valider");
-        btnValidate.addActionListener(Controler.getInstance());
+        btnValidate.addActionListener(controler);
         btnValidate.setActionCommand("ADD_SCORE_VALIDATE");
         panelValidate.add(btnValidate);
 	}

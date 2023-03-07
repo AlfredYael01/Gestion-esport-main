@@ -6,7 +6,7 @@ import javax.swing.border.MatteBorder;
 
 import com.esporter.both.types.TypesImage;
 import com.esporter.both.types.TypesStable;
-import com.esporter.client.controleur.Controler;
+import com.esporter.client.controleur.ControlerStableList;
 import com.esporter.client.vue.MasterFrame;
 
 import java.awt.GridLayout;
@@ -75,7 +75,7 @@ public class RendererStable extends JPanel {
 		
 		panel.add(lblStableName);
 		panel.add(verticalGlueBottom);
-		btnArrowIcon.addActionListener(Controler.getInstance());
+		btnArrowIcon.addActionListener(new ControlerStableList());
 		btnArrowIcon.setActionCommand("STABLE_LIST RENDERER "+id);
 		add(btnArrowIcon, BorderLayout.EAST);
 		btnArrowIcon.setBorder(null);

@@ -6,10 +6,6 @@ import java.util.Map;
 
 import com.esporter.both.types.Types;
 import com.esporter.both.types.TypesID;
-import com.esporter.both.types.TypesPlayer;
-import com.esporter.both.types.TypesStable;
-import com.esporter.both.types.TypesTeam;
-import com.esporter.both.types.TypesTournament;
 
 public class ResponseObject implements Serializable{
 

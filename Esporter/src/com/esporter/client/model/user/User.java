@@ -15,7 +15,6 @@ import com.esporter.both.types.TypesLogin;
 import com.esporter.both.types.TypesMatch;
 import com.esporter.both.types.TypesMenu;
 import com.esporter.both.types.TypesPermission;
-import com.esporter.both.types.TypesPlayer;
 import com.esporter.both.types.TypesRegisterTeam;
 import com.esporter.both.types.TypesStable;
 import com.esporter.both.types.TypesString;
@@ -24,7 +23,7 @@ import com.esporter.both.types.TypesTournament;
 import com.esporter.both.types.WaitingFor;
 import com.esporter.both.types.exception.ExceptionInvalidPermission;
 import com.esporter.both.types.exception.ExceptionLogin;
-import com.esporter.client.controleur.Controler;
+import com.esporter.client.controleur.MasterControler;
 import com.esporter.client.vue.MasterFrame;
 
 public class User {
@@ -87,19 +86,19 @@ public class User {
 		case LOGIN:
 			switch (permission) {
 			case REFEREE:
-				Controler.getInstance().setMenu(TypesMenu.REFEREE);
+				MasterControler.setMenu(TypesMenu.REFEREE);
 				break;
 			case STABLE:
-				Controler.getInstance().setMenu(TypesMenu.STABLE);
+				MasterControler.setMenu(TypesMenu.STABLE);
 				break;
 			case PLAYER:
-				Controler.getInstance().setMenu(TypesMenu.PLAYER);
+				MasterControler.setMenu(TypesMenu.PLAYER);
 				break;
 			case ORGANIZER:
-				Controler.getInstance().setMenu(TypesMenu.ORGANIZER);
+				MasterControler.setMenu(TypesMenu.ORGANIZER);
 				break;
 			case VISITOR:
-				Controler.getInstance().setMenu(TypesMenu.VISITOR);
+				MasterControler.setMenu(TypesMenu.VISITOR);
 				break;
 			default:
 				break;
@@ -151,7 +150,7 @@ public class User {
 
 	public void addTeam(TypesRegisterTeam team) {
 		if (permission != TypesPermission.STABLE) {
-			Controler.getInstance()
+			MasterControler
 					.fireError(new ExceptionInvalidPermission("Vous n'avez pas la permission de faire cette action"),false, false);
 		} else {
 			com.addTeam(team);
@@ -161,7 +160,7 @@ public class User {
 
 	public void modifyTeam(TypesTeam team) {
 		if (permission != TypesPermission.STABLE) {
-			Controler.getInstance()
+			MasterControler
 					.fireError(new ExceptionInvalidPermission("Vous n'avez pas la permission de faire cette action"),false, false);
 		} else {
 			com.modifyTeam(team);

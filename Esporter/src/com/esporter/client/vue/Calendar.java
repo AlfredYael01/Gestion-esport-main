@@ -25,13 +25,12 @@ import javax.swing.plaf.ComboBoxUI;
 import com.esporter.both.types.TypesGame;
 import com.esporter.both.types.TypesPermission;
 import com.esporter.both.types.TypesTournament;
-import com.esporter.client.controleur.Controler;
+import com.esporter.client.controleur.ControlerCalendar;
 import com.esporter.client.vue.component.ComboBoxRendererArrow;
 import com.esporter.client.vue.component.DataJPanel;
 import com.esporter.client.vue.component.RendererCalendar;
 import com.esporter.client.vue.player.RendererPlayerCalendar;
 import com.esporter.client.vue.referee.RendererRefereeCalendar;
-import com.esporter.client.vue.stable.RendererStableCalendar;
 import com.esporter.client.vue.visitor.RendererVisitorCalendar;
 
 public class Calendar extends DataJPanel implements com.esporter.client.vue.component.Calendar{
@@ -68,23 +67,16 @@ public class Calendar extends DataJPanel implements com.esporter.client.vue.comp
 			for (TypesTournament t : tournoisfiltreJeu) {
 				RendererCalendar rend = null;
 				switch(permission) {
-					case VISITOR :
-						rend = new RendererVisitorCalendar(t,id);
-						
-						break;
 					case PLAYER :
 						rend = new RendererPlayerCalendar(t,id);
-
-						break;
-					case STABLE :
-						rend = new RendererStableCalendar(t,id);
-
 						break;
 					case REFEREE :
 						rend = new RendererRefereeCalendar(t,id);
-
 						break;
 					case ORGANIZER :
+						break;
+					default:
+						rend = new RendererVisitorCalendar(t,id);
 						break;
 				}
 				panelContent.add((JPanel) rend);
@@ -104,6 +96,7 @@ public class Calendar extends DataJPanel implements com.esporter.client.vue.comp
 	}
 	
 	public void initialize() {
+		ControlerCalendar controler = new ControlerCalendar();
 		setLayout(new BorderLayout(0, 0));
 		panelRoot = new JPanel();
 		panelRoot.setLayout(new BorderLayout());
@@ -160,7 +153,7 @@ public class Calendar extends DataJPanel implements com.esporter.client.vue.comp
 		btnDate.setForeground(MasterFrame.COLOR_TEXT);
 		btnDate.setFont(new Font("Cambria", Font.PLAIN, 15));
 		btnDate.setBorder(null);
-		btnDate.addActionListener(Controler.getInstance());
+		btnDate.addActionListener(controler);
 		btnDate.setActionCommand("CALENDAR_DATE");
 		panelFilterDate.add(btnDate, BorderLayout.EAST);
 		
@@ -178,7 +171,7 @@ public class Calendar extends DataJPanel implements com.esporter.client.vue.comp
 		comboBoxFilterGame.setForeground(MasterFrame.COLOR_TEXT);
 		comboBoxFilterGame.insertItemAt(null, 0);
 		comboBoxFilterGame.setSelectedIndex(0);
-		comboBoxFilterGame.addActionListener(Controler.getInstance());
+		comboBoxFilterGame.addActionListener(controler);
 		comboBoxFilterGame.setActionCommand("CALENDAR_GAMECOMBO");
 		
 		panel_3.add(comboBoxFilterGame);

@@ -22,7 +22,7 @@ import com.esporter.both.types.TypesFame;
 import com.esporter.both.types.TypesGame;
 import com.esporter.both.types.TypesTournament;
 import com.esporter.both.types.exception.ExceptionInvalidPermission;
-import com.esporter.client.controleur.Controler;
+import com.esporter.client.controleur.ControlerAddTournament;
 import com.esporter.client.vue.MasterFrame;
 import com.esporter.client.vue.component.ComboBoxRendererArrow;
 import com.esporter.client.vue.component.DatePicker;
@@ -75,6 +75,7 @@ public class CreateTournament extends JPanel{
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		ControlerAddTournament controler = new ControlerAddTournament();
 		all = new JPanel();
 		all.setBounds(100, 100, 300, 187);
 		all.setLayout(new BorderLayout(0, 0));
@@ -211,7 +212,7 @@ public class CreateTournament extends JPanel{
 		JButton btnOpenDatePickerDateTournament = new JButton("...");
 		btnOpenDatePickerDateTournament.setForeground(MasterFrame.COLOR_TEXT);
 		btnOpenDatePickerDateTournament.setBackground(new Color(0, 164, 210));
-		btnOpenDatePickerDateTournament.addActionListener(Controler.getInstance());
+		btnOpenDatePickerDateTournament.addActionListener(controler);
 		btnOpenDatePickerDateTournament.setActionCommand("ADD_TOURNAMENT_DATE");
 		panel_DatePicketDateTournament.add(btnOpenDatePickerDateTournament);
 		
@@ -349,7 +350,7 @@ public class CreateTournament extends JPanel{
 		btnCancel.setBorder(new CompoundBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 120, 215)), new EmptyBorder(3, 5, 3, 5)));
 		btnCancel.setBackground(MasterFrame.COLOR_MASTER);
 		btnCancel.setAlignmentY(1.0f);
-		btnCancel.addActionListener(Controler.getInstance());
+		btnCancel.addActionListener(controler);
 		btnCancel.setActionCommand("ADD_TOURNAMENT_CANCEL");
 		panelContainerButton.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
 		panelContainerButton.add(btnCancel);
@@ -366,7 +367,7 @@ public class CreateTournament extends JPanel{
 		btnConfirm.setBorder(new CompoundBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 120, 215)), new EmptyBorder(3, 5, 3, 5)));
 		btnConfirm.setBackground(MasterFrame.COLOR_MASTER);
 		btnConfirm.setAlignmentY(1.0f);
-		btnConfirm.addActionListener(Controler.getInstance());
+		btnConfirm.addActionListener(controler);
 		btnConfirm.setActionCommand("ADD_TOURNAMENT_YES");
 		panelContainerButton.add(btnConfirm);
 	}

@@ -1,65 +1,33 @@
 package com.esporter.client.vue.organizer;
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-
-import javax.swing.JPanel;
-import java.awt.GridLayout;
-
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JSpinner;
-import javax.swing.JTextField;
-import javax.swing.UIManager;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.MatteBorder;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.plaf.ComboBoxUI;
-
-import com.esporter.both.types.TypesFame;
-import com.esporter.both.types.TypesGame;
-import com.esporter.both.types.TypesTournament;
-import com.esporter.client.controleur.Controler;
-import com.esporter.client.vue.MasterFrame;
-import com.esporter.client.vue.component.ComboBoxRendererArrow;
-import com.esporter.client.vue.component.DataJPanel;
-import com.esporter.client.vue.component.DatePicker;
-import com.esporter.client.vue.component.RendererCalendar;
-import com.esporter.client.vue.visitor.RendererVisitorCalendar;
-
-import javax.swing.JList;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
-
-import java.awt.FlowLayout;
-import javax.swing.JComboBox;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.ActionEvent;
 import java.awt.Font;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.sql.Date;
+import java.awt.GridLayout;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.swing.AbstractListModel;
-import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.MatteBorder;
+import javax.swing.plaf.ComboBoxUI;
+
+import com.esporter.both.types.TypesGame;
+import com.esporter.both.types.TypesTournament;
+import com.esporter.client.controleur.ControlerCalendar;
+import com.esporter.client.vue.MasterFrame;
+import com.esporter.client.vue.component.ComboBoxRendererArrow;
+import com.esporter.client.vue.component.DataJPanel;
+import com.esporter.client.vue.component.RendererCalendar;
 
 public class Calendar extends DataJPanel implements com.esporter.client.vue.component.Calendar{
 	/**
@@ -197,12 +165,14 @@ public class Calendar extends DataJPanel implements com.esporter.client.vue.comp
 			});*/
 		panelDateFilter.add(txtDate, BorderLayout.CENTER);
 		
+		ControlerCalendar controler = new ControlerCalendar();
+		
 		JButton btnMoreDate = new JButton(" ... ");
 		btnMoreDate.setBackground(MasterFrame.COLOR_MASTER);
 		btnMoreDate.setForeground(MasterFrame.COLOR_TEXT);
 		btnMoreDate.setFont(new Font("Cambria", Font.PLAIN, 15));
 		btnMoreDate.setBorder(null);
-		btnMoreDate.addActionListener(Controler.getInstance());
+		btnMoreDate.addActionListener(controler);
 		btnMoreDate.setActionCommand("CALENDAR_DATE");
 		panelDateFilter.add(btnMoreDate, BorderLayout.EAST);
 
@@ -252,7 +222,7 @@ public class Calendar extends DataJPanel implements com.esporter.client.vue.comp
 		});*/
 		comboBoxFilterGame.insertItemAt(null, 0);
 		comboBoxFilterGame.setSelectedIndex(0);
-		comboBoxFilterGame.addActionListener(Controler.getInstance());
+		comboBoxFilterGame.addActionListener(controler);
 		comboBoxFilterGame.setActionCommand("CALENDAR_GAMECOMBO");
 		
 		panelGameFilter.add(comboBoxFilterGame);
@@ -269,7 +239,7 @@ public class Calendar extends DataJPanel implements com.esporter.client.vue.comp
 		btnAddTournament.setBackground(MasterFrame.COLOR_MASTER);
 		btnAddTournament.setFont(new Font("Cambria", Font.PLAIN, 15));
 		btnAddTournament.setForeground(MasterFrame.COLOR_TEXT_MENU);
-		btnAddTournament.addActionListener(Controler.getInstance());
+		btnAddTournament.addActionListener(controler);
 		btnAddTournament.setActionCommand("CALENDAR_ADD");
 		panelAddTournament.add(btnAddTournament);
 		

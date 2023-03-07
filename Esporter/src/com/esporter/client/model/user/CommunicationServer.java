@@ -5,7 +5,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.security.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,12 +26,11 @@ import com.esporter.both.types.TypesPlayer;
 import com.esporter.both.types.TypesRanking;
 import com.esporter.both.types.TypesRegisterTeam;
 import com.esporter.both.types.TypesStable;
-import com.esporter.both.types.TypesString;
 import com.esporter.both.types.TypesTeam;
 import com.esporter.both.types.TypesTournament;
 import com.esporter.both.types.exception.ExceptionError;
 import com.esporter.both.types.exception.ExceptionInvalidPermission;
-import com.esporter.client.controleur.Controler;
+import com.esporter.client.controleur.MasterControler;
 import com.esporter.client.vue.MasterFrame;
 
 public class CommunicationServer implements Runnable{
@@ -76,13 +74,13 @@ public class CommunicationServer implements Runnable{
 		reconnect++;
 		if (reconnect>5) {
 			run=false;
-			Controler.getInstance().fireError(new Exception("Impossible de se connecter au serveur, veuillez relancer l'application"), false, true);
+			MasterControler.fireError(new Exception("Impossible de se connecter au serveur, veuillez relancer l'application"), false, true);
 			JOptionPane.showMessageDialog(null, "L'application va maintenant fermer","Erreur", JOptionPane.ERROR_MESSAGE);
 			System.exit(-2);
 		
 		}
 		reconnectTime*=2;
-		Controler.getInstance().fireError(new Exception("Erreur de connexion au serveur \n Tentative de reconnexion n°"+reconnect+" dans "+reconnectTime+"s...."), true, false);
+		MasterControler.fireError(new Exception("Erreur de connexion au serveur \n Tentative de reconnexion n°"+reconnect+" dans "+reconnectTime+"s...."), true, false);
 		String s = "Reconnecting number "+reconnect+" in "+reconnectTime+"s....";
 		System.out.println(s);
 		try {
@@ -95,7 +93,6 @@ public class CommunicationServer implements Runnable{
 			reconnectTime=1;
 			MasterFrame.getInstance().getError().setVisible(false);
 			MasterFrame.getInstance().getError().setException(null);
-			Controler.getInstance().closeError();
 		} catch (IOException e2) {
 			reconnect();
 			
@@ -258,7 +255,7 @@ public class CommunicationServer implements Runnable{
 		case UPDATE_TEAM:
 			TypesTeam team = (TypesTeam)r.getInfoByID(TypesID.TEAM);
 			user.getData().getStables().get(team.getStable().getId()).getTeams().put(team.getId(), team);
-			if(Controler.getInstance().getUser().getPermission() != TypesPermission.VISITOR) {
+			if(MasterControler.getUser().getPermission() != TypesPermission.VISITOR) {
 				if (((TypesStable)user.getInfo()).getId() == team.getStable().getId()) {
 					((TypesStable)user.getInfo()).addTeam(team);
 				}
@@ -299,7 +296,7 @@ public class CommunicationServer implements Runnable{
 			break;
 		case UPDATE_RANKING:
 			TypesRanking ranking = ((TypesRanking)r.getInfoByID(TypesID.RANKING));
-			Controler.getInstance().getData().getRanking().put(ranking.getId(), ranking);
+			MasterControler.getUser().getData().getRanking().put(ranking.getId(), ranking);
 			MasterFrame.getInstance().dataUpdate();
 			break;
 		default:

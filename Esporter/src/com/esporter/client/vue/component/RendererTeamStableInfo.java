@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.border.MatteBorder;
 
 import com.esporter.both.types.TypesTeam;
-import com.esporter.client.controleur.Controler;
+import com.esporter.client.controleur.ControlerStableInfo;
 import com.esporter.client.vue.MasterFrame;
 
 public class RendererTeamStableInfo extends JPanel{
@@ -41,7 +41,7 @@ public class RendererTeamStableInfo extends JPanel{
 		panelText.add(lblTeamName);
 		add(panelText, BorderLayout.WEST);
 		
-		btnArrowIcon.addActionListener(Controler.getInstance());
+		btnArrowIcon.addActionListener(new ControlerStableInfo());
 		btnArrowIcon.setActionCommand("STABLE_INFO RENDERER "+id);
 		
 		

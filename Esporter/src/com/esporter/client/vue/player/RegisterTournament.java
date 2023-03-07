@@ -32,8 +32,8 @@ import com.esporter.both.types.TypesGame;
 import com.esporter.both.types.TypesPlayer;
 import com.esporter.both.types.TypesTournament;
 import com.esporter.both.types.exception.ExceptionInvalidPermission;
-import com.esporter.client.controleur.Controler;
-import com.esporter.client.controleur.State;
+import com.esporter.client.controleur.ControlerRegistration;
+import com.esporter.client.controleur.MasterControler;
 import com.esporter.client.vue.MasterFrame;
 
 import javax.swing.border.BevelBorder;
@@ -66,56 +66,10 @@ public class RegisterTournament extends JDialog {
 	 * Initialize the contents of the 
 	 */
 	private void initialize() {
+		MasterControler.openDialog(this);
 		getContentPane().setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
 		setBounds(100, 100, 450, 300);
-		Controler.getInstance().openDialog(this, State.INSCRIPTION);
-		
-		setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-		addWindowListener(new WindowListener() {
-			
-			@Override
-			public void windowOpened(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowIconified(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowDeiconified(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowDeactivated(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowClosing(WindowEvent e) {
-				Controler.getInstance().closeDialog();
-				dispose();
-				
-			}
-			
-			@Override
-			public void windowClosed(WindowEvent e) {
-				Controler.getInstance().closeDialog();
-				dispose();
-			}
-			
-			@Override
-			public void windowActivated(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
+		ControlerRegistration controler = new ControlerRegistration();
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] {0};
 		gridBagLayout.rowHeights = new int[] {0, 0};
@@ -172,7 +126,7 @@ public class RegisterTournament extends JDialog {
 		btnYes.setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
 		btnYes.setBorder(new CompoundBorder(new BevelBorder(BevelBorder.LOWERED, new Color(0, 164, 210), null, new Color(0, 164, 210), null), new EmptyBorder(5, 15, 5, 15)));
 		btnYes.setFont(new Font("Cambria", Font.PLAIN, 12));
-		btnYes.addActionListener(Controler.getInstance());
+		btnYes.addActionListener(controler);
 		btnYes.setActionCommand("INSCRIPTION_YES");
 		
 		btnYes.setHorizontalAlignment(SwingConstants.LEADING);
@@ -183,7 +137,7 @@ public class RegisterTournament extends JDialog {
 		btnNo.setForeground(MasterFrame.COLOR_TEXT);
 		btnNo.setBorder(new CompoundBorder(new BevelBorder(BevelBorder.LOWERED, new Color(0, 164, 210), null, new Color(0, 164, 210), null), new EmptyBorder(5, 15, 5, 15)));
 		btnNo.setFont(new Font("Cambria", Font.PLAIN, 12));
-		btnNo.addActionListener(Controler.getInstance());
+		btnNo.addActionListener(controler);
 		btnNo.setActionCommand("INSCRIPTION_NO");
 		panelCentered.add(btnNo);
 	}

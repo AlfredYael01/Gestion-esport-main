@@ -15,7 +15,7 @@ import javax.swing.plaf.ComboBoxUI;
 import com.esporter.both.types.TypesGame;
 import com.esporter.both.types.TypesStable;
 import com.esporter.both.types.TypesTeam;
-import com.esporter.client.controleur.Controler;
+import com.esporter.client.controleur.ControlerStableManagement;
 import com.esporter.client.vue.MasterFrame;
 import com.esporter.client.vue.component.ComboBoxRendererArrow;
 import com.esporter.client.vue.component.ComboBoxRendererCell;
@@ -98,7 +98,7 @@ public class TeamManagement extends DataJPanel{
 	private void initialize() {
 		setLayout(new BorderLayout(0, 0));
 		
-
+		ControlerStableManagement controler = new ControlerStableManagement();
 		JPanel panelHead = new JPanel();
 		add(panelHead, BorderLayout.NORTH);
 		panelHead.setLayout(new BorderLayout(0, 0));
@@ -118,10 +118,10 @@ public class TeamManagement extends DataJPanel{
 		
 		comboBoxFilterGame = new JComboBox<>(TypesGame.values());
 		comboBoxFilterGame.setUI((ComboBoxUI) ComboBoxRendererArrow.createUI(comboBoxFilterGame));
-		comboBoxFilterGame.addActionListener(Controler.getInstance());
 		comboBoxFilterGame.setActionCommand("STABLE_MANAGEMENT_COMBO");
 		comboBoxFilterGame.insertItemAt(null, 0);
 		comboBoxFilterGame.setSelectedIndex(0);
+		comboBoxFilterGame.addActionListener(controler);
 		panelFilter.add(comboBoxFilterGame);
 	
 		JPanel panelAddTeam = new JPanel();
@@ -134,7 +134,7 @@ public class TeamManagement extends DataJPanel{
 		btnAddTeam.setForeground(MasterFrame.COLOR_TEXT_MENU);
 
 		btnAddTeam.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		btnAddTeam.addActionListener(Controler.getInstance());
+		btnAddTeam.addActionListener(controler);
 		btnAddTeam.setActionCommand("STABLE_MANAGEMENT_ADDTEAM");
 
 		
