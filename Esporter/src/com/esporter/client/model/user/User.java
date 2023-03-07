@@ -39,9 +39,6 @@ public class User {
 		this.permission = TypesPermission.VISITOR;
 		this.com = new CommunicationServer(this);
 		this.waiting = new WaitingFor();
-		this.t = new Thread(com);
-		t.setDaemon(true);
-		t.start();
 		com.initializeApp();
 		waiting.waitFor(Response.UPDATE_ALL);
 
