@@ -9,6 +9,7 @@ import java.awt.Dimension;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import com.esporter.both.types.exception.ExceptionLogin;
 import com.esporter.client.controleur.Controler;
 import com.esporter.client.vue.MasterFrame;
 
@@ -127,6 +128,11 @@ public class ErrorPanel extends JPanel {
 			progressBar.setVisible(true);
 			btnRetry.setVisible(false);
 		} else {
+			if (e instanceof ExceptionLogin) {
+				btnRetry.setText("Réessayer");		
+			}else {
+				btnRetry.setText("Continuer");	
+			}
 			progressBar.setVisible(false);
 			btnRetry.setVisible(true);
 		}
@@ -181,7 +187,7 @@ public class ErrorPanel extends JPanel {
 		btnRetry.addActionListener(Controler.getInstance());
 		btnRetry.addKeyListener(Controler.getInstance());
 		btnRetry.setActionCommand("ERROR_CONTINUE");
-		btnRetry.setText("Réesayer");
+		btnRetry.setText("Continuer");
 		panel_1.add(btnRetry);
 
 		panelTexte.setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
