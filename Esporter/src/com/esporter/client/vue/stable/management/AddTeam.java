@@ -95,7 +95,7 @@ public class AddTeam extends JPanel{
 		panel_2.setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
 		panel.add(panel_2, BorderLayout.SOUTH);
 		
-		comboBox = new JComboBox<>(TypesGame.values());
+		
 		comboBox.setUI((ComboBoxUI) ComboBoxRendererArrow.createUI(comboBox));
 		comboBox.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
 		comboBox.setFont(new Font("Cambria", Font.PLAIN, 15));
@@ -125,12 +125,13 @@ public class AddTeam extends JPanel{
 		panelMain.add(panelValidate);
 		
 		JButton btnValidate = new JButton("Valider");
+		
+		btnValidate.setHorizontalAlignment(SwingConstants.RIGHT);
 		btnValidate.setVerticalTextPosition(SwingConstants.BOTTOM);
 		btnValidate.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnValidate.setMargin(new Insets(14, 0, 14, 14));
 		btnValidate.setIconTextGap(10);
 		btnValidate.setHorizontalTextPosition(SwingConstants.LEFT);
-		btnValidate.setHorizontalAlignment(SwingConstants.LEFT);
 		btnValidate.setForeground(SystemColor.text);
 		btnValidate.setFont(new Font("Cambria", Font.PLAIN, 22));
 		btnValidate.setBorder(new CompoundBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 120, 215)), new EmptyBorder(3, 5, 3, 5)));
@@ -139,6 +140,7 @@ public class AddTeam extends JPanel{
 		panelValidate.add(btnValidate);
 		btnValidate.addActionListener(Controler.getInstance());
 		btnValidate.setActionCommand("ADD_TEAM_VALIDATE");
+		
 	}
 	
 	public JComboBox<TypesGame> getComboBox() {

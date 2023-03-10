@@ -24,7 +24,7 @@ public class ErrorPanel extends JPanel {
 	private boolean persistent;
 	private ErrorPanel instance;
 	private JPanel panel_1;
-	private JButton btnContinuer;
+	private JButton btnRetry;
 	private boolean critical;
 	private JLabel Titre;
 	private JPanel panel_2;
@@ -125,10 +125,10 @@ public class ErrorPanel extends JPanel {
 		this.critical = critical;
 		if (persistent) {
 			progressBar.setVisible(true);
-			btnContinuer.setVisible(false);
+			btnRetry.setVisible(false);
 		} else {
 			progressBar.setVisible(false);
-			btnContinuer.setVisible(true);
+			btnRetry.setVisible(true);
 		}
 		synchronized (instance) {
 			instance.notify();
@@ -177,12 +177,12 @@ public class ErrorPanel extends JPanel {
 		panel_1 = new JPanel();
 		panel.add(panel_1, BorderLayout.SOUTH);
 
-		btnContinuer = new JButton();
-		btnContinuer.addActionListener(Controler.getInstance());
-		btnContinuer.addKeyListener(Controler.getInstance());
-		btnContinuer.setActionCommand("ERROR_CONTINUE");
-		btnContinuer.setText("Continuer");
-		panel_1.add(btnContinuer);
+		btnRetry = new JButton();
+		btnRetry.addActionListener(Controler.getInstance());
+		btnRetry.addKeyListener(Controler.getInstance());
+		btnRetry.setActionCommand("ERROR_CONTINUE");
+		btnRetry.setText("Réesayer");
+		panel_1.add(btnRetry);
 
 		panelTexte.setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
 		panelTexte.setForeground(MasterFrame.COLOR_TEXT);
