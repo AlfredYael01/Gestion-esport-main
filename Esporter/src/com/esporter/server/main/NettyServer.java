@@ -13,6 +13,8 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.serialization.ClassResolvers;
 import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
+import io.netty.handler.logging.LogLevel;
+import io.netty.handler.logging.LoggingHandler;
 
 public class NettyServer {
 
@@ -44,7 +46,8 @@ public class NettyServer {
                   new ProcessingHandler());
             }
         }).option(ChannelOption.SO_BACKLOG, 128)
-          .childOption(ChannelOption.SO_KEEPALIVE, true);
+          .childOption(ChannelOption.SO_KEEPALIVE, true)
+          .handler(new LoggingHandler(LogLevel.INFO));
 
         f = b.bind(port).sync();
         

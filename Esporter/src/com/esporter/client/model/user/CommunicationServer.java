@@ -38,8 +38,9 @@ public class CommunicationServer{
 	public CommunicationServer(User user) throws UnknownHostException, IOException {
 		this.user = user;
 		this.decodeId = new HashMap<>();
-		connect();
 		netty = new NettyClient(user);
+		connect();
+		
 	}
 	
 	private void connect() throws UnknownHostException, IOException{

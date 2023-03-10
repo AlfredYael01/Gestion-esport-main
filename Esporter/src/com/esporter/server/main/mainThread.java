@@ -58,9 +58,9 @@ public class mainThread {
 			
 			NettyServer netty = new NettyServer(45000);
 			try {
-				netty.run();
 				System.out.println("Serv démarré");
 				System.out.println("En attente d'une connexion");
+				netty.run();
 				netty.getChannel().closeFuture().sync();
 			} catch (InterruptedException e1) {
 				// TODO Auto-generated catch block

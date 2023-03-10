@@ -107,10 +107,29 @@ public class ProcessingHandler extends ChannelInboundHandlerAdapter {
     }
     
     @Override
+    public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
+    	System.out.println("okok");
+    }
+    
+    @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
     	mainThread.getInstance().ajouterClient(new ConnectionClient(ctx), ctx);
     	System.out.println("Connection acceptée");
     	System.out.println("En attente d'une connexion");
+    }
+    
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+    	System.out.println("Client disconnected");
+    	mainThread.getInstance().closeClient(ctx);
+    }
+    
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+          // Close the connection when an exception is raised.
+          mainThread.getInstance().closeClient(ctx);
+          ctx.close();
+          System.out.println("exceptionCaught : "+cause.getClass());
     }
     
     public ConnectionClient getClientData(ChannelHandlerContext ctx) {
