@@ -5,6 +5,6 @@ import org.junit.platform.suite.api.Suite;
 
 
 @Suite
-@SelectClasses({ TestConnection.class })
+@SelectClasses({ TestConnection.class, TestRegisterTournament.class })
 public class AllTests {
 }
