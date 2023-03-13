@@ -1,18 +1,21 @@
 package com.esporter.client.vue.error;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import com.esporter.client.controleur.Controler;
+import com.esporter.client.controleur.ControlerError;
+import com.esporter.client.controleur.ControlerKeyStroke;
 import com.esporter.client.vue.MasterFrame;
-
-import java.awt.Font;
 
 public class ErrorPanel extends JPanel {
 
@@ -108,7 +111,6 @@ public class ErrorPanel extends JPanel {
 		synchronized (instance) {
 			this.e = e;
 			if (e != null) {
-				Controler.getInstance().openError();
 				System.out.println("Thread error notify");
 				this.notify();
 			}
@@ -178,9 +180,16 @@ public class ErrorPanel extends JPanel {
 		panel.add(panel_1, BorderLayout.SOUTH);
 
 		btnContinuer = new JButton();
-		btnContinuer.addActionListener(Controler.getInstance());
-		btnContinuer.addKeyListener(Controler.getInstance());
+		ControlerError controler = new ControlerError();
+		ControlerKeyStroke controlerKey = new ControlerKeyStroke();
+		btnContinuer.addActionListener(controler);
+		//btnContinuer.addKeyListener(controler);
+		
+		
 		btnContinuer.setActionCommand("ERROR_CONTINUE");
+		
+		btnContinuer.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("pressed ENTER"), "pressedEnter");
+		btnContinuer.getActionMap().put("pressedEnter", controlerKey);
 		btnContinuer.setText("Continuer");
 		panel_1.add(btnContinuer);
 

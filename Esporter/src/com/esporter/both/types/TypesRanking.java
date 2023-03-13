@@ -7,7 +7,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import com.esporter.client.controleur.Controler;
+import com.esporter.client.controleur.MasterControler;
 
 public class TypesRanking implements Types, Serializable{
 	
@@ -41,7 +41,7 @@ public class TypesRanking implements Types, Serializable{
 	public HashMap<TypesStable, Integer> getStables() {
 		HashMap<TypesStable, Integer> stableFormate = new HashMap<>();
 		for(Integer it : stables.keySet()) {
-			stableFormate.put(Controler.getInstance().getData().getStables().get(it), stables.get(it));
+			stableFormate.put(MasterControler.getUser().getData().getStables().get(it), stables.get(it));
 		}
 		return stableFormate;
 	}

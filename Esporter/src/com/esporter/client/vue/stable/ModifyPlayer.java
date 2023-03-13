@@ -1,64 +1,39 @@
 package com.esporter.client.vue.stable;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.Date;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.MatteBorder;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.filechooser.FileSystemView;
 
 import com.esporter.both.types.TypesImage;
-import com.esporter.both.types.TypesLogin;
 import com.esporter.both.types.TypesPlayer;
-import com.esporter.both.types.TypesRegisterPlayer;
-import com.esporter.both.types.TypesStable;
-import com.esporter.client.controleur.Controler;
-import com.esporter.client.controleur.State;
+import com.esporter.client.controleur.ControlerModifyPlayer;
+import com.esporter.client.controleur.MasterControler;
 import com.esporter.client.vue.MasterFrame;
 import com.esporter.client.vue.component.ContainerModifyPlayer;
-import com.esporter.client.vue.component.ContainerPlayer;
-import com.esporter.client.vue.component.DatePicker;
-
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Image;
-
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import java.awt.Font;
-import java.awt.Graphics2D;
-
-import javax.swing.SwingConstants;
-import java.awt.Insets;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.awt.FlowLayout;
-import javax.swing.border.MatteBorder;
-import java.awt.SystemColor;
-import javax.swing.border.CompoundBorder;
 
 //create class and extend with JFrame
 public class ModifyPlayer extends JDialog {
@@ -107,55 +82,8 @@ public class ModifyPlayer extends JDialog {
 		super(MasterFrame.getInstance().getFrame(), "Ajouter joueur ", false);
 		this.container = container;
 		
-		Controler.getInstance().openDialog(this, State.MODIFY_PLAYER);
-		
-		setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-		addWindowListener(new WindowListener() {
-			
-			@Override
-			public void windowOpened(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowIconified(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowDeiconified(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowDeactivated(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowClosing(WindowEvent e) {
-				Controler.getInstance().closeDialog();
-				dispose();
-				
-			}
-			
-			@Override
-			public void windowClosed(WindowEvent e) {
-				Controler.getInstance().closeDialog();
-				dispose();
-			}
-			
-			@Override
-			public void windowActivated(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
-		
+		ControlerModifyPlayer controler = new ControlerModifyPlayer();
+		MasterControler.openDialog(this);
 		
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		//set title
@@ -181,7 +109,7 @@ public class ModifyPlayer extends JDialog {
 		btnMoreEndContract.setFont(new Font("Cambria", Font.PLAIN, 15));
 		btnMoreEndContract.setContentAreaFilled(false); 
 		btnMoreEndContract.setFocusPainted(false); 
-		btnMoreEndContract.addActionListener(Controler.getInstance());
+		btnMoreEndContract.addActionListener(controler);
 		btnMoreEndContract.setActionCommand("ADD_PLAYER_MORE2");
 		//create text field
 				txtEndContractDate = new JTextField();
@@ -197,7 +125,7 @@ public class ModifyPlayer extends JDialog {
 		btnMoreStartContract.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.BLACK));
 		btnMoreStartContract.setContentAreaFilled(false); 
 		btnMoreStartContract.setFocusPainted(false); 
-		btnMoreStartContract.addActionListener(Controler.getInstance());
+		btnMoreStartContract.addActionListener(controler);
 		btnMoreStartContract.setActionCommand("ADD_PLAYER_MORE3");
 		//create text field
 				txtStartContractDate = new JTextField();
@@ -257,7 +185,7 @@ public class ModifyPlayer extends JDialog {
 		
 		btnValidate = new JButton("Valider");
 		btnValidate.setBorder(new CompoundBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 120, 215)), new EmptyBorder(3, 5, 3, 5)));
-		btnValidate.addActionListener(Controler.getInstance());
+		btnValidate.addActionListener(controler);
 		btnValidate.setActionCommand("MODIFY_PLAYER_VALIDATE");
 		
 		btnValidate.setForeground(Color.WHITE);
@@ -359,7 +287,7 @@ public class ModifyPlayer extends JDialog {
 		btnMoreBirthDate.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.BLACK));
 		btnMoreBirthDate.setBackground(MasterFrame.COLOR_TEXT);
 		btnMoreBirthDate.setForeground(MasterFrame.COLOR_TEXT);
-		btnMoreBirthDate.addActionListener(Controler.getInstance());
+		btnMoreBirthDate.addActionListener(controler);
 		btnMoreBirthDate.setActionCommand("ADD_PLAYER_MORE1");
 		btnMoreBirthDate.setFont(new Font("Cambria", Font.PLAIN, 12));
 		btnMoreBirthDate.setFocusPainted(false);
@@ -396,7 +324,7 @@ public class ModifyPlayer extends JDialog {
 		
 		lblPlayerImageIcon = new JLabel("");
 		lblPlayerImageIcon.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.BLACK));
-		lblPlayerImageIcon.addMouseListener(Controler.getInstance());
+		lblPlayerImageIcon.addMouseListener(controler);
 		
 		lblPlayerImageIcon.setIcon(null);
 		panelImage.add(lblPlayerImageIcon);
