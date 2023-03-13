@@ -195,14 +195,14 @@ public class RegisterStable extends JPanel {
 		btnValidate.setPreferredSize(new Dimension(50, 23));
 		btnValidate.setMinimumSize(new Dimension(70, 23));
 		btnValidate.setMaximumSize(new Dimension(70, 23));
-		btnValidate.setBackground(MasterFrame.COLOR_BTN_VALIDATE);
+		btnValidate.setBackground(MasterFrame.COLOR_MASTER);
 		panel_5.add(btnValidate);
 		
 		btnValidate.setActionCommand("REGISTER_STABLE_VALIDATE");
 		btnValidate.addActionListener(Controler.getInstance());
 		
 		JButton btnCancel = new JButton("Annuler");
-		btnCancel.setBackground(MasterFrame.COLOR_BTN_CANCEL);
+		btnCancel.setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
 		panel_5.add(btnCancel, BorderLayout.NORTH);
 		btnCancel.setActionCommand("REGISTER_STABLE_CANCEL");
 		btnCancel.addActionListener(Controler.getInstance());

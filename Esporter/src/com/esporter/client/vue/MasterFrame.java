@@ -70,8 +70,6 @@ public class MasterFrame {
 	public static final Color COLOR_TEXT = Color.BLACK;
 	public static final Color COLOR_TEXT_MENU = Color.WHITE;
 	public static final Color COLOR_MENU_BACKGROUND = Color.BLACK;
-	public static final Color COLOR_BTN_VALIDATE = new Color(0x32CD32);
-	public static final Color COLOR_BTN_CANCEL = new Color(0xDC143C);
 	private JPanel panelMenuBtn;
 	private ButtonGroup btnGroupMenu;
 	private JPanel panelHeader;
