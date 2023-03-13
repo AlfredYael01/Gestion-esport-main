@@ -8,10 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
@@ -21,14 +18,11 @@ import com.esporter.both.socket.Response;
 import com.esporter.both.types.TypesGame;
 import com.esporter.both.types.TypesPermission;
 import com.esporter.both.types.TypesPlayer;
-import com.esporter.both.types.TypesStable;
 import com.esporter.both.types.exception.ExceptionInvalidPermission;
 import com.esporter.both.types.exception.ExceptionLogin;
 import com.esporter.client.controleur.MasterControler;
 import com.esporter.client.model.user.User;
 import com.esporter.client.vue.MasterFrame;
-
-import oracle.jdbc.pool.OracleDataSource;
 
 @DisplayName("Tests inscription aux tournois")
 public class TestRegisterTournament {

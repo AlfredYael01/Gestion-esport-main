@@ -61,13 +61,13 @@ public class ControlerModifyPlayer extends MasterControler implements ActionList
 			}
 			break;
 		case "ADD_PLAYER_MORE1":
-			mp.getTxtBirthDate().setText(openDatePicker(FilterDate.BEFORE_TODAY));
+			mp.getTxtBirthDate().setText(openDatePicker(mp.getTxtBirthDate().getText(), FilterDate.BEFORE_TODAY));
 			break;
 		case "ADD_PLAYER_MORE2":
-			mp.getTxtEndContractDate().setText(openDatePicker());
+			mp.getTxtEndContractDate().setText(openDatePicker(mp.getTxtEndContractDate().getText()));
 			break;
 		case "ADD_PLAYER_MORE3":
-			mp.getTxtStartContractDate().setText(openDatePicker());
+			mp.getTxtStartContractDate().setText(openDatePicker(mp.getTxtStartContractDate().getText()));
 			break;
 		}
 	}

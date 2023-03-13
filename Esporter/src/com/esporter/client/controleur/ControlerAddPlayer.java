@@ -68,13 +68,13 @@ public class ControlerAddPlayer extends MasterControler implements ActionListene
 			}
 			break;
 		case "ADD_PLAYER_MORE1":
-			jd.getTxtBirthDate().setText(openDatePicker(FilterDate.BEFORE_TODAY));
+			jd.getTxtBirthDate().setText(openDatePicker(jd.getTxtBirthDate().getText(), FilterDate.BEFORE_TODAY));
 			break;
 		case "ADD_PLAYER_MORE2":
-			jd.getTxtEndContractDate().setText(openDatePicker());
+			jd.getTxtEndContractDate().setText(openDatePicker(jd.getTxtEndContractDate().getText()));
 			break;
 		case "ADD_PLAYER_MORE3":
-			jd.getTxtStartContractDate().setText(openDatePicker());
+			jd.getTxtStartContractDate().setText(openDatePicker(jd.getTxtStartContractDate().getText()));
 			break;
 			
 		}

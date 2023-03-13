@@ -76,6 +76,7 @@ public class Data implements Serializable, Types {
 	}
 	
 	public ArrayList<TypesTournament> listFilteredTournament(Timestamp date, TypesGame game) {
+		
 		ArrayList<TypesTournament>  listOfTournamentInfo = listSortedTournaments();
 		ArrayList<TypesTournament> sortedFiltered = new ArrayList<>();
 		if (date!=null && game!=null) {
