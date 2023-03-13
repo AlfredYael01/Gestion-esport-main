@@ -21,7 +21,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
 import com.esporter.both.types.TypesTeam;
-import com.esporter.client.controleur.Controler;
+import com.esporter.client.controleur.ControlerStableManagement;
 import com.esporter.client.vue.MasterFrame;
 
 public class RendererTeamStableManagement extends JPanel {
@@ -35,7 +35,7 @@ public class RendererTeamStableManagement extends JPanel {
 	private final JButton btnNewButton = new JButton("Modifier");
 	
 	public RendererTeamStableManagement(TypesTeam team, int id) {
-		
+		ControlerStableManagement controler = new ControlerStableManagement();
 		this.team = team;
 		setBorder(new MatteBorder(0, 0, 1, 0, MasterFrame.COLOR_TEXT));
 		setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
@@ -47,7 +47,7 @@ public class RendererTeamStableManagement extends JPanel {
 		panelText.add(lblTeamName);
 		add(panelText, BorderLayout.WEST);
 		
-		btnArrowIcon.addActionListener(Controler.getInstance());
+		btnArrowIcon.addActionListener(controler);
 		btnArrowIcon.setActionCommand("STABLE_MANAGEMENT RENDERER INFO "+id);
 		
 		btnArrowIcon.setBorder(null);
@@ -66,7 +66,7 @@ public class RendererTeamStableManagement extends JPanel {
 		btnNewButton.setBorder(new CompoundBorder(new MatteBorder(1, 1, 1, 1, (Color) MasterFrame.COLOR_TEXT), new EmptyBorder(2, 7, 2, 7)));
 		btnNewButton.setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
 		btnNewButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-		btnNewButton.addActionListener(Controler.getInstance());
+		btnNewButton.addActionListener(controler);
 		btnNewButton.setActionCommand("STABLE_MANAGEMENT RENDERER MODIFY "+id);
 		panel_2.add(btnNewButton);
 		try {

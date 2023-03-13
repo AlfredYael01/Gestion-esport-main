@@ -1,7 +1,6 @@
 package com.esporter.both.types;
 
 import java.io.Serializable;
-import java.sql.Date;
 import java.sql.Timestamp;
 
 public class TypesTitle implements Types, Serializable{

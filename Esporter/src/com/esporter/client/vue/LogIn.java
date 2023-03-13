@@ -3,44 +3,31 @@ package com.esporter.client.vue;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
-import java.awt.SystemColor;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.IOException;
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Types;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.border.SoftBevelBorder;
 
-import com.esporter.client.controleur.Controler;
-
-import java.awt.Color;
-
-import javax.imageio.ImageIO;
-import javax.swing.Box;
-import javax.swing.border.LineBorder;
+import com.esporter.client.controleur.ControlerKeyStroke;
+import com.esporter.client.controleur.ControlerLogin;
 
 public class LogIn extends JPanel{
 
@@ -70,6 +57,8 @@ public class LogIn extends JPanel{
 	 */
 	private void initialize() {
 		setLayout(new BorderLayout(0, 0));
+		
+		ControlerLogin controler = new ControlerLogin();
 		
 		JPanel panelLoginAll = new JPanel();
 		panelLoginAll.setBorder(new LineBorder(MasterFrame.COLOR_MASTER, 4, true));
@@ -206,7 +195,7 @@ public class LogIn extends JPanel{
 		
 		panelBtnForgot.add(btnRegisterStable);
 		btnRegisterStable.setActionCommand("LOGIN_REGISTER_STABLE");
-		btnRegisterStable.addActionListener(Controler.getInstance());
+		btnRegisterStable.addActionListener(controler);
 		
 		JLabel lblTitle = new JLabel("Connexion\r\n");
 		lblTitle.setForeground(MasterFrame.COLOR_TEXT);
@@ -279,7 +268,7 @@ public class LogIn extends JPanel{
 		btnCancel.setAlignmentY(0.0f);
 		btnCancel.setAlignmentX(1.0f);
 		panelBtnRight.add(btnCancel);
-		btnCancel.addActionListener(Controler.getInstance());
+		btnCancel.addActionListener(controler);
 		btnCancel.setActionCommand("LOGIN_CANCEL");
 		
 		btnProceed = new JButton("  Connexion  \r\n");
@@ -294,12 +283,16 @@ public class LogIn extends JPanel{
 		btnProceed.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, MasterFrame.COLOR_MASTER, null, MasterFrame.COLOR_MASTER, null));
 		btnProceed.setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
 		btnProceed.setAlignmentY(1.0f);
-		btnProceed.addActionListener(Controler.getInstance());
+		btnProceed.addActionListener(controler);
+		ControlerKeyStroke controlerKey = new ControlerKeyStroke();
+		
 		btnProceed.setActionCommand("LOGIN_PROCEED");
+		
 		panelBtnRight.add(btnProceed);
 		
-		txtPassword.addKeyListener(Controler.getInstance());
-		txtUsername.addKeyListener(Controler.getInstance());
+		
+		btnProceed.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ENTER"), "pressedEnter");
+		btnProceed.getActionMap().put("pressedEnter", controlerKey);
 		
 	}
 	

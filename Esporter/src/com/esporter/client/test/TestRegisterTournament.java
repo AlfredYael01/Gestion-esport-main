@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.IOException;
+import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,7 +24,7 @@ import com.esporter.both.types.TypesPlayer;
 import com.esporter.both.types.TypesStable;
 import com.esporter.both.types.exception.ExceptionInvalidPermission;
 import com.esporter.both.types.exception.ExceptionLogin;
-import com.esporter.client.controleur.Controler;
+import com.esporter.client.controleur.MasterControler;
 import com.esporter.client.model.user.User;
 import com.esporter.client.vue.MasterFrame;
 
@@ -31,14 +33,14 @@ import oracle.jdbc.pool.OracleDataSource;
 @DisplayName("Tests inscription aux tournois")
 public class TestRegisterTournament {
 	
-	private Controler controler;
+	private MasterControler controler;
 	private User user;
 	private final static int TEST_TOURNAMENT_ID = 192 ;
 	
-	public TestRegisterTournament() throws SQLException {
-		this.controler = Controler.getInstance();
+	public TestRegisterTournament() throws SQLException, UnknownHostException, IOException {
+		this.user = new User();
+		this.controler = new MasterControler(user);
 		MasterFrame.getInstance().getFrame().setVisible(true);
-		this.user = controler.getUser();
 		
 	}
 	
@@ -90,7 +92,7 @@ public class TestRegisterTournament {
 		user.unregisterTournament(TEST_TOURNAMENT_ID, TypesGame.gameToInt(TypesGame.ROCKET_LEAGUE));
 		assertAll("Registration",
 			() -> assertEquals(Response.UPDATE_TOURNAMENT, user.getWaiting().getActualState()),
-			() -> assertFalse(Controler.getInstance().getData().getCalendar().get(TEST_TOURNAMENT_ID).getRegistered().contains(((TypesPlayer)user.getInfo()).getIdTeam())));
+			() -> assertFalse(this.user.getData().getCalendar().get(TEST_TOURNAMENT_ID).getRegistered().contains(((TypesPlayer)user.getInfo()).getIdTeam())));
 		user.logout();
 		
 	}
@@ -104,7 +106,7 @@ public class TestRegisterTournament {
 		user.registerTournament(TEST_TOURNAMENT_ID);
 		assertAll("Registration",
 				() -> assertEquals(Response.UPDATE_TOURNAMENT, user.getWaiting().getActualState()),
-				() -> assertTrue(Controler.getInstance().getData().getCalendar().get(TEST_TOURNAMENT_ID).getRegistered().contains(((TypesPlayer)user.getInfo()).getIdTeam())));
+				() -> assertTrue(this.user.getData().getCalendar().get(TEST_TOURNAMENT_ID).getRegistered().contains(((TypesPlayer)user.getInfo()).getIdTeam())));
 		user.logout();
 		
 	}

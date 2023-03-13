@@ -2,39 +2,27 @@ package com.esporter.client.vue;
  
 
 
-import java.awt.EventQueue;
-
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
-
 import java.awt.BorderLayout;
-import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
-import javax.swing.JDialog;
-
-import java.awt.FlowLayout;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.net.UnknownHostException;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Point;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import com.esporter.both.types.TypesImage;
@@ -42,25 +30,12 @@ import com.esporter.both.types.TypesMenu;
 import com.esporter.both.types.TypesPermission;
 import com.esporter.both.types.TypesPlayer;
 import com.esporter.both.types.TypesStable;
-import com.esporter.both.types.exception.ExceptionInvalidPermission;
-import com.esporter.both.types.exception.ExceptionLogin;
-import com.esporter.client.controleur.Controler;
-import com.esporter.client.controleur.State;
+import com.esporter.client.controleur.ControlerMenu;
+import com.esporter.client.controleur.MasterControler;
 import com.esporter.client.model.user.User;
 import com.esporter.client.vue.component.DataJPanel;
 import com.esporter.client.vue.component.MenuButton;
-import com.esporter.client.vue.error.Error;
 import com.esporter.client.vue.error.ErrorPanel;
-import com.esporter.client.vue.organizer.Calendar;
-
-import javax.swing.JButton;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class MasterFrame {
 
@@ -82,7 +57,7 @@ public class MasterFrame {
 	private static volatile DataJPanel currentDataPanel = null;
 	private static volatile MasterFrame instance;
 	private static volatile JPanel currentPanel = null;
-	private Controler controler;
+	//private OldControler controler;
 
 	/**
 	 * Create the application.
@@ -97,7 +72,7 @@ public class MasterFrame {
 	
 	
 	private MasterFrame() {
-		this.controler = Controler.getInstance();
+		//this.controler = OldControler.getInstance();
 		this.instance = this;
 		initialize();
 		
@@ -239,39 +214,14 @@ public class MasterFrame {
 		panelMenu.add(panelDummyTop, BorderLayout.NORTH);
 		
 		
-		btnGroupMenu = new ButtonGroup();
-		TypesMenu m = TypesMenu.VISITOR;
-		MenuButton[] menu = m.getMenu();
-		for (int i=0; i<menu.length;i++) {
-			panelMenuBtn.add(menu[i]);
-			btnGroupMenu.add(menu[i]);
-			menu[i].addActionListener(controler);
-		}
+		setMenu(TypesMenu.VISITOR);
 		
 		JPanel footer = new JPanel();
 		panelMain.add(footer, BorderLayout.SOUTH);
 		
 		setAccount();
-		
-		/*btnLogin.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(controler.getUser().getPermission()!=TypesPermission.VISITOR) {
-					//LOGGED IN
-					controler.getUser().logout();
-					setMenu(TypesMenu.VISITOR);
-					setPanel(vue.visitor.Home.class, null);
-					
-				} else {
-					//NOT LOG IN
-					panelMain.setVisible(false);
-					error.setVisible(false);
-					loginPage.setVisible(true);
-					loginPage.getTxtUsername().requestFocus();
-				}
-			}
-		});*/
-		
-		btnLogin.addActionListener(controler);
+		ControlerMenu cm = new ControlerMenu();
+		btnLogin.addActionListener(cm);
 		btnLogin.setActionCommand("menuLogin");
 		
 		
@@ -280,7 +230,7 @@ public class MasterFrame {
 		 * */
 		panelMain.add(new com.esporter.client.vue.Calendar(TypesPermission.VISITOR));
 		
-		menu[0].doClick();
+		btnGroupMenu.getElements().nextElement().doClick();
 		
 	}
 	
@@ -305,11 +255,12 @@ public class MasterFrame {
 		panelMenuBtn.removeAll();
 		btnGroupMenu = new ButtonGroup();
 		MenuButton[] menu = m.getMenu();
+		ControlerMenu cm = new ControlerMenu();
 		for (int i=0; i<menu.length;i++) {
 			
 			panelMenuBtn.add(menu[i]);
 			btnGroupMenu.add(menu[i]);
-			menu[i].addActionListener(controler);
+			menu[i].addActionListener(cm);
 		}
 		menu[0].setSelected(true);
 		setAccount();
@@ -318,7 +269,7 @@ public class MasterFrame {
 	}
 	
 	public void setAccount() {
-		switch(controler.getUser().getPermission()) {
+		switch(MasterControler.getUser().getPermission()) {
 		case REFEREE:
 			btnLogin.setText("Se deconnecter");
 			lblAccountLogo.setIcon(null);
@@ -327,18 +278,18 @@ public class MasterFrame {
 			break;
 		case STABLE:
 			btnLogin.setText("Se deconnecter");
-			TypesStable e = (TypesStable)controler.getUser().getInfo();
+			TypesStable e = (TypesStable)MasterControler.getUser().getInfo();
 			lblAccountName.setText(e.getName());
-			BufferedImage logoStable = ((TypesStable)controler.getUser().getInfo()).getLogo().getImage();
+			BufferedImage logoStable = ((TypesStable)MasterControler.getUser().getInfo()).getLogo().getImage();
 			logoStable = TypesImage.resize(logoStable, 100, 100);
 			lblAccountLogo.setIcon(new ImageIcon(logoStable));
 
 			break;
 		case PLAYER:
 			btnLogin.setText("Se deconnecter");
-			TypesPlayer p = (TypesPlayer)controler.getUser().getInfo();
+			TypesPlayer p = (TypesPlayer)MasterControler.getUser().getInfo();
 			lblAccountName.setText(p.getName());
-			BufferedImage picture = ( (TypesPlayer)controler.getUser().getInfo() ).getImage().getImage();
+			BufferedImage picture = ( (TypesPlayer)MasterControler.getUser().getInfo() ).getImage().getImage();
 			picture = TypesImage.resize(picture, 80, 100);
 			lblAccountLogo.setIcon(new ImageIcon(picture));
 
@@ -359,11 +310,11 @@ public class MasterFrame {
 			break;
 		
 		}
-		Controler.getInstance().setState(State.CALENDAR);
-		if(controler.getUser().getPermission() == TypesPermission.ORGANIZER) {
+		//OldControler.getInstance().setState(State.CALENDAR);
+		if(MasterControler.getUser().getPermission() == TypesPermission.ORGANIZER) {
 			setPanel(com.esporter.client.vue.organizer.Calendar.class, null);
 		} else {
-			setPanel(com.esporter.client.vue.Calendar.class, controler.getUser().getPermission());
+			setPanel(com.esporter.client.vue.Calendar.class, MasterControler.getUser().getPermission());
 		}
 	}
 	
@@ -446,7 +397,7 @@ public class MasterFrame {
 	}
 	
 	public User getUser() {
-		return controler.getUser();
+		return MasterControler.getUser();
 	}
 	
 	public Point getFrameCenter() {

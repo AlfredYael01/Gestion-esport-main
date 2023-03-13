@@ -30,7 +30,7 @@ import javax.swing.border.MatteBorder;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import com.esporter.client.controleur.Controler;
+import com.esporter.client.controleur.ControlerRegisterStable;
 import com.esporter.client.vue.MasterFrame;
 
 import javax.swing.SwingConstants;
@@ -81,10 +81,12 @@ public class RegisterStable extends JPanel {
         FileFilter imageFilter = new FileNameExtensionFilter("Image files", ImageIO.getReaderFileSuffixes());
         fileExplorer.setFileFilter(imageFilter);
 		
+        ControlerRegisterStable controler = new ControlerRegisterStable();
+        
 		lblPictureChooser = new JLabel("");
 		lblPictureChooser.setPreferredSize(new Dimension(100, 100));
 		lblPictureChooser.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.BLACK));
-		lblPictureChooser.addMouseListener(Controler.getInstance());
+		lblPictureChooser.addMouseListener(controler);
 		panelContainerPictureInside.setLayout(new BorderLayout(0, 0));
 		panelContainerPictureInside.add(lblPictureChooser);
 		
@@ -199,12 +201,12 @@ public class RegisterStable extends JPanel {
 		panel_5.add(btnValidate);
 		
 		btnValidate.setActionCommand("REGISTER_STABLE_VALIDATE");
-		btnValidate.addActionListener(Controler.getInstance());
+		btnValidate.addActionListener(controler);
 		
 		JButton btnCancel = new JButton("Annuler");
 		panel_5.add(btnCancel, BorderLayout.NORTH);
 		btnCancel.setActionCommand("REGISTER_STABLE_CANCEL");
-		btnCancel.addActionListener(Controler.getInstance());
+		btnCancel.addActionListener(controler);
 
 	}
 	

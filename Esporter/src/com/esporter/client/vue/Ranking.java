@@ -1,26 +1,25 @@
 package com.esporter.client.vue;
 
-import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.util.HashMap;
 
 import javax.swing.Box;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
 import com.esporter.both.types.TypesGame;
 import com.esporter.both.types.TypesRanking;
 import com.esporter.both.types.TypesStable;
-import com.esporter.client.controleur.Controler;
+import com.esporter.client.controleur.ControlerRanking;
 import com.esporter.client.vue.component.DataJPanel;
 import com.esporter.client.vue.component.RendererRanking;
-
-import java.awt.Font;
-import javax.swing.JComboBox;
-import java.awt.GridLayout;
-import java.util.HashMap;
-import javax.swing.JScrollPane;
 
 public class Ranking extends DataJPanel {
 
@@ -34,7 +33,7 @@ public class Ranking extends DataJPanel {
 	public void createListRenderer(TypesGame game) {
 		TypesRanking rank = null;
 		panelContent.removeAll();
-		for(TypesRanking r : Controler.getInstance().getData().getRanking().values()) {
+		for(TypesRanking r : MasterFrame.getInstance().getUser().getData().getRanking().values()) {
 			if(r.getGame() == game) {
 				rank = r;
 				break;
@@ -89,7 +88,7 @@ public class Ranking extends DataJPanel {
 		
 		comboBoxGame = new JComboBox<TypesGame>(TypesGame.values());
 		comboBoxGame.setActionCommand("RANKING_COMBOGAME");
-		comboBoxGame.addActionListener(Controler.getInstance());
+		comboBoxGame.addActionListener(new ControlerRanking());
 		panel_1.add(comboBoxGame);
 		
 		JPanel panel_4 = new JPanel();

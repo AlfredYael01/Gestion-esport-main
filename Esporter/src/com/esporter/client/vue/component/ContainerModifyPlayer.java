@@ -10,7 +10,8 @@ import javax.swing.border.LineBorder;
 
 import com.esporter.both.types.TypesPlayer;
 import com.esporter.both.types.TypesRegisterPlayer;
-import com.esporter.client.controleur.Controler;
+import com.esporter.client.controleur.ControlerModifyPlayer;
+import com.esporter.client.controleur.ControlerModifyTeam;
 import com.esporter.client.vue.MasterFrame;
 import com.esporter.client.vue.stable.AddPlayer;
 import com.esporter.client.vue.stable.ModifyPlayer;
@@ -65,7 +66,7 @@ public class ContainerModifyPlayer extends JPanel {
 		gbc_playerName.gridx = 0;
 		gbc_playerName.gridy = 1;
 		add(playerName, gbc_playerName);
-		addMouseListener(Controler.getInstance());
+		addMouseListener(new ControlerModifyTeam());
 		
 	}
 	

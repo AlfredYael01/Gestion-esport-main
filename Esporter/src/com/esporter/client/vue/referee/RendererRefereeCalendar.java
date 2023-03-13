@@ -23,7 +23,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
 import com.esporter.both.types.TypesTournament;
-import com.esporter.client.controleur.Controler;
+import com.esporter.client.controleur.ControlerCalendar;
 import com.esporter.client.vue.MasterFrame;
 import com.esporter.client.vue.component.RendererCalendar;
 
@@ -43,6 +43,7 @@ public class RendererRefereeCalendar extends JPanel implements RendererCalendar{
 	
 	
 	public RendererRefereeCalendar (TypesTournament tournament, int id) {
+		ControlerCalendar controler = new ControlerCalendar();
 		this.tournament = tournament;
 		setBorder(new MatteBorder(0, 0, 1, 0, MasterFrame.COLOR_TEXT));
 		setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
@@ -68,7 +69,7 @@ public class RendererRefereeCalendar extends JPanel implements RendererCalendar{
 		
 		panel.add(btnScore);
 		panel.add(verticalGlue_1);
-		lbArrowIcon.addActionListener(Controler.getInstance());
+		lbArrowIcon.addActionListener(controler);
 		lbArrowIcon.setActionCommand("CALENDAR RENDERER POOL "+id);
 		add(lbArrowIcon, BorderLayout.EAST);
 		

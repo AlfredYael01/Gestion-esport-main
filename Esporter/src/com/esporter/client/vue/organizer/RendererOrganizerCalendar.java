@@ -29,7 +29,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
 import com.esporter.both.types.TypesTournament;
-import com.esporter.client.controleur.Controler;
+import com.esporter.client.controleur.ControlerCalendar;
 import com.esporter.client.vue.MasterFrame;
 import com.esporter.client.vue.component.RendererCalendar;
 
@@ -51,6 +51,7 @@ public class RendererOrganizerCalendar extends JPanel implements RendererCalenda
 	
 	
 	public RendererOrganizerCalendar (TypesTournament tournoi, int id) {
+		ControlerCalendar controler = new ControlerCalendar();
 		if (tournoi.isFull()) {
 			lblSep.setVisible(false);
 		}
@@ -74,7 +75,7 @@ public class RendererOrganizerCalendar extends JPanel implements RendererCalenda
 		
 		panelBtnAction.add(panelBtn);
 		panelBtn.setLayout(new BoxLayout(panelBtn, BoxLayout.X_AXIS));
-		btnModify.addActionListener(Controler.getInstance());
+		btnModify.addActionListener(controler);
 		btnModify.setActionCommand("CALENDAR RENDERER MODIFY "+id);
 		
 		if (tournoi.isFull()) {
@@ -93,7 +94,7 @@ public class RendererOrganizerCalendar extends JPanel implements RendererCalenda
 		
 		lblSep.setForeground(MasterFrame.COLOR_TEXT);
 		panelBtn.add(lblSep);
-		btnRemove.addActionListener(Controler.getInstance());
+		btnRemove.addActionListener(controler);
 		btnRemove.setActionCommand("CALENDAR RENDERER REMOVE "+id);
 	
 		if (tournoi.isFull()) {
@@ -108,7 +109,7 @@ public class RendererOrganizerCalendar extends JPanel implements RendererCalenda
 		
 		panelBtnAction.add(verticalGlueBot);
 
-		lblArrowIcon.addActionListener(Controler.getInstance());
+		lblArrowIcon.addActionListener(controler);
 		lblArrowIcon.setActionCommand("CALENDAR RENDERER POOL "+id);
 		add(lblArrowIcon, BorderLayout.EAST);
 		

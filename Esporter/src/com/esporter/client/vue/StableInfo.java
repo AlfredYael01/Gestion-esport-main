@@ -1,58 +1,36 @@
 package com.esporter.client.vue;
 
-import javax.swing.JPanel;
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
-import java.awt.Image;
-
-import javax.swing.JButton;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-
-import javax.swing.JTextField;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingConstants;
-import javax.swing.JLabel;
-import javax.swing.ImageIcon;
-import java.awt.event.ActionListener;
+import java.awt.GridLayout;
+import java.awt.SystemColor;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.awt.event.ActionEvent;
-import java.awt.FlowLayout;
+
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import com.esporter.both.types.TypesImage;
 import com.esporter.both.types.TypesStable;
 import com.esporter.both.types.TypesTeam;
 import com.esporter.both.types.TypesTitle;
-import com.esporter.client.controleur.Controler;
+import com.esporter.client.controleur.ControlerStableInfo;
 import com.esporter.client.vue.component.DataJPanel;
 import com.esporter.client.vue.component.RendererStableTitle;
 import com.esporter.client.vue.component.RendererTeamStableInfo;
-
-import javax.swing.JScrollPane;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Color;
-import javax.swing.BoxLayout;
-import javax.imageio.ImageIO;
-import javax.swing.AbstractButton;
-import javax.swing.Box;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import java.awt.SystemColor;
 
 public class StableInfo extends DataJPanel{
 
@@ -254,7 +232,7 @@ public class StableInfo extends DataJPanel{
 		panelDummyTop.setLayout(new BorderLayout(0, 0));
 		JButton btnStable = new JButton("Ecuries /");
 		btnStable.setForeground(MasterFrame.COLOR_MASTER);
-		btnStable.addActionListener(Controler.getInstance());
+		btnStable.addActionListener(new ControlerStableInfo());
 		btnStable.setActionCommand("STABLE_INFO_STABLE");
 		
 		btnStable.setBackground(null);

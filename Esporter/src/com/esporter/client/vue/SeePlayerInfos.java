@@ -1,24 +1,22 @@
 package com.esporter.client.vue;
 
-import javax.swing.JPanel;
-
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import com.esporter.both.types.TypesPlayer;
 import com.esporter.both.types.TypesTeam;
-import com.esporter.client.controleur.Controler;
+import com.esporter.client.controleur.ControlerPlayerInfo;
+import com.esporter.client.controleur.MasterControler;
 import com.esporter.client.vue.component.DataJPanel;
 import com.esporter.client.vue.component.SeePlayerInfosRenderer;
 
@@ -38,7 +36,7 @@ public class SeePlayerInfos extends DataJPanel {
 	
 	private void createListPlayer() {
 		pan.removeAll();
-		HashMap<Integer,TypesPlayer> liste = Controler.getInstance().getData().getStables().get(team.getStable().getId()).getTeams().get(team.getId()).getPlayers();
+		HashMap<Integer,TypesPlayer> liste = MasterControler.getUser().getData().getStables().get(team.getStable().getId()).getTeams().get(team.getId()).getPlayers();
 		for(Entry<Integer, TypesPlayer> set : liste.entrySet()) {
 			pan.add(new SeePlayerInfosRenderer(set.getValue()));
 		}	
@@ -72,12 +70,14 @@ public class SeePlayerInfos extends DataJPanel {
 		fl_panel_Tree.setAlignment(FlowLayout.LEFT);
 		panel_ContainerTree.add(panel_Tree);
 		
+		ControlerPlayerInfo controler = new ControlerPlayerInfo();
+		
 		JButton btn_ecurieTree = new JButton("Ecuries /");
 		btn_ecurieTree.setBorder(null);
 		btn_ecurieTree.setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
 		btn_ecurieTree.setForeground(MasterFrame.COLOR_MASTER);
 		btn_ecurieTree.setFont(new Font("Cambria", Font.PLAIN, 20));
-		btn_ecurieTree.addActionListener(Controler.getInstance());
+		btn_ecurieTree.addActionListener(controler);
 		btn_ecurieTree.setActionCommand("PLAYER_INFO_STABLE");
 		panel_Tree.add(btn_ecurieTree);
 		JButton btn_voirInfoTree = new JButton(team.getStable().getName() +"/");
@@ -86,7 +86,7 @@ public class SeePlayerInfos extends DataJPanel {
 		btn_voirInfoTree.setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
 		btn_voirInfoTree.setForeground(MasterFrame.COLOR_MASTER);
 		btn_voirInfoTree.setFont(new Font("Cambria", Font.PLAIN, 20));
-		btn_voirInfoTree.addActionListener(Controler.getInstance());
+		btn_voirInfoTree.addActionListener(controler);
 		btn_voirInfoTree.setActionCommand("PLAYER_INFO_TEAM");
 		panel_Tree.add(btn_voirInfoTree);
 		

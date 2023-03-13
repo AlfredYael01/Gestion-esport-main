@@ -1,24 +1,17 @@
 package com.esporter.client.vue;
 
-import javax.swing.JPanel;
-import javax.swing.BoxLayout;
-import java.awt.GridLayout;
-import javax.swing.JLabel;
-import java.awt.GridBagLayout;
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
+import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-
-import java.awt.BorderLayout;
 import javax.swing.SwingConstants;
-import java.awt.FlowLayout;
 import javax.swing.border.EmptyBorder;
 
 import com.esporter.both.types.TypesMatch;

@@ -1,67 +1,37 @@
 package com.esporter.client.vue.stable;
 
-//import statements
-import java.awt.EventQueue;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.Blob;
-import java.sql.Date;
-import java.text.SimpleDateFormat;
-
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.filechooser.FileSystemView;
-
-import com.esporter.both.types.TypesImage;
-import com.esporter.both.types.TypesLogin;
-import com.esporter.both.types.TypesPlayer;
-import com.esporter.both.types.TypesRegisterPlayer;
-import com.esporter.both.types.TypesStable;
-import com.esporter.client.controleur.Controler;
-import com.esporter.client.controleur.State;
-import com.esporter.client.vue.MasterFrame;
-import com.esporter.client.vue.component.ContainerPlayer;
-import com.esporter.client.vue.component.DatePicker;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.GridLayout;
-import java.awt.Image;
-
-import javax.swing.JSplitPane;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
-import java.awt.GridBagLayout;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import java.awt.Font;
-import java.awt.Graphics2D;
-
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import java.awt.Insets;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.awt.FlowLayout;
-import java.awt.SystemColor;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import com.esporter.both.types.TypesImage;
+import com.esporter.both.types.TypesPlayer;
+import com.esporter.client.controleur.ControlerAddPlayer;
+import com.esporter.client.controleur.MasterControler;
+import com.esporter.client.vue.MasterFrame;
+import com.esporter.client.vue.component.ContainerPlayer;
 
 //create class and extend with JFrame
 public class AddPlayer extends JDialog {
@@ -69,42 +39,19 @@ public class AddPlayer extends JDialog {
 	* 
 	*/
 	private static final long serialVersionUID = -725884370429132629L;
-	// add JPanel to the contentPane
 	private JPanel contentPane;
-	// declare variable
 	private JTextField txtEndContractDate;
 	private JTextField txtStartContractDate;
-	private JPanel panelContractDate;
-	private JPanel panelInfo;
-	private JPanel panelImage;
-	private JLabel lblName;
-	private JLabel lblFirstname;
-	private JLabel lblBirthDate;
-	private JLabel lblPlayerImageIcon;
-	private JPanel panelStartContract;
-	private JPanel panelEndContract;
-	private JPanel panelBottom;
-	private JLabel lblStartContractDate;
-	private JLabel lblEndContratDate;
-	private JPanel panelFirstname;
 	private JLabel txtPlayerImage;
-	private JPanel panelBirthDate;
 	private JTextField txtBirthDate;
-	private JPanel panelName;
 	private JTextField txtName;
 	private JTextField txtFirstname;
-	private JButton btnMoreBirthDate;
-	private JPanel panelValidate;
-	private JButton btnValidate;
-	private JLabel lblUsername;
-	private JPanel panelUsername;
 	private JTextField txtUsername;
-	private JLabel lblPassword;
-	private JPanel panelPassword;
 	private JTextField txtPassword;
 	private BufferedImage image;
 	private JFileChooser fileExplorer;
 	private ContainerPlayer container;
+	private JLabel lblPlayerImageIcon;
 
 	/**
 	 * Create the frame.
@@ -114,54 +61,9 @@ public class AddPlayer extends JDialog {
 	// create constructor of class
 	public AddPlayer(ContainerPlayer container) {
 		super(MasterFrame.getInstance().getFrame(), "Ajouter joueur ", false);
+		ControlerAddPlayer controler = new ControlerAddPlayer();
 		this.container = container;
-		Controler.getInstance().openDialog(this, State.ADD_PLAYER);
-
-		setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-		addWindowListener(new WindowListener() {
-
-			@Override
-			public void windowOpened(WindowEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void windowIconified(WindowEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void windowDeiconified(WindowEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void windowDeactivated(WindowEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void windowClosing(WindowEvent e) {
-				Controler.getInstance().closeDialog();
-				dispose();
-
-			}
-
-			@Override
-			public void windowClosed(WindowEvent e) {
-
-			}
-
-			@Override
-			public void windowActivated(WindowEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-		});
+		MasterControler.openDialog(this);
 
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		// set title
@@ -185,7 +87,7 @@ public class AddPlayer extends JDialog {
 		btnMoreEndContract.setFont(new Font("Cambria", Font.PLAIN, 15));
 		btnMoreEndContract.setContentAreaFilled(false);
 		btnMoreEndContract.setFocusPainted(false);
-		btnMoreEndContract.addActionListener(Controler.getInstance());
+		btnMoreEndContract.addActionListener(controler);
 		btnMoreEndContract.setActionCommand("ADD_PLAYER_MORE2");
 		// create text field
 		txtEndContractDate = new JTextField();
@@ -201,7 +103,7 @@ public class AddPlayer extends JDialog {
 		btnMoreStartContract.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.BLACK));
 		btnMoreStartContract.setContentAreaFilled(false);
 		btnMoreStartContract.setFocusPainted(false);
-		btnMoreStartContract.addActionListener(Controler.getInstance());
+		btnMoreStartContract.addActionListener(controler);
 		btnMoreStartContract.setActionCommand("ADD_PLAYER_MORE3");
 		// create text field
 		txtStartContractDate = new JTextField();
@@ -211,17 +113,17 @@ public class AddPlayer extends JDialog {
 		txtStartContractDate.setFont(new Font("Cambria", Font.PLAIN, 13));
 		txtStartContractDate.setColumns(11);
 
-		panelContractDate = new JPanel();
+		JPanel panelContractDate = new JPanel();
 		panelContractDate.setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
 		contentPane.add(panelContractDate, BorderLayout.SOUTH);
 		panelContractDate.setLayout(new BorderLayout(0, 0));
 
-		panelStartContract = new JPanel();
+		JPanel panelStartContract = new JPanel();
 		panelStartContract.setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
 		panelContractDate.add(panelStartContract, BorderLayout.WEST);
 		panelStartContract.setLayout(new BorderLayout(0, 0));
 
-		lblStartContractDate = new JLabel();
+		JLabel lblStartContractDate = new JLabel();
 		lblStartContractDate.setForeground(MasterFrame.COLOR_TEXT);
 		lblStartContractDate.setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
 		lblStartContractDate.setHorizontalAlignment(SwingConstants.CENTER);
@@ -232,13 +134,13 @@ public class AddPlayer extends JDialog {
 		panelStartContract.add(txtStartContractDate, BorderLayout.WEST);
 		lblStartContractDate.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 
-		panelEndContract = new JPanel();
+		JPanel panelEndContract = new JPanel();
 		panelContractDate.add(panelEndContract, BorderLayout.EAST);
 		panelEndContract.setLayout(new BorderLayout(0, 0));
 		panelEndContract.add(btnMoreEndContract, BorderLayout.EAST);
 		panelEndContract.add(txtEndContractDate, BorderLayout.WEST);
 
-		lblEndContratDate = new JLabel();
+		JLabel lblEndContratDate = new JLabel();
 		lblEndContratDate.setForeground(MasterFrame.COLOR_TEXT);
 		lblEndContratDate.setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
 		lblEndContratDate.setHorizontalAlignment(SwingConstants.CENTER);
@@ -247,25 +149,25 @@ public class AddPlayer extends JDialog {
 		panelEndContract.add(lblEndContratDate, BorderLayout.NORTH);
 		lblEndContratDate.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 
-		panelBottom = new JPanel();
+		JPanel panelBottom = new JPanel();
 		panelBottom.setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
 		panelContractDate.add(panelBottom, BorderLayout.SOUTH);
 		panelBottom.setLayout(new BorderLayout(0, 0));
 
-		panelValidate = new JPanel();
+		JPanel panelValidate = new JPanel();
 		panelBottom.add(panelValidate, BorderLayout.EAST);
 		panelValidate.setLayout(new BorderLayout(0, 0));
 
-		btnValidate = new JButton("Valider");
+		JButton btnValidate = new JButton("Valider");
 		btnValidate.setActionCommand("ADD_PLAYER_VALIDATE");
-		btnValidate.addActionListener(Controler.getInstance());
+		btnValidate.addActionListener(controler);
 
 		btnValidate.setForeground(Color.WHITE);
 		btnValidate.setBackground(MasterFrame.COLOR_MASTER);
 		btnValidate.setFont(new Font("Cambria", Font.PLAIN, 15));
 		panelValidate.add(btnValidate, BorderLayout.NORTH);
 
-		panelInfo = new JPanel();
+		JPanel panelInfo = new JPanel();
 		panelInfo.setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
 		contentPane.add(panelInfo, BorderLayout.EAST);
 		GridBagLayout gbl_panelInfo = new GridBagLayout();
@@ -275,7 +177,7 @@ public class AddPlayer extends JDialog {
 		gbl_panelInfo.rowWeights = new double[] { 1.0, 0.0, 0.0, 1.0, 1.0 };
 		panelInfo.setLayout(gbl_panelInfo);
 
-		lblName = new JLabel();
+		JLabel lblName = new JLabel();
 		lblName.setForeground(MasterFrame.COLOR_TEXT);
 		lblName.setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
 		lblName.setBorder(null);
@@ -289,7 +191,7 @@ public class AddPlayer extends JDialog {
 		gbc_lblName.gridy = 0;
 		panelInfo.add(lblName, gbc_lblName);
 
-		panelName = new JPanel();
+		JPanel panelName = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) panelName.getLayout();
 		flowLayout.setVgap(0);
 		flowLayout.setHgap(3);
@@ -307,7 +209,7 @@ public class AddPlayer extends JDialog {
 		txtName.setColumns(12);
 		panelName.add(txtName);
 
-		lblFirstname = new JLabel();
+		JLabel lblFirstname = new JLabel();
 		lblFirstname.setForeground(MasterFrame.COLOR_TEXT);
 		lblFirstname.setBorder(null);
 		lblFirstname.setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
@@ -321,7 +223,7 @@ public class AddPlayer extends JDialog {
 		gbc_lblFirstName.gridy = 1;
 		panelInfo.add(lblFirstname, gbc_lblFirstName);
 
-		panelFirstname = new JPanel();
+		JPanel panelFirstname = new JPanel();
 		GridBagConstraints gbc_panelFirstName = new GridBagConstraints();
 		gbc_panelFirstName.insets = new Insets(0, 0, 5, 0);
 		gbc_panelFirstName.gridx = 1;
@@ -336,7 +238,7 @@ public class AddPlayer extends JDialog {
 		txtFirstname.setColumns(12);
 		panelFirstname.add(txtFirstname);
 
-		panelBirthDate = new JPanel();
+		JPanel panelBirthDate = new JPanel();
 		panelBirthDate.setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
 		panelBirthDate.setBorder(null);
 		GridBagConstraints gbc_panelBirthDate = new GridBagConstraints();
@@ -354,11 +256,11 @@ public class AddPlayer extends JDialog {
 		txtBirthDate.setHorizontalAlignment(SwingConstants.CENTER);
 		txtBirthDate.setColumns(11);
 
-		btnMoreBirthDate = new JButton("...");
+		JButton btnMoreBirthDate = new JButton("...");
 		btnMoreBirthDate.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.BLACK));
 		btnMoreBirthDate.setBackground(MasterFrame.COLOR_TEXT);
 		btnMoreBirthDate.setForeground(MasterFrame.COLOR_TEXT);
-		btnMoreBirthDate.addActionListener(Controler.getInstance());
+		btnMoreBirthDate.addActionListener(controler);
 		btnMoreBirthDate.setActionCommand("ADD_PLAYER_MORE1");
 
 		btnMoreBirthDate.setFont(new Font("Cambria", Font.PLAIN, 12));
@@ -366,7 +268,7 @@ public class AddPlayer extends JDialog {
 		btnMoreBirthDate.setContentAreaFilled(false);
 		panelBirthDate.add(btnMoreBirthDate);
 
-		lblBirthDate = new JLabel();
+		JLabel lblBirthDate = new JLabel();
 		lblBirthDate.setBorder(null);
 		lblBirthDate.setForeground(MasterFrame.COLOR_TEXT);
 		lblBirthDate.setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
@@ -380,7 +282,7 @@ public class AddPlayer extends JDialog {
 		gbc_lblBirthDate.gridy = 2;
 		panelInfo.add(lblBirthDate, gbc_lblBirthDate);
 
-		lblUsername = new JLabel();
+		JLabel lblUsername = new JLabel();
 		lblUsername.setHorizontalAlignment(SwingConstants.CENTER);
 		lblUsername.setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
 		lblUsername.setForeground(MasterFrame.COLOR_TEXT);
@@ -394,7 +296,7 @@ public class AddPlayer extends JDialog {
 		gbc_lblUsername.gridy = 3;
 		panelInfo.add(lblUsername, gbc_lblUsername);
 
-		panelUsername = new JPanel();
+		JPanel panelUsername = new JPanel();
 		panelUsername.setBorder(null);
 		panelUsername.setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
 		FlowLayout fl_panelUsername = (FlowLayout) panelUsername.getLayout();
@@ -413,7 +315,7 @@ public class AddPlayer extends JDialog {
 		panelUsername.add(txtUsername);
 		txtUsername.setColumns(15);
 
-		lblPassword = new JLabel();
+		JLabel lblPassword = new JLabel();
 		lblPassword.setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
 		lblPassword.setForeground(MasterFrame.COLOR_TEXT);
 		lblPassword.setBorder(null);
@@ -427,7 +329,7 @@ public class AddPlayer extends JDialog {
 		gbc_txtMotDePasse.gridy = 4;
 		panelInfo.add(lblPassword, gbc_txtMotDePasse);
 
-		panelPassword = new JPanel();
+		JPanel panelPassword = new JPanel();
 		FlowLayout fl_panelPassword = (FlowLayout) panelPassword.getLayout();
 		fl_panelPassword.setHgap(3);
 		panelPassword.setBorder(null);
@@ -444,7 +346,7 @@ public class AddPlayer extends JDialog {
 		txtPassword.setFont(new Font("Cambria", Font.PLAIN, 12));
 		panelPassword.add(txtPassword);
 		txtPassword.setColumns(15);
-		panelImage = new JPanel();
+		JPanel panelImage = new JPanel();
 		contentPane.add(panelImage, BorderLayout.CENTER);
 		panelImage.setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
 		panelImage.setLayout(new BorderLayout(0, 0));
@@ -460,7 +362,7 @@ public class AddPlayer extends JDialog {
 		lblPlayerImageIcon = new JLabel("");
 
 		lblPlayerImageIcon.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.BLACK));
-		lblPlayerImageIcon.addMouseListener(Controler.getInstance());
+		lblPlayerImageIcon.addMouseListener(controler);
 
 		lblPlayerImageIcon.setIcon(null);
 		panelImage.add(lblPlayerImageIcon);

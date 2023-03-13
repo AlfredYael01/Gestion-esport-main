@@ -1,39 +1,11 @@
 package com.esporter.client.vue;
 
-import javax.swing.JPanel;
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.SwingConstants;
-import java.awt.Font;
 import java.awt.Component;
 import java.awt.Dimension;
-import javax.swing.Box;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableModel;
-
-import com.esporter.both.types.TypesImage;
-import com.esporter.both.types.TypesPool;
-import com.esporter.both.types.TypesTeam;
-import com.esporter.both.types.TypesTournament;
-import com.esporter.client.controleur.Controler;
-import com.esporter.client.vue.component.DataJPanel;
-
-import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -42,6 +14,25 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import javax.swing.Box;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+
+import com.esporter.both.types.TypesImage;
+import com.esporter.both.types.TypesPool;
+import com.esporter.both.types.TypesTeam;
+import com.esporter.both.types.TypesTournament;
+import com.esporter.client.controleur.ControlerPool;
+import com.esporter.client.controleur.MasterControler;
+import com.esporter.client.vue.component.DataJPanel;
 
 public class ProgramMatchs extends DataJPanel {
 	/**
@@ -129,7 +120,7 @@ public class ProgramMatchs extends DataJPanel {
 		panel_2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		JButton btnProgram = new JButton("Voir Programme");
 		
-		btnProgram.addActionListener(Controler.getInstance());
+		btnProgram.addActionListener(new ControlerPool());
 		btnProgram.setActionCommand("PROGRAM_MATCH_MATCH");
 		
 		btnProgram.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -337,7 +328,7 @@ public class ProgramMatchs extends DataJPanel {
 		((DefaultTableModel)tableGroupStageD.getModel()).getDataVector().removeAllElements();
 		
 		
-		ArrayList<TypesPool> pools = Controler.getInstance().getData().getCalendar().get(tournament.getId()).getPool();
+		ArrayList<TypesPool> pools = MasterControler.getUser().getData().getCalendar().get(tournament.getId()).getPool();
 		
 		HashMap<TypesTeam,Integer> p = pools.get(4).getPoint();
 		List<Entry<TypesTeam, Integer>> listSorted = new LinkedList<>(p.entrySet());
