@@ -27,7 +27,7 @@ public class ErrorPanel extends JPanel {
 	private boolean persistent;
 	private ErrorPanel instance;
 	private JPanel panel_1;
-	private JButton btnContinuer;
+	private JButton btnRetry;
 	private boolean critical;
 	private JLabel Titre;
 	private JPanel panel_2;
@@ -127,10 +127,15 @@ public class ErrorPanel extends JPanel {
 		this.critical = critical;
 		if (persistent) {
 			progressBar.setVisible(true);
-			btnContinuer.setVisible(false);
+			btnRetry.setVisible(false);
 		} else {
+			if (e instanceof ExceptionLogin) {
+				btnRetry.setText("Réessayer");		
+			}else {
+				btnRetry.setText("Continuer");	
+			}
 			progressBar.setVisible(false);
-			btnContinuer.setVisible(true);
+			btnRetry.setVisible(true);
 		}
 		synchronized (instance) {
 			instance.notify();
