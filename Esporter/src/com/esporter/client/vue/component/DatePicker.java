@@ -18,6 +18,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
+import javax.swing.border.SoftBevelBorder;
 
 import com.esporter.client.controleur.ControlerDatePicker;
 import com.esporter.client.vue.MasterFrame;
@@ -25,6 +28,10 @@ import com.esporter.client.vue.MasterFrame;
 //create class
 public class DatePicker 
 {
+	private static final Color COLOR_CHOSER_DATE = MasterFrame.COLOR_MASTER;
+	private static final Color COLOR_TODAY = new Color( 250, 137, 137 );
+	
+	
 	//Define the possible day to chose
 	public enum FilterDate {BEFORE_TODAY, AFTER_TODAY, TODAY}
 
@@ -79,6 +86,8 @@ public class DatePicker
 			//The timestamp can't be parsed, it must be another string
 		}
 		
+		
+		
 
 		d = new JDialog();
 		d.setPreferredSize(new Dimension(700,250));
@@ -90,7 +99,10 @@ public class DatePicker
 		//Create header that contains the year and the month
 		JPanel head = new JPanel(new BorderLayout());
 		JPanel years = new JPanel();
+		years.setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
 		JPanel months = new JPanel();
+		months.setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
+		head.setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
 
 		head.add(years, BorderLayout.NORTH);
 		years.setLayout(new GridLayout(1, 3, 0, 0));
@@ -99,6 +111,7 @@ public class DatePicker
 		years.add(strutLeftYear);
 
 		JButton previousYear = new JButton("<< ann\u00E9e");
+		setButtonProperties(previousYear);
 		years.add(previousYear);
 
 		lblCurrentYear = new JLabel("New label");
@@ -107,6 +120,7 @@ public class DatePicker
 		years.add(lblCurrentYear);
 
 		JButton nextYear = new JButton("ann\u00E9e >>");
+		setButtonProperties(nextYear);
 		years.add(nextYear);
 
 		Component strutRightYear = Box.createHorizontalStrut(20);
@@ -118,15 +132,17 @@ public class DatePicker
 		months.add(strutLeftMonth);
 
 		JButton previousMonth = new JButton("<< mois");
+		setButtonProperties(previousMonth);
 		months.add(previousMonth);
 
-
+		lblSelectedDate.setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
 
 		lblCurrentMonth = new JLabel("New label");
 		lblCurrentMonth.setHorizontalAlignment(SwingConstants.CENTER);
 		months.add(lblCurrentMonth);
 
 		JButton nextMonth = new JButton("mois >>");
+		setButtonProperties(nextMonth);
 		months.add(nextMonth);
 
 		Component strutRightMonth = Box.createHorizontalStrut(20);
@@ -181,14 +197,17 @@ public class DatePicker
 		}
 		//create JPanel object with grid layout
 		JPanel p2 = new JPanel(new GridLayout(1, 3));
+		p2.setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
 		p2.add(lblSelectedDate);//add label
 		//create object of button for next month
 		JButton btnOK = new JButton("Accepter");
+		setButtonPropertiesPlainBlue(btnOK);
 		//add action command
 		btnOK.addActionListener(controler);
 		btnOK.setActionCommand("DATEPICKER_OK");
 
 		JButton reset = new JButton("Remettre a z\u00E9ro");
+		setButtonPropertiesPlainBlue(reset);
 		reset.addActionListener(controler);
 		reset.setActionCommand("DATEPICKER_RESET");
 
@@ -237,7 +256,7 @@ public class DatePicker
 				}else {
 					button[x].setEnabled(true);
 				}
-				button[x].setBackground(MasterFrame.COLOR_MASTER);
+				button[x].setBackground(COLOR_TODAY);
 			}else {
 				if(calToday.compareTo(cal) > 0 && !AcceptAfter) {
 					button[x].setEnabled(false);
@@ -250,7 +269,7 @@ public class DatePicker
 				button[x].setBackground(Color.white);
 			}
 			if(year==yearSelected && month==monthSelected && day==daySelected) {
-				button[x].setBackground(Color.red.brighter());
+				button[x].setBackground(COLOR_CHOSER_DATE);
 			}
 
 			button[x].setText("" + day);
@@ -340,6 +359,20 @@ public class DatePicker
 	}
 	public JDialog getD() {
 		return d;
+	}
+	
+	private void setButtonPropertiesPlainBlue(JButton button) {
+		button.setBackground(MasterFrame.COLOR_MASTER);
+		button.setForeground(MasterFrame.COLOR_TEXT_MENU);
+
+		button.setFont(new Font("Tahoma", Font.PLAIN, 13));
+	}
+	
+	private void setButtonProperties(JButton button) {
+		button.setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
+		button.setForeground(MasterFrame.COLOR_TEXT);
+		//button.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, MasterFrame.COLOR_MASTER, null, MasterFrame.COLOR_MASTER, null));
+		button.setFont(new Font("Tahoma", Font.PLAIN, 13));
 	}
 
 
