@@ -30,12 +30,11 @@ public class Stables extends DataJPanel {
 	
 	private void createStableInfo() {
 		panelAllStables.removeAll();
-		HashMap<Integer, TypesStable> map = MasterFrame.getInstance().getUser().getData().getStables();
         allRenderer = new LinkedList<RendererStable>();
         
         panelAllStables.setLayout(new GridLayout(0, 1));
         
-        Iterator<TypesStable> ite = map.values().iterator();
+        Iterator<TypesStable> ite = MasterFrame.getInstance().getUser().getData().getStables().values().iterator();
         int cmp=0;
 		while (ite.hasNext()) {
 			TypesStable t = ite.next();

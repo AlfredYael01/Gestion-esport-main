@@ -29,11 +29,16 @@ public class CommunicationServer{
 	
 	private User user;
 	private int reconnect = 1;
-	private int reconnectTime = 1;
+	private long reconnectTime = 1;
 	private static final String IP = "localhost"; //144.24.206.118
 	private static final int PORT = 45000;
 	private Map<Integer, Types> decodeId;
 	private NettyClient netty;
+	private CommunicationServer waitingThread;
+	
+	public CommunicationServer getWaitingThread() {
+		return waitingThread;
+	}
 	
 	public CommunicationServer(User user) throws UnknownHostException, IOException {
 		this.user = user;
@@ -74,6 +79,7 @@ public class CommunicationServer{
 		try {
 			Thread.sleep(reconnectTime*1000);
 		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 		try {
 			connect();
@@ -95,8 +101,11 @@ public class CommunicationServer{
 		netty.send(c);
 		while(decodeId.get(id)==null) {
 			try {
-				Thread.sleep(10);
+				wait();
+				this.waitingThread = this;
 			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 		return decodeId.get(id);

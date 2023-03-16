@@ -33,7 +33,7 @@ public class User {
 	private Thread t;
 	private Types info;
 	private WaitingFor waiting;
-	private volatile static Data data;
+	private static Data data;
 
 	public User() throws UnknownHostException, IOException {
 		this.permission = TypesPermission.VISITOR;
@@ -45,7 +45,7 @@ public class User {
 	}
 
 	public Data getData() {
-		synchronized (data) {
+		synchronized (this) {
 			return data;
 		}
 	}
@@ -55,7 +55,7 @@ public class User {
 	}
 
 	public void setData(Data data) {
-		synchronized (data) {
+		synchronized (this) {
 			User.data = data;
 		}
 

@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.esporter.client.controleur.MasterControler;
 
@@ -16,7 +17,7 @@ public class TypesRanking implements Types, Serializable{
 	 */
 	private static final long serialVersionUID = -1122216096852324306L;
 	private TypesGame game;
-	private HashMap<Integer, Integer> stables;
+	private ConcurrentHashMap<Integer, Integer> stables;
 	private int id;
 	
 	public int getId() {
@@ -26,11 +27,11 @@ public class TypesRanking implements Types, Serializable{
 	
 	public TypesRanking(TypesGame game, int id) {
 		this.game = game;
-		this.stables = new HashMap<>();
+		this.stables = new ConcurrentHashMap<>();
 		this.id = id;
 	}
 	
-	public void setStables(HashMap<Integer, Integer> stables) {
+	public void setStables(ConcurrentHashMap<Integer, Integer> stables) {
 		this.stables = stables;
 	}
 	

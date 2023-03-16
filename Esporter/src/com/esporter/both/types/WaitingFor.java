@@ -1,27 +1,32 @@
 package com.esporter.both.types;
 
+import java.util.concurrent.atomic.AtomicReferenceArray;
+
 import com.esporter.both.socket.Response;
 
 public class WaitingFor {
 	
-	private volatile Response[] goal;
+	private volatile AtomicReferenceArray<Response> goal;
 	private volatile Response actualState;
+	private Thread t;
 	
 	public WaitingFor() {
 		
 	}
 	
 	public void waitFor(Response... goal) {
-		this.goal = goal;
+		this.goal = new AtomicReferenceArray<>(goal);
 		actualState=null;
-		Thread t = new Thread(new Runnable() {
+		t = new Thread(new Runnable() {
 			@Override
 			public void run() {
 				System.out.println("Waiting for "+goal);
 				while (continueWaiting()) {
 					try {
-						Thread.sleep(50);
-					} catch (InterruptedException e) {}
+						wait();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 				}
 				System.out.println("Not waiting anymore");
 			}
@@ -30,12 +35,13 @@ public class WaitingFor {
 		try {
 			t.join();
 		} catch (InterruptedException e) {
+			t.interrupt();
 		}
 	}
 	
 	public boolean continueWaiting() {
-		for (Response r : goal) {
-			if (actualState == r) {
+		for (int i = 0; i<goal.length();i++) {
+			if (actualState.equals(goal.get(i))) {
 				return false;
 			}
 		}
@@ -44,6 +50,7 @@ public class WaitingFor {
 	
 	public void setActualState(Response actualState) {
 		this.actualState = actualState;
+		t.notify();
 	}
 	
 	public Response getActualState() {

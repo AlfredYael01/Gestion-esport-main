@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import com.esporter.both.types.Types;
 import com.esporter.both.types.TypesGame;
@@ -20,38 +22,38 @@ public class Data implements Serializable, Types {
 	 * 
 	 */
 	private static final long serialVersionUID = 6632461413087395187L;
-	private volatile HashMap<Integer, TypesStable> stables = new HashMap<>();
-	private volatile HashMap<Integer, TypesTournament> calendar = new HashMap<>();
-	private volatile HashMap<Integer, TypesRanking> ranking = new HashMap<>();
-	private volatile HashMap<Integer, TypesTeam> teams = new HashMap<>();
+	private volatile ConcurrentMap<Integer, TypesStable> stables = new ConcurrentHashMap<>();
+	private volatile ConcurrentMap<Integer, TypesTournament> calendar = new ConcurrentHashMap<>();
+	private volatile ConcurrentMap<Integer, TypesRanking> ranking = new ConcurrentHashMap<>();
+	private volatile ConcurrentMap<Integer, TypesTeam> teams = new ConcurrentHashMap<>();
 	
-	public HashMap<Integer, TypesTournament> getCalendar() {
+	public ConcurrentMap<Integer, TypesTournament> getCalendar() {
 		return calendar;
 	}
 	
-	public HashMap<Integer, TypesRanking> getRanking() {
+	public ConcurrentMap<Integer, TypesRanking> getRanking() {
 		return ranking;
 	}
 	
-	public HashMap<Integer, TypesStable> getStables() {
+	public ConcurrentMap<Integer, TypesStable> getStables() {
 		return stables;
 	}
 	
-	public HashMap<Integer, TypesTeam> getTeams() {
+	public ConcurrentMap<Integer, TypesTeam> getTeams() {
 		return teams;
 	}
 	
 	
 	
-	public void setCalendar(HashMap<Integer, TypesTournament> calendar) {
+	public void setCalendar(ConcurrentMap<Integer, TypesTournament> calendar) {
 		this.calendar = calendar;
 	}
 	
-	public void setRanking(HashMap<Integer, TypesRanking> ranking) {
+	public void setRanking(ConcurrentMap<Integer, TypesRanking> ranking) {
 		this.ranking = ranking;
 	}
 	
-	public void setStables(HashMap<Integer, TypesStable> stables) {
+	public void setStables(ConcurrentMap<Integer, TypesStable> stables) {
 		this.stables = stables;
 	}
 	

@@ -56,7 +56,7 @@ public class ControlerCalendar extends MasterControler implements ActionListener
 			break;
 		default:
 			if(e.getActionCommand().contains("RENDERER")) {
-				String model = null;
+				String model = "";
 				if(e.getActionCommand().contains("MODIFY")) {
 					model = "CALENDAR RENDERER MODIFY ";
 				}else if(e.getActionCommand().contains("REMOVE")) {

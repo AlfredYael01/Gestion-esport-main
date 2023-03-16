@@ -42,6 +42,7 @@ public class ClientProcessingHandler extends ChannelInboundHandlerAdapter {
 			if(decodeId.containsKey(id)) {
 				decodeId.put(id, r.getInfoByID(TypesID.STRING));
 			}
+			this.user.getCom().getWaitingThread().notify();
 			break;
 		case ERROR_LOGIN:
 			this.user.getWaiting().setActualState(Response.ERROR_LOGIN);

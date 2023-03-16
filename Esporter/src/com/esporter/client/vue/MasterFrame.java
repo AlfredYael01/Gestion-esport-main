@@ -54,9 +54,9 @@ public class MasterFrame {
 	private JLabel lblAccountName;
 	private JLabel lblAccountLogo;
 	private JButton btnLogin;
-	private static volatile DataJPanel currentDataPanel = null;
-	private static volatile MasterFrame instance;
-	private static volatile JPanel currentPanel = null;
+	private static DataJPanel currentDataPanel = null;
+	private static MasterFrame instance;
+	private static JPanel currentPanel = null;
 	//private OldControler controler;
 
 	/**
@@ -243,11 +243,15 @@ public class MasterFrame {
 	}
 	
 	public DataJPanel getCurrentDataPanel() {
-		return currentDataPanel;
+		synchronized (this) {
+			return currentDataPanel;
+		}
 	}
 	
 	public void setCurrentDataPanel(DataJPanel currentPanel) {
-		MasterFrame.currentDataPanel = currentPanel;
+		synchronized (this) {
+			MasterFrame.currentDataPanel = currentPanel;
+		}
 	}
 	
 	
@@ -383,13 +387,15 @@ public class MasterFrame {
 	}
 	
 	public void dataUpdate() {
-		if (currentDataPanel!=null) {
-			//setPanel(currentMainPanel.getClass(), user.getPermission());
-			
-			currentDataPanel.dataUpdate();
-			currentDataPanel.repaint();
-			currentDataPanel.revalidate();
+		synchronized (this) {
+			if (currentDataPanel!=null) {
+				//setPanel(currentMainPanel.getClass(), user.getPermission());
+				currentDataPanel.dataUpdate();
+				currentDataPanel.repaint();
+				currentDataPanel.revalidate();
+			}
 		}
+		
 	}
 	
 	public JFrame getFrame() {
@@ -420,11 +426,12 @@ public class MasterFrame {
 	}
 	
 	
-	public static void setCurrentPanel(JPanel currentPanel) {
+	public synchronized static void setCurrentPanel(JPanel currentPanel) {
 		MasterFrame.currentPanel = currentPanel;
+		
 	}
 	
-	public static JPanel getCurrentPanel() {
+	public synchronized static JPanel getCurrentPanel() {
 		return currentPanel;
 	}
 	

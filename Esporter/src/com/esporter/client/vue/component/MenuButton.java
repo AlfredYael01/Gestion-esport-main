@@ -144,22 +144,6 @@ public class MenuButton extends JRadioButton{
 				GradientPaint gp = new GradientPaint(0, height, new Color(0,164,210,100), 0, height/4, MasterFrame.COLOR_MENU_BACKGROUND);
 				g2.setPaint(gp);
 				g2.fillRect(0, height/4, width, height*3/4);
-				
-				
-				/*int centerPoint = mouseX;
-				float radius = width/5;
-				float[] dist = {0f,1f};	
-				Color[] color = {new Color(0,164,210,brightness), new Color(0,0,0,0) };
-				RadialGradientPaint rgp = new RadialGradientPaint(new Point(mouseX, height), radius, dist, color);	
-				g2.setPaint(rgp);
-				g2.fill(new Ellipse2D.Double(centerPoint - radius, height - radius, radius * 2, radius * 2));*/
-				//GradientPaint gp2 = new GradientPaint(0, height, new Color(0,164,210,100), 0, height/4, MasterFrame.COULEUR_MASTER_FOND);
-				//g2.setPaint(gp2);
-				/*float[] dist2 = {0.75f,1f};	
-				Color[] color2 = {new Color(0,164,210,brightness+55), new Color(0,0,0,0) };
-				RadialGradientPaint rgp2 = new RadialGradientPaint(new Point(mouseX, height), radius, dist2, color2);	
-				g2.setPaint(rgp2);
-				g2.fillRect(mouseX-(int)radius, height-5, (int)radius*2, 5);*/
 	
 			}
 			
