@@ -8,7 +8,7 @@ import java.awt.FlowLayout;
 import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
-
+import com.esporter.client.vue.MasterFrame;
 import java.awt.GridLayout;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -198,12 +198,14 @@ public class RegisterStable extends JPanel {
 		btnValidate.setPreferredSize(new Dimension(50, 23));
 		btnValidate.setMinimumSize(new Dimension(70, 23));
 		btnValidate.setMaximumSize(new Dimension(70, 23));
+		btnValidate.setBackground(MasterFrame.COLOR_MASTER);
 		panel_5.add(btnValidate);
 		
 		btnValidate.setActionCommand("REGISTER_STABLE_VALIDATE");
 		btnValidate.addActionListener(controler);
 		
 		JButton btnCancel = new JButton("Annuler");
+		btnCancel.setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
 		panel_5.add(btnCancel, BorderLayout.NORTH);
 		btnCancel.setActionCommand("REGISTER_STABLE_CANCEL");
 		btnCancel.addActionListener(controler);
