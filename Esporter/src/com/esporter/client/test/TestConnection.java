@@ -1,46 +1,37 @@
 package com.esporter.client.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-import java.net.UnknownHostException;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
 
 import com.esporter.both.socket.Response;
 import com.esporter.both.types.TypesPermission;
 import com.esporter.both.types.TypesPlayer;
 import com.esporter.both.types.TypesStable;
 import com.esporter.both.types.exception.ExceptionLogin;
-import com.esporter.client.controleur.Controler;
+import com.esporter.client.controleur.MasterControler;
 import com.esporter.client.model.user.User;
 import com.esporter.client.vue.MasterFrame;
 
 @DisplayName("Tests de la connection de l'application")
 public class TestConnection {
 	
-	private Controler controler;
 	private User user;
 	
-	@BeforeEach
-	public void setUp() throws Exception {
-		this.controler = Controler.getInstance();
+	
+	public TestConnection() throws Exception {
+		
+		
+		this.user = new User();
+		MasterControler controler = new MasterControler(user);
 		MasterFrame.getInstance().getFrame().setVisible(true);
-		this.user = controler.getUser();
 	}
 
-	@AfterEach
-	public void tearDown() throws Exception {
-		this.user = null;
-		this.controler=null;
-	}
+
 	
 	@Test
 	@DisplayName("Connection from the start to server")

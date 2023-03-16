@@ -28,7 +28,7 @@ import javax.swing.border.MatteBorder;
 import com.esporter.both.types.TypesGame;
 import com.esporter.both.types.TypesPlayer;
 import com.esporter.both.types.TypesTournament;
-import com.esporter.client.controleur.Controler;
+import com.esporter.client.controleur.ControlerCalendar;
 import com.esporter.client.vue.MasterFrame;
 import com.esporter.client.vue.component.DataJPanel;
 import com.esporter.client.vue.component.RendererCalendar;
@@ -56,6 +56,7 @@ public class RendererPlayerCalendar extends DataJPanel implements RendererCalend
 	
 	
 	public RendererPlayerCalendar (TypesTournament tournament, int id) {
+		ControlerCalendar controler = new ControlerCalendar();
 		this.tournament = tournament;
 		setBorder(new MatteBorder(0, 0, 1, 0, MasterFrame.COLOR_TEXT));
 		setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
@@ -94,7 +95,7 @@ public class RendererPlayerCalendar extends DataJPanel implements RendererCalend
 		gbl_panelBtnRegister.rowWeights = new double[]{0.0, 0.0};
 		panelBtnRegister.setLayout(gbl_panelBtnRegister);
 		
-		lbInscriptionButton.addActionListener(Controler.getInstance());
+		lbInscriptionButton.addActionListener(controler);
 		lbInscriptionButton.setActionCommand("CALENDAR RENDERER INSCRIPTION "+id);
 		
 		lbInscriptionButton.setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
@@ -110,7 +111,7 @@ public class RendererPlayerCalendar extends DataJPanel implements RendererCalend
 		panelBtnRegister.add(lbInscriptionButton, gbc_lbInscriptionButton);
 		
 		
-		lblArrowIcon.addActionListener(Controler.getInstance());
+		lblArrowIcon.addActionListener(controler);
 		lblArrowIcon.setActionCommand("CALENDAR RENDERER POOL "+id);
 		add(lblArrowIcon, BorderLayout.EAST);
 		

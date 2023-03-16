@@ -24,7 +24,7 @@ import com.esporter.both.types.TypesPlayer;
 import com.esporter.both.types.TypesStable;
 import com.esporter.both.types.TypesTeam;
 import com.esporter.both.types.exception.ExceptionTeamNotFull;
-import com.esporter.client.controleur.Controler;
+import com.esporter.client.controleur.ControlerModifyTeam;
 import com.esporter.client.vue.MasterFrame;
 import com.esporter.client.vue.component.ContainerModifyPlayer;
 import com.esporter.client.vue.component.ContainerPlayer;
@@ -110,7 +110,7 @@ public class ModifyTeam extends JPanel {
 		btnValidate.setBackground(MasterFrame.COLOR_MASTER);
 		btnValidate.setAlignmentY(1.0f);
 		panelValidate.add(btnValidate);
-		btnValidate.addActionListener(Controler.getInstance());
+		btnValidate.addActionListener(new ControlerModifyTeam());
 		btnValidate.setActionCommand("MODIFY_TEAM_VALIDATE");
 		
 	}

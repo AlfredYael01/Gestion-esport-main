@@ -1,13 +1,29 @@
 package com.esporter.client;
-import java.awt.EventQueue;
+import java.io.IOException;
+import java.net.UnknownHostException;
 
-import com.esporter.client.controleur.Controler;
+import javax.swing.SwingUtilities;
+
+import com.esporter.client.controleur.MasterControler;
+import com.esporter.client.model.user.User;
 import com.esporter.client.vue.MasterFrame;
 
 public class Main {
 
 	public static void main(String[] args) {
-		Controler control = Controler.getInstance();
-		MasterFrame.getInstance().getFrame().setVisible(true);
+		try {
+			MasterControler mc = new MasterControler(new User());
+			SwingUtilities.invokeLater(new Runnable(){
+	            public void run() {
+	            	MasterFrame.getInstance();
+	            }
+			});
+			MasterFrame.getInstance().getFrame().setVisible(true);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 }

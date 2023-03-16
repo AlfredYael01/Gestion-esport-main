@@ -1,48 +1,28 @@
 package com.esporter.client.vue.stable.management;
 
-import javax.swing.JFrame;
+import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.SystemColor;
 
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.border.BevelBorder;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
-import javax.swing.border.SoftBevelBorder;
 import javax.swing.plaf.ComboBoxUI;
 
-import com.esporter.both.socket.Response;
 import com.esporter.both.types.TypesGame;
-import com.esporter.both.types.TypesRegisterPlayer;
-import com.esporter.both.types.TypesRegisterTeam;
-import com.esporter.both.types.TypesStable;
-import com.esporter.both.types.exception.ExceptionTeamNotFull;
-import com.esporter.client.controleur.Controler;
+import com.esporter.client.controleur.ControlerAddTeam;
 import com.esporter.client.vue.MasterFrame;
 import com.esporter.client.vue.component.ComboBoxRendererArrow;
 import com.esporter.client.vue.component.ContainerPlayer;
-
-import java.awt.BorderLayout;
-import javax.swing.JLabel;
-import javax.swing.JList;
-
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import java.awt.SystemColor;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-
-import javax.swing.JComboBox;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JButton;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.FlowLayout;
-import javax.swing.Box;
 
 
 public class AddTeam extends JPanel{
@@ -66,6 +46,7 @@ public class AddTeam extends JPanel{
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		ControlerAddTeam controler = new ControlerAddTeam();
 		setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
 		setPreferredSize(MasterFrame.getInstance().getFrameCenterDimension());
 		JFrame frame = MasterFrame.getInstance().getFrame(); 
@@ -95,7 +76,7 @@ public class AddTeam extends JPanel{
 		panel_2.setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
 		panel.add(panel_2, BorderLayout.SOUTH);
 		
-		comboBox = new JComboBox<>(TypesGame.values());
+		
 		comboBox.setUI((ComboBoxUI) ComboBoxRendererArrow.createUI(comboBox));
 		comboBox.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
 		comboBox.setFont(new Font("Cambria", Font.PLAIN, 15));
@@ -103,7 +84,7 @@ public class AddTeam extends JPanel{
 		comboBox.setForeground(MasterFrame.COLOR_TEXT);
 		comboBox.setSelectedItem(game);
 		comboBox.setActionCommand("ADD_TEAM_COMBOGAME");
-		comboBox.addActionListener(Controler.getInstance());
+		comboBox.addActionListener(controler);
 		
 		panel_2.add(comboBox);
 		
@@ -125,20 +106,22 @@ public class AddTeam extends JPanel{
 		panelMain.add(panelValidate);
 		
 		JButton btnValidate = new JButton("Valider");
+		
+		btnValidate.setHorizontalAlignment(SwingConstants.RIGHT);
 		btnValidate.setVerticalTextPosition(SwingConstants.BOTTOM);
 		btnValidate.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnValidate.setMargin(new Insets(14, 0, 14, 14));
 		btnValidate.setIconTextGap(10);
 		btnValidate.setHorizontalTextPosition(SwingConstants.LEFT);
-		btnValidate.setHorizontalAlignment(SwingConstants.LEFT);
 		btnValidate.setForeground(SystemColor.text);
 		btnValidate.setFont(new Font("Cambria", Font.PLAIN, 22));
 		btnValidate.setBorder(new CompoundBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 120, 215)), new EmptyBorder(3, 5, 3, 5)));
 		btnValidate.setBackground(MasterFrame.COLOR_MASTER);
 		btnValidate.setAlignmentY(1.0f);
 		panelValidate.add(btnValidate);
-		btnValidate.addActionListener(Controler.getInstance());
+		btnValidate.addActionListener(controler);
 		btnValidate.setActionCommand("ADD_TEAM_VALIDATE");
+		
 	}
 	
 	public JComboBox<TypesGame> getComboBox() {

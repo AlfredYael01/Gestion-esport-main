@@ -2,12 +2,17 @@ package com.esporter.server.main;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.imageio.ImageIO;
 
@@ -32,11 +37,14 @@ import com.esporter.server.model.database.DatabaseAccess;
 import com.esporter.server.model.database.Query;
 import com.esporter.server.model.database.Query.typeRequete;
 
+import io.netty.channel.ChannelHandlerContext;
+
 public class mainThread {
 
 	private static mainThread instance;
 	private boolean running=true;
-	private static volatile ArrayList<ConnectionClient> tabClient =  new ArrayList<>();
+	
+	private ConcurrentHashMap<String, ConnectionClient> allClients = new ConcurrentHashMap<>();
 	private static volatile int nbClient=0;
 	private DatabaseAccess db;
 	private Data data;
@@ -47,16 +55,26 @@ public class mainThread {
 			data = new Data();
 			initializeApp();
 			instance = this;
-			ServerSocket server = new ServerSocket(45000);
-			System.out.println("Serv dÃ©marrÃ©");
-			while(running) {
+			
+			NettyServer netty = new NettyServer(45000);
+			try {
+				System.out.println("Serv démarré");
 				System.out.println("En attente d'une connexion");
-				Socket s = server.accept();
-				ConnectionClient c = new ConnectionClient(s);
-				ajouterClient(c);
-
-				System.out.println("Nouvelle connexion acceptï¿½");
-			}
+				netty.run();
+				netty.getChannel().closeFuture().sync();
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} finally {
+	            netty.shutdownGracefully();
+	            System.out.println("Server shutdown");
+	        }
+			
+			
+			
+			
+			
+			
 			//Stop DB worker
 			try {
 				DatabaseAccess.getInstance().getTimerCheckAlive().cancel();
@@ -67,21 +85,16 @@ public class mainThread {
 			}
 			
 			//Stop all client
+			Collection<ConnectionClient> tabClient = allClients.values();
 			for (ConnectionClient c : tabClient) {
 				try {
-					c.getSocket().close();
-					c.getThread().join();
+					c.getChannel().close().sync();
 			
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
-			//Stop Server
-			try {
-				server.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+
 			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -100,12 +113,18 @@ public class mainThread {
 		return instance;
 	}
 	
-	public void ajouterClient(ConnectionClient c) {
-		synchronized (tabClient) {
-			tabClient.add(c);
+	public void ajouterClient(ConnectionClient c, ChannelHandlerContext ctx) {
+		String host = ((InetSocketAddress)ctx.channel().remoteAddress()).getAddress().getHostAddress();
+		int port = ((InetSocketAddress)ctx.channel().remoteAddress()).getPort();
+		String uniqueID = host+":"+port;
+		synchronized (allClients) {
+			allClients.put(uniqueID, c);
+
 			nbClient++;
 		}
 	}
+	
+	
 	
 	public synchronized Data getData() {
 		return data;
@@ -327,8 +346,9 @@ public class mainThread {
 	}
 	
 	public void sendAll(ResponseObject response) {
-		synchronized (tabClient) {
-			System.out.println("Send all "+response.getName());
+		System.out.println("Send all "+response.getName());
+		Collection<ConnectionClient> tabClient = allClients.values();
+		synchronized (allClients) {
 			for (ConnectionClient con : tabClient) {
 				System.out.println("send");
 				con.send(response);
@@ -336,10 +356,20 @@ public class mainThread {
 		}
 	}
 	
-	public void closeClient(ConnectionClient c) {
+	public void closeClient(ChannelHandlerContext ctx) {
+		Collection<ConnectionClient> tabClient = allClients.values();
+		String host = ((InetSocketAddress)ctx.channel().remoteAddress()).getAddress().getHostAddress();
+		int port = ((InetSocketAddress)ctx.channel().remoteAddress()).getPort();
+		String uniqueID = host+":"+port;
 		synchronized (tabClient) {
-			tabClient.remove(c);
+			tabClient.remove(uniqueID);
 			nbClient--;
+		}
+	}
+	
+	public ConcurrentHashMap<String, ConnectionClient> getAllClients() {
+		synchronized (allClients) {
+			return allClients;
 		}
 	}
 }

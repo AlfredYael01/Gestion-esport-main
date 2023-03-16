@@ -1,30 +1,23 @@
 package com.esporter.client.vue;
 
-import javax.swing.JPanel;
 import java.awt.BorderLayout;
-import java.awt.Color;
-
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
-import java.awt.Font;
 import javax.swing.border.EmptyBorder;
 
 import com.esporter.both.types.TypesStable;
-import com.esporter.both.types.TypesTournament;
 import com.esporter.client.vue.component.DataJPanel;
 import com.esporter.client.vue.component.RendererStable;
-
-import javax.swing.JComboBox;
-import javax.swing.JButton;
-import javax.swing.JLabel;
 
 public class Stables extends DataJPanel {
 	/**

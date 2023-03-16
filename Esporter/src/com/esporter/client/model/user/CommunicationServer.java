@@ -1,21 +1,15 @@
 package com.esporter.client.model.user;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
 import java.net.UnknownHostException;
-import java.security.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JOptionPane;
 
-import com.esporter.both.data.Data;
 import com.esporter.both.socket.Command;
 import com.esporter.both.socket.CommandName;
-import com.esporter.both.socket.Response;
 import com.esporter.both.socket.ResponseObject;
 import com.esporter.both.types.Types;
 import com.esporter.both.types.TypesID;
@@ -24,34 +18,29 @@ import com.esporter.both.types.TypesLogin;
 import com.esporter.both.types.TypesMatch;
 import com.esporter.both.types.TypesPermission;
 import com.esporter.both.types.TypesPlayer;
-import com.esporter.both.types.TypesRanking;
 import com.esporter.both.types.TypesRegisterTeam;
 import com.esporter.both.types.TypesStable;
-import com.esporter.both.types.TypesString;
 import com.esporter.both.types.TypesTeam;
 import com.esporter.both.types.TypesTournament;
-import com.esporter.both.types.exception.ExceptionError;
-import com.esporter.both.types.exception.ExceptionInvalidPermission;
-import com.esporter.client.controleur.Controler;
+import com.esporter.client.controleur.MasterControler;
 import com.esporter.client.vue.MasterFrame;
 
-public class CommunicationServer implements Runnable{
+public class CommunicationServer{
 	
 	private User user;
-	private Socket s;
-	private ObjectOutputStream out;
-	private ObjectInputStream in;
 	private int reconnect = 1;
 	private int reconnectTime = 1;
-	private volatile boolean run=true;
-	private static final String IP = "127.0.0.1"; //144.24.206.118
+	private static final String IP = "localhost"; //144.24.206.118
 	private static final int PORT = 45000;
 	private Map<Integer, Types> decodeId;
+	private NettyClient netty;
 	
 	public CommunicationServer(User user) throws UnknownHostException, IOException {
 		this.user = user;
 		this.decodeId = new HashMap<>();
+		netty = new NettyClient(user);
 		connect();
+		
 	}
 	
 	private void connect() throws UnknownHostException, IOException{
@@ -59,13 +48,11 @@ public class CommunicationServer implements Runnable{
 		System.out.println("Tentative de connexion au server "+IP+":"+PORT);
 		
 		try {
-			s = new Socket(IP,PORT);
-			out = new ObjectOutputStream(s.getOutputStream());
-			in = new ObjectInputStream(s.getInputStream());
+			netty.run(IP, PORT);
 			System.out.println("Done");
-			reconnect=1;
-			reconnectTime=1;
-		} catch (IOException e) {
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 			reconnect();
 		}
 		
@@ -75,14 +62,13 @@ public class CommunicationServer implements Runnable{
 	private void reconnect() throws IOException,UnknownHostException {
 		reconnect++;
 		if (reconnect>5) {
-			run=false;
-			Controler.getInstance().fireError(new Exception("Impossible de se connecter au serveur, veuillez relancer l'application"), false, true);
+			MasterControler.fireError(new Exception("Impossible de se connecter au serveur, veuillez relancer l'application"), false, true);
 			JOptionPane.showMessageDialog(null, "L'application va maintenant fermer","Erreur", JOptionPane.ERROR_MESSAGE);
 			System.exit(-2);
 		
 		}
 		reconnectTime*=2;
-		Controler.getInstance().fireError(new Exception("Erreur de connexion au serveur \n Tentative de reconnexion n°"+reconnect+" dans "+reconnectTime+"s...."), true, false);
+		MasterControler.fireError(new Exception("Erreur de connexion au serveur \n Tentative de reconnexion n°"+reconnect+" dans "+reconnectTime+"s...."), true, false);
 		String s = "Reconnecting number "+reconnect+" in "+reconnectTime+"s....";
 		System.out.println(s);
 		try {
@@ -95,36 +81,18 @@ public class CommunicationServer implements Runnable{
 			reconnectTime=1;
 			MasterFrame.getInstance().getError().setVisible(false);
 			MasterFrame.getInstance().getError().setException(null);
-			Controler.getInstance().closeError();
 		} catch (IOException e2) {
 			reconnect();
 			
 		}
 	}
-	
-	@Override
-	public void run() {
-		while (run) {
-			try {
-				processInput((ResponseObject)in.readObject());
-			} catch (ClassNotFoundException e2) {
-				e2.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-				try {
-					reconnect();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-			}
-		}
-	}
+
 	
 	public Types waitSynhronousResponse(Command c) {
 		int id = (int) (new Date().getTime())/1000;
 		c.getInfo().put(TypesID.INT, new TypesInteger(id));
 		this.decodeId.put(id, null);
-		send(c);
+		netty.send(c);
 		while(decodeId.get(id)==null) {
 			try {
 				Thread.sleep(10);
@@ -138,7 +106,7 @@ public class CommunicationServer implements Runnable{
 		HashMap<TypesID, Types> m = new HashMap<>();
 		m.put(TypesID.TOURNAMENT, new TypesInteger(t));
 		Command c = new Command(CommandName.DELETE_TOURNAMENT, m);
-		send(c);
+		netty.send(c);
 	}
 	
 	
@@ -146,7 +114,7 @@ public class CommunicationServer implements Runnable{
 		HashMap<TypesID, Types> m = new HashMap<>();
 		m.put(TypesID.LOGIN, new TypesLogin(username, password));
 		Command c = new Command(CommandName.LOGIN, m);
-		send(c);
+		netty.send(c);
 	}
 	
 	public void registerTournament(int idTournament) {
@@ -154,7 +122,7 @@ public class CommunicationServer implements Runnable{
 		m.put(TypesID.TOURNAMENT, new TypesInteger(idTournament));
 		m.put(TypesID.PLAYER, new TypesInteger(((TypesPlayer)user.getInfo()).getId()));
 		Command c = new Command(CommandName.REGISTER_TOURNAMENT, m);
-		send(c);
+		netty.send(c);
 	}
 	
 	public void unregisterTournament(int idTournament, int idGame) {
@@ -163,33 +131,33 @@ public class CommunicationServer implements Runnable{
 		m.put(TypesID.PLAYER, new TypesInteger(((TypesPlayer)user.getInfo()).getId()));
 		m.put(TypesID.GAME, new TypesInteger(idGame));
 		Command c = new Command(CommandName.UNREGISTER_TOURNAMENT ,m);
-		send(c);
+		netty.send(c);
 	}
 	
 	public void addTeam(TypesRegisterTeam team) {
 		HashMap<TypesID, Types> m = new HashMap<>();
 		m.put(TypesID.TEAM, team);
 		Command c = new Command(CommandName.ADD_TEAM, m);
-		send(c);
+		netty.send(c);
 	}
 	
 	public void modifyTeam(TypesTeam team) {
 		HashMap<TypesID, Types> m = new HashMap<>();
 		m.put(TypesID.TEAM, team);
 		Command c = new Command(CommandName.MODIFY_TEAM, m);
-		send(c);
+		netty.send(c);
 	}
 	
 	public void addTournament(TypesTournament t) {
 		HashMap<TypesID, Types> m = new HashMap<>();
 		m.put(TypesID.TOURNAMENT, t);
 		Command c = new Command(CommandName.ADD_TOURNAMENT, m);
-		send(c);
+		netty.send(c);
 	}
 	
 	public void logout() {
 		Command c = new Command(CommandName.LOGOUT, null);
-		send(c);
+		netty.send(c);
 	}
 	
 	public void receiveLogin(ResponseObject r) {
@@ -207,18 +175,9 @@ public class CommunicationServer implements Runnable{
 		}
 	}
 	
-	public void send (Command c) {
-		try {
-			out.writeObject(c);
-		} catch (IOException e) {
-
-			e.printStackTrace();
-		}
-	}
-	
 	public void initializeApp() {
 		Command c = new Command(CommandName.INIT, null);
-		send(c);
+		netty.send(c);
 	}
 	
 	
@@ -226,95 +185,12 @@ public class CommunicationServer implements Runnable{
 		user.setPermission(perms);
 	}
 	
-	public void processInput(ResponseObject r) {
-		System.out.println(r.getName());
-		switch(r.getName()) {
-		case SYNCHRONIZED_COMMAND:
-			int id= ((TypesInteger)r.getInfoByID(TypesID.INT)).getInteger();
-			if(decodeId.containsKey(id)) {
-				decodeId.put(id, r.getInfoByID(TypesID.STRING));
-			}
-			break;
-		case ERROR_LOGIN:
-			user.getWaiting().setActualState(Response.ERROR_LOGIN);
-			break;
-		case ERROR_PERMISSION:
-			MasterFrame.getInstance().fireError(new ExceptionInvalidPermission("Vous n'avez pas la permission d'effectuer ceci"), false, false);
-			System.out.println("ERREUR PERMISSION");
-			user.getWaiting().setActualState(Response.ERROR_PERMISSION);
-			break;
-		case LOGIN:
-			receiveLogin(r);
-			user.getWaiting().setActualState(r.getName());
-			break;
-		case UPDATE_CALENDAR:
-			//ok
-			break;
-		case UPDATE_STABLE:
-			TypesStable stable = (TypesStable)r.getInfoByID(TypesID.STABLE);
-			user.getData().getStables().put(stable.getId(), stable);
-			MasterFrame.getInstance().dataUpdate();
-			break;
-		case UPDATE_TEAM:
-			TypesTeam team = (TypesTeam)r.getInfoByID(TypesID.TEAM);
-			user.getData().getStables().get(team.getStable().getId()).getTeams().put(team.getId(), team);
-			if(Controler.getInstance().getUser().getPermission() != TypesPermission.VISITOR) {
-				if (((TypesStable)user.getInfo()).getId() == team.getStable().getId()) {
-					((TypesStable)user.getInfo()).addTeam(team);
-				}
-			}
-			user.getData().getTeams().put(team.getId(), team);
-			MasterFrame.getInstance().dataUpdate();
-			break;
-		case UPDATE_TOURNAMENT:
-			TypesTournament tournament = (TypesTournament)r.getInfoByID(TypesID.TOURNAMENT);
-			user.getData().getCalendar().put(tournament.getId(), tournament);
-			MasterFrame.getInstance().dataUpdate();
-			break;
-		case UPDATE_ALL:
-			user.setData((Data)r.getInfo().get(TypesID.ALL));
-			user.getWaiting().setActualState(Response.UPDATE_ALL);
-			
-			break;
-		case ERROR:
-			MasterFrame.getInstance().fireError(new ExceptionError(r.getError()), false, false);
-			System.out.println("ERREUR");
-			break;
-		case DELETE_TOURNAMENT:
-			user.getData().getCalendar().remove(((TypesInteger)r.getInfoByID(TypesID.TOURNAMENT)).getInteger());
-			MasterFrame.getInstance().dataUpdate();
-			break;
-		case UPDATE_MATCH:
-			int idTournoi = ((TypesInteger)r.getInfoByID(TypesID.TOURNAMENT)).getInteger();
-			int Pool = ((TypesInteger)r.getInfoByID(TypesID.POOL)).getInteger();
-			TypesMatch match = ((TypesMatch)r.getInfoByID(TypesID.MATCH));
-			
-			for(TypesMatch m : user.getData().getCalendar().get(idTournoi).getPool().get(Pool).getMatchs()) {
-				if(m.equals(match)) {
-					m.setPoint(match.getTeam1Score(), match.getTeam2Score());
-					break;
-				}
-			}
-			MasterFrame.getInstance().dataUpdate();
-			break;
-		case UPDATE_RANKING:
-			TypesRanking ranking = ((TypesRanking)r.getInfoByID(TypesID.RANKING));
-			Controler.getInstance().getData().getRanking().put(ranking.getId(), ranking);
-			MasterFrame.getInstance().dataUpdate();
-			break;
-		default:
-			break;
-		
-		
-		}
-		user.getWaiting().setActualState(r.getName());
-	}
 
 	public void modifyTournament(TypesTournament t) {
 		HashMap<TypesID, Types> m = new HashMap<>();
 		m.put(TypesID.TOURNAMENT, t);
 		Command c = new Command(CommandName.MODIFY_TOURNAMENT, m);
-		send(c);
+		netty.send(c);
 	}
 	
 	
@@ -324,7 +200,7 @@ public class CommunicationServer implements Runnable{
 		m.put(TypesID.TOURNAMENT, new TypesInteger(idTournament));
 		m.put(TypesID.POOL, new TypesInteger(idPool));
 		Command c = new Command(CommandName.SCORE, m);
-		send(c);
+		netty.send(c);
 	}
 	
 	public void registerStable(TypesStable s, TypesLogin l) {
@@ -332,7 +208,7 @@ public class CommunicationServer implements Runnable{
 		m.put(TypesID.STABLE, s);
 		m.put(TypesID.LOGIN, l);
 		Command c = new Command(CommandName.STABLE,m);
-		send(c);
+		netty.send(c);
 	}
 
 

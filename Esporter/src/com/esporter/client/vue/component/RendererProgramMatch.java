@@ -1,36 +1,31 @@
 package com.esporter.client.vue.component;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.text.SimpleDateFormat;
 
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
 import com.esporter.both.types.TypesImage;
 import com.esporter.both.types.TypesMatch;
 import com.esporter.both.types.TypesPermission;
-import com.esporter.both.types.TypesTournament;
-import com.esporter.client.controleur.Controler;
+import com.esporter.client.controleur.ControlerMatches;
+import com.esporter.client.controleur.MasterControler;
 import com.esporter.client.vue.MasterFrame;
-
-import java.awt.FlowLayout;
-import javax.swing.SwingConstants;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.Insets;
-import java.awt.image.BufferedImage;
-import java.text.SimpleDateFormat;
-
-import javax.swing.border.EmptyBorder;
-import java.awt.Color;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 
 public class RendererProgramMatch extends JPanel {
 
@@ -85,7 +80,7 @@ public class RendererProgramMatch extends JPanel {
 		panelContainerTeamsInfo.setLayout(new GridLayout(0, 5, 0, 0));
 		JLabel lblTeam1Name;
 		if(match.getTeam1()!=0) {
-			lblTeam1Name = new JLabel(Controler.getInstance().getData().getTeams().get(match.getTeam1()).getStable().getName());
+			lblTeam1Name = new JLabel(MasterControler.getUser().getData().getTeams().get(match.getTeam1()).getStable().getName());
 		} else {
 			lblTeam1Name = new JLabel("ADT");
 		}
@@ -94,7 +89,7 @@ public class RendererProgramMatch extends JPanel {
 		
 		JLabel lblTeam1Logo = new JLabel();
 		if(match.getTeam1()!=0) {
-			BufferedImage logoStable1 = Controler.getInstance().getData().getTeams().get(match.getTeam1()).getStable().getLogo().getImage();
+			BufferedImage logoStable1 = MasterControler.getUser().getData().getTeams().get(match.getTeam1()).getStable().getLogo().getImage();
 			logoStable1 = TypesImage.resize(logoStable1, 100, 100);
 			lblTeam1Logo.setIcon(new ImageIcon(logoStable1));
 		}else {
@@ -115,7 +110,7 @@ public class RendererProgramMatch extends JPanel {
 		
 		JLabel lblTeam2Logo = new JLabel();
 		if(match.getTeam2()!=0) {
-			BufferedImage logoStable2 = Controler.getInstance().getData().getTeams().get(match.getTeam2()).getStable().getLogo().getImage();
+			BufferedImage logoStable2 = MasterControler.getUser().getData().getTeams().get(match.getTeam2()).getStable().getLogo().getImage();
 			logoStable2 = TypesImage.resize(logoStable2, 100, 100);
 			lblTeam2Logo.setIcon(new ImageIcon(logoStable2));
 		}else {
@@ -126,7 +121,7 @@ public class RendererProgramMatch extends JPanel {
 		
 		JLabel lblTeam2Name;
 		if(match.getTeam1()!=0) {
-			lblTeam2Name = new JLabel(Controler.getInstance().getData().getTeams().get(match.getTeam2()).getStable().getName());
+			lblTeam2Name = new JLabel(MasterControler.getUser().getData().getTeams().get(match.getTeam2()).getStable().getName());
 		} else {
 			lblTeam2Name = new JLabel("ADT");
 		}
@@ -152,10 +147,10 @@ public class RendererProgramMatch extends JPanel {
 		panelContainerButton.add(panelButton, gbc_panelButton);
 		JButton btnSetScore = new JButton("Ajouter le score");
 		panelButton.add(btnSetScore);
-		btnSetScore.addActionListener(Controler.getInstance());
+		btnSetScore.addActionListener(new ControlerMatches());
 		btnSetScore.setActionCommand("MATCHES RENDERER SCORE "+id);
 		
-		if(Controler.getInstance().getUser().getPermission() != TypesPermission.REFEREE || match.isPlayed()) {
+		if(MasterControler.getUser().getPermission() != TypesPermission.REFEREE || match.isPlayed()) {
 			btnSetScore.setVisible(false);
 		}
 		
