@@ -110,6 +110,11 @@ public class TypesTournament implements Types, Serializable, Comparable<TypesTou
 	public int compareTo(TypesTournament o) {
 		return this.getRegisterDate().compareTo(o.getRegisterDate());
 	}
+
+	public void setGame(TypesGame game) {
+		this.game=game;
+	}
+	
 	
 	
 	
