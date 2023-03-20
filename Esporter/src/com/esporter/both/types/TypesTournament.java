@@ -115,10 +115,17 @@ public class TypesTournament implements Types, Serializable, Comparable<TypesTou
 		this.game=game;
 	}
 	
+	public void setFame(TypesFame fame) {
+		this.fame=fame;
+	}
 	
+	public void setName(String name) {
+		this.name=name;
+	}
 	
-	
-	
+	public void setRegisterDate(Timestamp registerDate ) {
+		this.registerDate=registerDate;
+	}
 	
 	
 
