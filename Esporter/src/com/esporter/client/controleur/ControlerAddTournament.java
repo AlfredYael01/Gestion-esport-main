@@ -57,7 +57,7 @@ public class ControlerAddTournament extends MasterControler implements ActionLis
 			//create frame new object  f
 			final JFrame f = new JFrame();
 			//set text which is collected by date picker i.e. set date 
-			create.getTxtDateStartTournament().setText(new DatePicker(f).setPickedDate());
+			create.getTxtDateStartTournament().setText(new DatePicker(f, create.getTxtDateStartTournament().getText()).setPickedDate());
 			break;
 		case "ADD_TOURNAMENT_CANCEL":
 			MasterFrame.getInstance().setPanel(com.esporter.client.vue.organizer.Calendar.class, null);

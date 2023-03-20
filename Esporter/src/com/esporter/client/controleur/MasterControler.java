@@ -89,9 +89,9 @@ public class MasterControler {
 		lastDialog=jdiag;
 	}
 	
-	public String openDatePicker(FilterDate... filterDates) {
+	public String openDatePicker(String date, FilterDate... filterDates) {
 		final JFrame f1 = new JFrame();
-		return new DatePicker(f1, filterDates).setPickedDate();
+		return new DatePicker(f1, date, filterDates).setPickedDate();
 	}
 	
 	

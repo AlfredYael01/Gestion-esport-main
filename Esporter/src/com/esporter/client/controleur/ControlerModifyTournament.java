@@ -24,7 +24,7 @@ public class ControlerModifyTournament extends MasterControler implements Action
 			//create frame new object  f
 			final JFrame f = new JFrame();
 			//set text which is collected by date picker i.e. set date 
-			((EditTournament)MasterFrame.getCurrentPanel()).getTxtDateStartTournament().setText(new DatePicker(f).setPickedDate());
+			((EditTournament)MasterFrame.getCurrentPanel()).getTxtDateStartTournament().setText(new DatePicker(f, ((EditTournament)MasterFrame.getCurrentPanel()).getTxtDateStartTournament().getText()).setPickedDate());
 			break;
 		case "MODIFY_TOURNAMENT_VALIDATE":
 			try {

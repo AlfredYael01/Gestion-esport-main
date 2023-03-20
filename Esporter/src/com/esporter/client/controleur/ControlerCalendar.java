@@ -32,14 +32,19 @@ public class ControlerCalendar extends MasterControler implements ActionListener
 			//create frame new object  f
 			final JFrame f = new JFrame();
 			//set text which is collected by date picker i.e. set date 
-			cal.getTxtDate().setText(new DatePicker(f).setPickedDate());
+			cal.getTxtDate().setText(new DatePicker(f, cal.getTxtDate().getText()).setPickedDate());
 			MasterFrame.getInstance().getMain().repaint();
             MasterFrame.getInstance().getMain().revalidate();
             if(!cal.getTxtDate().getText().equals("")) {
-				Timestamp t = Timestamp.valueOf(cal.getTxtDate().getText() + " 00:00:00");
-				System.out.println(t.toString());
-				cal.setChosenDate(t);
-				cal.createListTournament(t,cal.getGame() );
+            	try {
+            		Timestamp t = Timestamp.valueOf(cal.getTxtDate().getText() + " 00:00:00");
+            		System.out.println(t.toString());
+    				cal.setChosenDate(t);
+    				cal.createListTournament(t,cal.getGame() );
+            	} catch (Exception e1) {
+            		cal.createListTournament(null,cal.getGame() );
+            	}
+				
             } else {
             	cal.createListTournament(null,cal.getGame() );
             }
