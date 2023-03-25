@@ -7,6 +7,7 @@ import java.awt.Image;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
+import com.esporter.both.types.TypesImage;
 import com.esporter.both.types.TypesRegisterPlayer;
 import com.esporter.client.controleur.Controler;
 import com.esporter.client.vue.MasterFrame;
@@ -71,7 +72,7 @@ public class ContainerPlayer extends JPanel {
 		this.player = player;
 		playerName.setText(player.getPlayer().getName()+" "+player.getPlayer().getFirstName());
 		BufferedImage bf = player.getPlayer().getImage().getImage();
-		bf = resize(bf, WIDTH-1, HEIGHT-HEIGHT/4-1);
+		bf = TypesImage.resize(bf, WIDTH-1, HEIGHT-HEIGHT/4-1);
 		image.setIcon(new ImageIcon(bf));
 		revalidate();
 		repaint();
@@ -86,23 +87,12 @@ public class ContainerPlayer extends JPanel {
 		g.drawImage(bf, 0, 0, null);
 	}
 	
-	public static BufferedImage resize(BufferedImage img, int newW, int newH) { 
-	    Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
-	    BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
-
-	    Graphics2D g2d = dimg.createGraphics();
-	    g2d.drawImage(tmp, 0, 0, null);
-	    g2d.dispose();
-
-	    return dimg;
-	}
-	
-	public TypesRegisterPlayer getPlayer() {
-		return player;
-	}
-	
 	public ContainerPlayer getSelf() {
 		return this;
+	}
+
+	public TypesRegisterPlayer getPlayer() {
+		return player;
 	}
 	
 	
