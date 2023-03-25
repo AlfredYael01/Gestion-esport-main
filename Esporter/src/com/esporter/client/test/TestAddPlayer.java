@@ -49,7 +49,6 @@ class TestAddPlayer {
 	}
 	
 	@Test
-	@Order(1)
 	@DisplayName("Test permission")
 	public void testAddTeam1() {
 		ArrayList<TypesRegisterPlayer> team = new ArrayList<TypesRegisterPlayer>();
@@ -93,7 +92,6 @@ class TestAddPlayer {
 	}
 	
 	@Test
-	@Order(2)
 	@DisplayName("Test add player")
 	public void testAddPlayer2() throws ExceptionLogin {
 		this.user.login("G2", "G2");
