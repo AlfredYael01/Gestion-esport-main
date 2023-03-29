@@ -78,12 +78,9 @@ public class ConnectionClient {
 			return -1;
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+			Thread.currentThread().interrupt();
 			return -1;
 		}
-		/*
-		if (username.equals("test") && password.equals("mdpTest"))
-			return 4;
-		return -1;*/
 	}
 	
 	public int ajouterTournoi(TypesTournament t) {
@@ -101,6 +98,7 @@ public class ConnectionClient {
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			Thread.currentThread().interrupt();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -177,7 +175,7 @@ public class ConnectionClient {
 		TypesStable s = (TypesStable) c.getInfoByID(TypesID.STABLE);
 		TypesLogin l = (TypesLogin) c.getInfoByID(TypesID.LOGIN);
 		
-		Query q = new Query(Query.addStable(l.getUsername(), l.getPassword(), s.getName(), s.getNickname()),typeRequete.INSERTPLAYER);
+		Query q = new Query(Query.addStable(l.getUsername(), l.getPassword(), s.getName(), s.getNickname()),typeRequete.INSERT_DATE_BLOB);
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		try {
 			ImageIO.write(s.getLogo().getImage(), "png", os);
@@ -206,6 +204,7 @@ public class ConnectionClient {
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			Thread.currentThread().interrupt();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -263,6 +262,7 @@ public class ConnectionClient {
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			Thread.currentThread().interrupt();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -278,7 +278,9 @@ public class ConnectionClient {
 				mainThread.getInstance().getData().getCalendar().get(t.getId()).setPool(listP);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
+				Thread.currentThread().interrupt();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -415,7 +417,7 @@ public class ConnectionClient {
 			HashMap<Integer, TypesPlayer> joueurs = new HashMap<>();
 			for (TypesRegisterPlayer jou : equipe.getPlayers()) {
 				TypesPlayer joueur = jou.getPlayer();
-				Query reqJou = new Query(Query.addPlayer(jou.getLogin().getUsername(), jou.getLogin().getPassword(), joueur.getName(),joueur.getFirstName(), res.getInteger(), 1),typeRequete.INSERTPLAYER);
+				Query reqJou = new Query(Query.addPlayer(jou.getLogin().getUsername(), jou.getLogin().getPassword(), joueur.getName(),joueur.getFirstName(), res.getInteger(), 1),typeRequete.INSERT_DATE_BLOB);
 				ByteArrayOutputStream os = new ByteArrayOutputStream();
 				ImageIO.write(joueur.getImage().getImage(), "png", os);
 				InputStream is = new ByteArrayInputStream(os.toByteArray());
@@ -464,7 +466,7 @@ public class ConnectionClient {
 		Iterator<TypesPlayer> ite = team.getPlayers().values().iterator();
 		while(ite.hasNext()) {
 			TypesPlayer player = ite.next();
-			Query r = new Query(Query.modifyPlayer(player.getFirstName(), player.getName(), player.getId()),typeRequete.MODIFYPLAYER);
+			Query r = new Query(Query.modifyPlayer(player.getFirstName(), player.getName(), player.getId()),typeRequete.MODIFY_DATE_BLOB);
 			r.setDates(player.getBirthDate(),player.getContractStartDate(),player.getContractEndDate());
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
 			try {

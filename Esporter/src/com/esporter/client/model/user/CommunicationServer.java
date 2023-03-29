@@ -80,6 +80,7 @@ public class CommunicationServer{
 			Thread.sleep(reconnectTime*1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+			Thread.currentThread().interrupt();
 		}
 		try {
 			connect();
