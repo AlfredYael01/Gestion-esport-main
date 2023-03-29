@@ -120,7 +120,7 @@ public class ErrorPanel extends JPanel {
 			this.e = e;
 			if (e != null) {
 				System.out.println("Thread error notify");
-				t.notify();
+				instance.notify();
 			}
 		}
 
@@ -147,7 +147,7 @@ public class ErrorPanel extends JPanel {
 		}
 		synchronized (instance) {
 			setException(e);
-			t.notify();
+			instance.notify();
 		}
 		setTexte(e.getMessage());
 		
@@ -193,19 +193,19 @@ public class ErrorPanel extends JPanel {
 		panel_1 = new JPanel();
 		panel.add(panel_1, BorderLayout.SOUTH);
 
-		JButton btnContinuer = new JButton();
+		btnRetry = new JButton();
 		ControlerError controler = new ControlerError();
 		ControlerKeyStroke controlerKey = new ControlerKeyStroke();
-		btnContinuer.addActionListener(controler);
+		btnRetry.addActionListener(controler);
 		//btnContinuer.addKeyListener(controler);
 		
 		
-		btnContinuer.setActionCommand("ERROR_CONTINUE");
+		btnRetry.setActionCommand("ERROR_CONTINUE");
 		
-		btnContinuer.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("pressed ENTER"), "pressedEnter");
-		btnContinuer.getActionMap().put("pressedEnter", controlerKey);
-		btnContinuer.setText("Continuer");
-		panel_1.add(btnContinuer);
+		btnRetry.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("pressed ENTER"), "pressedEnter");
+		btnRetry.getActionMap().put("pressedEnter", controlerKey);
+		btnRetry.setText("Continuer");
+		panel_1.add(btnRetry);
 
 		panelTexte.setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
 		panelTexte.setForeground(MasterFrame.COLOR_TEXT);

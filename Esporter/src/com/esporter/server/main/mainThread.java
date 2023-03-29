@@ -69,8 +69,9 @@ public class mainThread {
 				
 				//Stop all client
 
-			} catch (Exception e) {
+			} catch (InterruptedException e) {
 				e.printStackTrace();
+				Thread.currentThread().interrupt();
 			} finally {
 				netty.shutdownGracefully();//Stop server
 				
@@ -100,6 +101,7 @@ public class mainThread {
 		} catch (InterruptedException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
+			Thread.currentThread().interrupt();
 		}
 	}
 
@@ -250,7 +252,7 @@ public class mainThread {
 				rankingStable.close();
 			}
 			return stableAndScore;
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 			return new ConcurrentHashMap<>();
 		}
@@ -354,12 +356,11 @@ public class mainThread {
 	}
 	
 	public void closeClient(ChannelHandlerContext ctx) {
-		Collection<ConnectionClient> tabClient = allClients.values();
 		String host = ((InetSocketAddress)ctx.channel().remoteAddress()).getAddress().getHostAddress();
 		int port = ((InetSocketAddress)ctx.channel().remoteAddress()).getPort();
 		String uniqueID = host+":"+port;
-		synchronized (tabClient) {
-			tabClient.remove(uniqueID);
+		synchronized (allClients) {
+			allClients.remove(uniqueID);
 			nbClient--;
 		}
 	}

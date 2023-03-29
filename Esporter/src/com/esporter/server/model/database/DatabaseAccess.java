@@ -90,12 +90,7 @@ public class DatabaseAccess {
 								rs.setError(true);
 							}
 							
-							try {
-								out.put(rs, id);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-								Thread.currentThread().interrupt();
-							}
+							out.put(rs, id);
 							
 							break;
 						case PROCEDURE:
@@ -109,12 +104,8 @@ public class DatabaseAccess {
 								e2.printStackTrace();
 								rs.setError(true);
 							}
-							try {
-								out.put(rs, id);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-								Thread.currentThread().interrupt();
-							}
+
+							out.put(rs, id);
 							
 							break;
 						case QUERY:
@@ -129,12 +120,9 @@ public class DatabaseAccess {
 								e1.printStackTrace();
 								rs.setError(true);
 							}
-							try {
-								out.put(rs, id);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-								Thread.currentThread().interrupt();
-							}
+
+							out.put(rs, id);
+
 							break;
 						case INSERT:
 							Statement st1 = null;
@@ -181,12 +169,9 @@ public class DatabaseAccess {
 									e.printStackTrace();
 								}
 							}
-							try {
-								out.put(rs, id);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-								Thread.currentThread().interrupt();
-							}
+
+							out.put(rs, id);
+
 						break;
 					case MODIFY_DATE_BLOB:
 						CallableStatement modify = null;
@@ -212,12 +197,9 @@ public class DatabaseAccess {
 								e.printStackTrace();
 							}
 						}
-						try {
-							out.put(rs, id);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-							Thread.currentThread().interrupt();
-						}
+
+						out.put(rs, id);
+
 							
 						}
 					}
@@ -270,7 +252,7 @@ public class DatabaseAccess {
 		return instance;
 	}
 	
-	public Result getData(Query query) throws InterruptedException {
+	public Result getData(Query query){
 		int id = in.put(query);
 		Entry<Integer, Result> data;
 		data = out.get(id);

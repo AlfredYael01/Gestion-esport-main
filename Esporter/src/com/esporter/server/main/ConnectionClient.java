@@ -161,7 +161,7 @@ public class ConnectionClient {
 				m.put(TypesID.INT, new TypesInteger(id));
 				ResponseObject res = new ResponseObject(Response.SYNCHRONIZED_COMMAND,m,null);
 				mainThread.getInstance().sendAll(res);
-			} catch (InterruptedException | SQLException e) {
+			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -201,10 +201,6 @@ public class ConnectionClient {
 			ResponseObject res = new ResponseObject(Response.UPDATE_STABLE,m,null);
 			mainThread.getInstance().sendAll(res);
 			
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			Thread.currentThread().interrupt();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -228,8 +224,6 @@ public class ConnectionClient {
 		try {
 			DatabaseAccess.getInstance().getData(q);
 			DatabaseAccess.getInstance().getData(new Query(Query.remplissagePoule(Pool, idTournoi, TypesGame.gameToInt(jeu), match.getWinner(), match.getTeam1(), match.getTeam2()),typeRequete.PROCEDURE));
-		} catch (InterruptedException e) {
-			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -356,9 +350,6 @@ public class ConnectionClient {
 				} catch (IllegalArgumentException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -397,10 +388,8 @@ public class ConnectionClient {
 			if (res.isError()) {
 				error("Erreur dans la creation des equipes veuillez ressayer plus tard");
 			}
-		} catch (InterruptedException | SQLException e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
 			error("Erreur dans la creation des equipes veuillez ressayer plus tard");
-			return;
 		}
 		try {
 
@@ -438,7 +427,7 @@ public class ConnectionClient {
 			m.put(TypesID.TEAM, eq);
 			mainThread.getInstance().miseAJourData(m);
 
-		} catch (InterruptedException | SQLException e) {
+		} catch (SQLException e) {
 			erreurAjoutEquipe(res.getInteger());
 			error("Erreur dans l'ajout de cette equipe, veuillez ressayer plus tard");
 		} catch (IOException e) {
@@ -454,7 +443,7 @@ public class ConnectionClient {
 
 			r = new Query(Query.removeTeam(idEquipe),typeRequete.QUERY);
 			DatabaseAccess.getInstance().getData(r);
-		} catch (InterruptedException | SQLException e) {
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -481,9 +470,6 @@ public class ConnectionClient {
 				if (res.isError()) {
 					System.out.println("Error on insert");
 				}
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -505,9 +491,6 @@ public class ConnectionClient {
 				return;
 			}
 			mainThread.getInstance().deleteData(TypesID.TOURNAMENT, new TypesInteger(t));
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -618,7 +601,7 @@ public class ConnectionClient {
 			mainThread.getInstance().miseAJourData(m);
 	
 	
-		} catch (InterruptedException | SQLException e) {
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

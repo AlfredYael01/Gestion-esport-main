@@ -29,7 +29,7 @@ public class ProcessingHandler extends ChannelInboundHandlerAdapter {
     			c = (Command)msg;
     		System.out.println("Message recu : "+c.getName());
     		ConnectionClient client = getClientData(ctx);
-    		if(client.getIsLogin()) {
+    		if(client.getIsLogin() && c!=null) {
 
     			switch(c.getName()) {
     			case LOGOUT : 

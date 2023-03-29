@@ -22,10 +22,10 @@ public class Data implements Serializable, Types {
 	 * 
 	 */
 	private static final long serialVersionUID = 6632461413087395187L;
-	private volatile ConcurrentMap<Integer, TypesStable> stables = new ConcurrentHashMap<>();
-	private volatile ConcurrentMap<Integer, TypesTournament> calendar = new ConcurrentHashMap<>();
-	private volatile ConcurrentMap<Integer, TypesRanking> ranking = new ConcurrentHashMap<>();
-	private volatile ConcurrentMap<Integer, TypesTeam> teams = new ConcurrentHashMap<>();
+	private ConcurrentMap<Integer, TypesStable> stables = new ConcurrentHashMap<>();
+	private ConcurrentMap<Integer, TypesTournament> calendar = new ConcurrentHashMap<>();
+	private ConcurrentMap<Integer, TypesRanking> ranking = new ConcurrentHashMap<>();
+	private ConcurrentMap<Integer, TypesTeam> teams = new ConcurrentHashMap<>();
 	
 	public ConcurrentMap<Integer, TypesTournament> getCalendar() {
 		return calendar;

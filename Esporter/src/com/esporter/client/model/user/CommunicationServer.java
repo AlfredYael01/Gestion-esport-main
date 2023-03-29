@@ -102,11 +102,15 @@ public class CommunicationServer{
 		netty.send(c);
 		while(decodeId.get(id)==null) {
 			try {
-				wait();
-				this.waitingThread = this;
+				synchronized (this) {
+					this.waitingThread = this;
+					wait();
+				}
+				
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				Thread.currentThread().interrupt();
 			}
 		}
 		return decodeId.get(id);

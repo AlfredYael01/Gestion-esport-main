@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class QueueDatabase<T> {
 
@@ -14,7 +15,7 @@ public class QueueDatabase<T> {
 	private int max;
 	private int actual;
 	private int nbElement;
-	private static volatile int ID;
+	private static AtomicInteger ID;
 	private DatabaseAccess db;
 	private final static int CAPACITY = 50;
 	
@@ -24,21 +25,34 @@ public class QueueDatabase<T> {
 		actual=0;
 		nbElement =0;
 		this.db = db;
-		
+		ID = new AtomicInteger(0);
 	}
 	
-	public int put(T s) throws InterruptedException {
+	public int put(T s){
 		if (queue.size()==0) {
 			synchronized (db) {
 				db.notify();
 			}
 		}
-		queue.put(new SimpleEntry<>(++ID,s));
-		return ID;
+		try {
+			
+			queue.put(new SimpleEntry<>(ID.addAndGet(1),s));
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Thread.currentThread().interrupt();
+		}
+		return ID.get();
 	}
 	
-	public void put(T s, int id) throws InterruptedException {
-		queue.put(new SimpleEntry<>(id,s));
+	public void put(T s, int id){
+		try {
+			queue.put(new SimpleEntry<>(id,s));
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Thread.currentThread().interrupt();
+		}
 	}
 	
 	public Entry<Integer, T> next(){
@@ -51,14 +65,18 @@ public class QueueDatabase<T> {
 		}
 	}
 	
-	public Entry<Integer, T> get(int id) throws InterruptedException{
+	public Entry<Integer, T> get(int id){
 		Entry<Integer, T> t;
 		t = queue.peek();
 		while(true) {
 			if (t!=null) {
+				try {
 				if (t.getKey()==id)
 					return queue.take();
 				Thread.sleep(100);
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
+				}
 			}
 			t = queue.peek();
 		}
