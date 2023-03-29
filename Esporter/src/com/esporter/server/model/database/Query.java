@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 
 public class Query {
 
-	public enum typeRequete{FUNCTION, QUERY, PROCEDURE, INSERT, INSERTPLAYER, MODIFYPLAYER}
+	public enum typeRequete{FUNCTION, QUERY, PROCEDURE, INSERT, INSERT_DATE_BLOB, MODIFY_DATE_BLOB}
 	
 	
 	private String query;

@@ -55,44 +55,41 @@ public class mainThread {
 			data = new Data();
 			initializeApp();
 			instance = this;
-			
-			NettyServer netty = new NettyServer(45000);
+			NettyServer netty = null;
 			try {
+			
+				netty = new NettyServer(45000);
+
 				System.out.println("Serv démarré");
 				System.out.println("En attente d'une connexion");
 				netty.run();
 				netty.getChannel().closeFuture().sync();
-			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				
+				
+				
+				//Stop all client
+
+			} catch (Exception e) {
+				e.printStackTrace();
 			} finally {
-	            netty.shutdownGracefully();
-	            System.out.println("Server shutdown");
-	        }
-			
-			
-			
-			
-			
-			
-			//Stop DB worker
-			try {
-				DatabaseAccess.getInstance().getTimerCheckAlive().cancel();
+				netty.shutdownGracefully();//Stop server
+				
+				//Stop db
+				DatabaseAccess.getInstance().getTimerCheckAlive().cancel(); 
 				DatabaseAccess.getInstance().stopThread();
 				DatabaseAccess.getInstance().getConn().close();
-			} catch(InterruptedException ie) {
-				ie.printStackTrace();
-			}
-			
-			//Stop all client
-			Collection<ConnectionClient> tabClient = allClients.values();
-			for (ConnectionClient c : tabClient) {
-				try {
-					c.getChannel().close().sync();
-			
-				} catch (Exception e) {
-					e.printStackTrace();
+				
+				//Disconnect all the clients
+				Collection<ConnectionClient> tabClient = allClients.values();
+				for (ConnectionClient c : tabClient) {
+					try {
+						c.getChannel().close().sync();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
+				
+				System.out.println("Server shutdown");
 			}
 
 			

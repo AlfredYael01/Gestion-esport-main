@@ -2,6 +2,7 @@ package com.esporter.client.model.user;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.EnumMap;
 import java.util.HashMap;
 
 import com.esporter.both.data.Data;
@@ -34,8 +35,10 @@ public class User {
 	private Types info;
 	private WaitingFor waiting;
 	private static Data data;
+	
+	private static final String ERROR_PERMISSION = "Vous n'avez pas la permission de faire cette action";
 
-	public User() throws UnknownHostException, IOException {
+	public User() throws IOException {
 		this.permission = TypesPermission.VISITOR;
 		this.com = new CommunicationServer(this);
 		this.waiting = new WaitingFor();
@@ -131,7 +134,7 @@ public class User {
 
 	public void registerTournament(int id) throws ExceptionInvalidPermission {
 		if (permission != TypesPermission.PLAYER) {
-			throw new ExceptionInvalidPermission("Vous n'avez pas la permission de faire cette action");
+			throw new ExceptionInvalidPermission(ERROR_PERMISSION);
 		}
 		com.registerTournament(id);
 		this.waiting.waitFor(Response.ERROR, Response.ERROR_PERMISSION, Response.UPDATE_TOURNAMENT);
@@ -139,7 +142,7 @@ public class User {
 
 	public void unregisterTournament(int idTournament, int idGame) throws ExceptionInvalidPermission {
 		if (permission != TypesPermission.PLAYER) {
-			throw new ExceptionInvalidPermission("Vous n'avez pas la permission de faire cette action");
+			throw new ExceptionInvalidPermission(ERROR_PERMISSION);
 		}
 		com.unregisterTournament(idTournament, idGame);
 		this.waiting.waitFor(Response.ERROR, Response.ERROR_PERMISSION, Response.UPDATE_TOURNAMENT);
@@ -148,7 +151,7 @@ public class User {
 	public void addTeam(TypesRegisterTeam team) {
 		if (permission != TypesPermission.STABLE) {
 			MasterControler
-					.fireError(new ExceptionInvalidPermission("Vous n'avez pas la permission de faire cette action"),false, false);
+					.fireError(new ExceptionInvalidPermission(ERROR_PERMISSION),false, false);
 		} else {
 			com.addTeam(team);
 			this.waiting.waitFor(Response.ERROR, Response.ERROR_PERMISSION, Response.UPDATE_TEAM);
@@ -158,7 +161,7 @@ public class User {
 	public void modifyTeam(TypesTeam team) {
 		if (permission != TypesPermission.STABLE) {
 			MasterControler
-					.fireError(new ExceptionInvalidPermission("Vous n'avez pas la permission de faire cette action"),false, false);
+					.fireError(new ExceptionInvalidPermission(ERROR_PERMISSION),false, false);
 		} else {
 			com.modifyTeam(team);
 			this.waiting.waitFor(Response.ERROR, Response.ERROR_PERMISSION, Response.UPDATE_TEAM);
@@ -182,7 +185,7 @@ public class User {
 
 	public void addTournament(TypesTournament t) throws ExceptionInvalidPermission {
 		if (permission != TypesPermission.ORGANIZER) {
-			throw new ExceptionInvalidPermission("Vous n'avez pas la permission de faire cette action");
+			throw new ExceptionInvalidPermission(ERROR_PERMISSION);
 		}
 		com.addTournament(t);
 		this.waiting.waitFor(Response.ERROR, Response.ERROR_PERMISSION, Response.UPDATE_TOURNAMENT);
@@ -190,7 +193,7 @@ public class User {
 
 	public void modifyTournament(TypesTournament t) throws ExceptionInvalidPermission {
 		if (permission != TypesPermission.ORGANIZER) {
-			throw new ExceptionInvalidPermission("Vous n'avez pas la permission de faire cette action");
+			throw new ExceptionInvalidPermission(ERROR_PERMISSION);
 
 		}
 		com.modifyTournament(t);
@@ -199,9 +202,9 @@ public class User {
 	
 	public String chckUsernameUsed(String p){
 		if (permission != TypesPermission.STABLE) {
-			MasterFrame.getInstance().fireError(new ExceptionInvalidPermission("Vous n'avez pas la permission de faire cette action"), false, false); 
+			MasterFrame.getInstance().fireError(new ExceptionInvalidPermission(ERROR_PERMISSION), false, false); 
 		}		
-		HashMap<TypesID, Types> m = new HashMap<>();
+		EnumMap<TypesID, Types> m = new EnumMap<>(TypesID.class);
 		m.put(TypesID.STRING, new TypesString(p));
 		Command c = new Command(CommandName.SYNCHRONIZED_COMMAND,m, ListSynchronzedCommand.CHECK_USERNAME);
 		TypesString ts = (TypesString)com.waitSynhronousResponse(c);

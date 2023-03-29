@@ -48,16 +48,13 @@ public class DatabaseAccess {
 		
 		//Ping the db to know if the connection is stil active
 		timerCheckAlive = new Timer();
-		timerCheckAlive.scheduleAtFixedRate(tt, 120000, 120000);;
+		timerCheckAlive.scheduleAtFixedRate(tt, 120000, 120000);
 		
 		
 		
 	    
 	    
-		t = new Thread(new Runnable() {
-		
-			@Override
-			public void run() {
+		t = new Thread( () -> {
 				while(run) {
 					synchronized (database) {
 
@@ -66,134 +63,67 @@ public class DatabaseAccess {
 								database.wait();
 							} catch (InterruptedException e) {
 								e.printStackTrace();
+								Thread.currentThread().interrupt();
 							}
 						Entry<Integer, Query> entry = in.next();
 						
-						if (entry!=null) {
-							int  id = entry.getKey();
-							Query r = entry.getValue();
-							Result rs=new Result(null, 0, false);
-							switch (r.getType()) {
-							case FUNCTION:
-								try {
-									CallableStatement cstmt = conn.prepareCall(r.getQuery());
-									cstmt.registerOutParameter(1, Types.INTEGER);
-									if (r.getDates()!=null) {
-										for (int i=2;i<r.getDates().length+2;i++) {
-											cstmt.setTimestamp(i, r.getDates()[i-2]);
-										}
+						int  id = entry.getKey();
+						Query r = entry.getValue();
+						Result rs=new Result(null, 0, false);
+						switch (r.getType()) {
+						case FUNCTION:
+							CallableStatement cstmt = null;
+							try {
+								cstmt = conn.prepareCall(r.getQuery());
+								cstmt.registerOutParameter(1, Types.INTEGER);
+								if (r.getDates()!=null) {
+									for (int i=2;i<r.getDates().length+2;i++) {
+										cstmt.setTimestamp(i, r.getDates()[i-2]);
 									}
-									synchronized (instance) {
-										cstmt.executeUpdate();
-									}
-									int integer = cstmt.getInt(1);
-									rs.setInteger(integer);
-								} catch (SQLException e1) {
-									e1.printStackTrace();
-									rs.setError(true);
 								}
-								try {
-									out.put(rs, id);
-								} catch (InterruptedException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-								
-								break;
-							case PROCEDURE:
-								CallableStatement cstmt;
-								try {
-									cstmt = conn.prepareCall(r.getQuery());
-									synchronized (instance) {
-										cstmt.executeUpdate();
-									}
-								} catch (SQLException e2) {
-									e2.printStackTrace();
-									rs.setError(true);
-								}
-								try {
-									out.put(rs, id);
-								} catch (InterruptedException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-								
-								break;
-							case QUERY:
-								
-								Statement st;
-								try {
-									st = conn.createStatement();
-									synchronized (instance) {
-										rs.setResultSet(st.executeQuery(r.getQuery()));
-									}
-								} catch (SQLException e1) {
-									e1.printStackTrace();
-									rs.setError(true);
-								}
-								try {
-									out.put(rs, id);
-								} catch (InterruptedException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-								break;
-							case INSERT:
-								Statement st1;
-								try {
-									st1 = conn.createStatement();
-									synchronized (instance) {
-										rs.setResultSet(st1.executeQuery(r.getQuery()));
-									}
-								} catch (SQLException e1) {
-									e1.printStackTrace();
-									rs.setError(true);
-								}
-								break;
-							case INSERTPLAYER:
-								
-								try {
-									System.out.println(r.getQuery());
-									CallableStatement insertPlayer = conn.prepareCall(r.getQuery());
-									insertPlayer.registerOutParameter(1, Types.INTEGER);
-									insertPlayer.setBinaryStream(2, r.getInputStream());
-									int j = 3;
-									if (r.getDates()!=null) {
-										for (int i=0;i<r.getDates().length;i++) {
-											insertPlayer.setTimestamp(i+j, r.getDates()[i]);
-										}
-										j+=r.getDates().length;
-									}
-									synchronized (instance) {
-										insertPlayer.executeUpdate();
-									}
-									int entier = insertPlayer.getInt(1);
-									rs.setInteger(entier);
-								} catch (SQLException e1) {
-									e1.printStackTrace();
-									rs.setError(true);
-								}
-								try {
-									out.put(rs, id);
-								} catch (InterruptedException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-							break;
-						case MODIFYPLAYER:
+								cstmt.executeUpdate();
+
+								int integer = cstmt.getInt(1);
+								rs.setInteger(integer);
+							} catch (SQLException e1) {
+								e1.printStackTrace();
+								rs.setError(true);
+							}
 							
 							try {
-								CallableStatement insertPlayer = conn.prepareCall(r.getQuery());
-								insertPlayer.setBinaryStream(1, r.getInputStream());
-								int j = 2;
-								if (r.getDates()!=null) {
-									for (int i=0;i<r.getDates().length;i++) {
-										insertPlayer.setTimestamp(i+j, r.getDates()[i]);
-									}
-									j+=r.getDates().length;
-								}
+								out.put(rs, id);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+								Thread.currentThread().interrupt();
+							}
+							
+							break;
+						case PROCEDURE:
+							CallableStatement cstmt2 = null;
+							try {
+								cstmt2 = conn.prepareCall(r.getQuery());
 								synchronized (instance) {
-									insertPlayer.executeUpdate();
+									cstmt2.executeUpdate();
+								}
+							} catch (SQLException e2) {
+								e2.printStackTrace();
+								rs.setError(true);
+							}
+							try {
+								out.put(rs, id);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+								Thread.currentThread().interrupt();
+							}
+							
+							break;
+						case QUERY:
+							
+							Statement st = null;
+							try {
+								st = conn.createStatement();
+								synchronized (instance) {
+									rs.setResultSet(st.executeQuery(r.getQuery()));
 								}
 							} catch (SQLException e1) {
 								e1.printStackTrace();
@@ -202,17 +132,97 @@ public class DatabaseAccess {
 							try {
 								out.put(rs, id);
 							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
+								e.printStackTrace();
+								Thread.currentThread().interrupt();
+							}
+							break;
+						case INSERT:
+							Statement st1 = null;
+							try {
+								st1 = conn.createStatement();
+								synchronized (instance) {
+									rs.setResultSet(st1.executeQuery(r.getQuery()));
+								}
+							} catch (SQLException e1) {
+								e1.printStackTrace();
+								rs.setError(true);
+							}finally {
+								try {
+									st1.close();
+								} catch (SQLException e) {
+									e.printStackTrace();
+								}
+							}
+							break;
+						case INSERT_DATE_BLOB:
+							CallableStatement insert = null;
+							try {
+								insert = conn.prepareCall(r.getQuery());
+								insert.registerOutParameter(1, Types.INTEGER);
+								insert.setBinaryStream(2, r.getInputStream());
+								int j = 3;
+								if (r.getDates()!=null) {
+									for (int i=0;i<r.getDates().length;i++) {
+										insert.setTimestamp(i+j, r.getDates()[i]);
+									}
+								}
+								synchronized (instance) {
+									insert.executeUpdate();
+								}
+								int entier = insert.getInt(1);
+								rs.setInteger(entier);
+							} catch (SQLException e1) {
+								e1.printStackTrace();
+								rs.setError(true);
+							} finally {
+								try {
+									insert.close();
+								} catch (SQLException e) {
+									e.printStackTrace();
+								}
+							}
+							try {
+								out.put(rs, id);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+								Thread.currentThread().interrupt();
+							}
+						break;
+					case MODIFY_DATE_BLOB:
+						CallableStatement modify = null;
+						try {
+							modify = conn.prepareCall(r.getQuery());
+							modify.setBinaryStream(1, r.getInputStream());
+							int j = 2;
+							if (r.getDates()!=null) {
+								for (int i=0;i<r.getDates().length;i++) {
+									modify.setTimestamp(i+j, r.getDates()[i]);
+								}
+							}
+							synchronized (instance) {
+								modify.executeUpdate();
+							}
+						} catch (SQLException e1) {
+							e1.printStackTrace();
+							rs.setError(true);
+						} finally {
+							try {
+								modify.close();
+							} catch (SQLException e) {
 								e.printStackTrace();
 							}
-						
+						}
+						try {
+							out.put(rs, id);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+							Thread.currentThread().interrupt();
 						}
 							
 						}
 					}
 				}
 				
-			}
 		});
 		t.setDaemon(true);
 		t.start();
@@ -243,13 +253,6 @@ public class DatabaseAccess {
 		dataSource.setURL("jdbc:oracle:thin:@telline.univ-tlse3.fr:1521:etupre");
 		dataSource.setUser("MRC4302A");
 		dataSource.setPassword("$iutinfo");
-        //String login = "MRC4302A";
-        //String passw = "$iutinfo";
-        //String connectString = "jdbc:oracle:thin:@telline.univ-tlse3.fr:1521:etupre";
-    
-        //DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
-        
-        //conn = DriverManager.getConnection(connectString, login, passw);
 		conn = dataSource.getConnection();
         System.out.println("Connexion OK");
 

@@ -94,6 +94,7 @@ public class ErrorPanel extends JPanel {
 								System.out.println("Thread error Wake up");
 							} catch (InterruptedException e1) {
 								e1.printStackTrace();
+								Thread.currentThread().interrupt();
 							}
 						} else {
 							try {
@@ -101,6 +102,7 @@ public class ErrorPanel extends JPanel {
 							} catch (InterruptedException e1) {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();
+								Thread.currentThread().interrupt();
 							}
 
 						}
@@ -118,7 +120,7 @@ public class ErrorPanel extends JPanel {
 			this.e = e;
 			if (e != null) {
 				System.out.println("Thread error notify");
-				this.notify();
+				t.notify();
 			}
 		}
 
@@ -145,7 +147,7 @@ public class ErrorPanel extends JPanel {
 		}
 		synchronized (instance) {
 			setException(e);
-			instance.notify();
+			t.notify();
 		}
 		setTexte(e.getMessage());
 		
