@@ -2,6 +2,7 @@ package com.esporter.both.types;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class TypesTeam implements Types, Serializable, Comparable<TypesTeam>  {
 
@@ -76,6 +77,11 @@ public class TypesTeam implements Types, Serializable, Comparable<TypesTeam>  {
 	@Override
 	public int compareTo(TypesTeam o) {
 		return this.getStable().compareTo(o.getStable());
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, game, players, stable);
 	}
 
 }

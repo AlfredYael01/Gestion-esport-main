@@ -13,6 +13,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import com.esporter.both.types.exception.ExceptionLogin;
 import com.esporter.client.controleur.ControlerError;
 import com.esporter.client.controleur.ControlerKeyStroke;
 import com.esporter.client.vue.MasterFrame;
@@ -20,7 +21,7 @@ import com.esporter.client.vue.MasterFrame;
 public class ErrorPanel extends JPanel {
 
 	private static final long serialVersionUID = 972390881488216598L;
-	private volatile Exception e;
+	private Exception e;
 	private JLabel texte;
 	private JCircleProgressBar progressBar;
 	private Thread t;
@@ -47,8 +48,13 @@ public class ErrorPanel extends JPanel {
 		setBackground(MasterFrame.COLOR_MASTER_BACKGROUND);
 		this.setVisible(false);
 		initalize();
-		e = null;
+		
+		
 		this.instance = this;
+		
+		synchronized (instance) {
+			e = null;
+		}
 
 		panel_2 = new JPanel();
 		panel_2.setPreferredSize(new Dimension(200, 200));
@@ -138,10 +144,11 @@ public class ErrorPanel extends JPanel {
 			btnRetry.setVisible(true);
 		}
 		synchronized (instance) {
+			setException(e);
 			instance.notify();
 		}
 		setTexte(e.getMessage());
-		setException(e);
+		
 		this.revalidate();
 		this.repaint();
 	}
@@ -184,7 +191,7 @@ public class ErrorPanel extends JPanel {
 		panel_1 = new JPanel();
 		panel.add(panel_1, BorderLayout.SOUTH);
 
-		btnContinuer = new JButton();
+		JButton btnContinuer = new JButton();
 		ControlerError controler = new ControlerError();
 		ControlerKeyStroke controlerKey = new ControlerKeyStroke();
 		btnContinuer.addActionListener(controler);

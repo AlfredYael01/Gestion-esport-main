@@ -3,6 +3,7 @@ package com.esporter.both.types;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class TypesStable implements Types, Serializable,  Comparable<TypesStable> {
 
@@ -75,6 +76,11 @@ public class TypesStable implements Types, Serializable,  Comparable<TypesStable
 		return this.getName().compareTo(o.getName());
 	}
 	
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

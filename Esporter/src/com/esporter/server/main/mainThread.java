@@ -134,7 +134,7 @@ public class mainThread {
 		//ECURIE
 		Query r = new Query(Query.allStables(), typeRequete.QUERY);
 		ResultSet rs = db.getData(r).getResultSet();
-		HashMap<Integer, TypesStable> ecuries = new HashMap<>();
+		ConcurrentHashMap<Integer, TypesStable> ecuries = new ConcurrentHashMap<>();
 		while(rs.next()) {
 			BufferedImage bf1 = ImageIO.read(rs.getBinaryStream("logoecurie"));
 			TypesImage im1 = new TypesImage(bf1, "png");
@@ -197,7 +197,7 @@ public class mainThread {
 		//Tournoi
 		r = new Query(Query.getCalendar(), typeRequete.QUERY);
 		rs = db.getData(r).getResultSet();
-		HashMap<Integer, TypesTournament> calendrier = new HashMap<>();
+		ConcurrentHashMap<Integer, TypesTournament> calendrier = new ConcurrentHashMap<>();
 		TypesTournament tournoi;
 		Query req;
 		ResultSet res;
@@ -240,9 +240,9 @@ public class mainThread {
 		
 	}
 	
-	public HashMap<Integer, Integer> getCalendar(int idClassement) {
+	public ConcurrentHashMap<Integer, Integer> getCalendar(int idClassement) {
 		try {
-			HashMap<Integer, Integer> stableAndScore = new HashMap<>();
+			ConcurrentHashMap<Integer, Integer> stableAndScore = new ConcurrentHashMap<>();
 			
 			for(TypesStable st : data.getStables().values()) {
 				
@@ -255,7 +255,7 @@ public class mainThread {
 			return stableAndScore;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new HashMap<>();
+			return new ConcurrentHashMap<>();
 		}
 	}
 	
