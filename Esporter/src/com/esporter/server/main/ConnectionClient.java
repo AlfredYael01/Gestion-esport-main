@@ -156,7 +156,7 @@ public class ConnectionClient {
 				m.put(TypesID.STRING, new TypesString(s));
 				m.put(TypesID.INT, new TypesInteger(id));
 				ResponseObject res = new ResponseObject(Response.SYNCHRONIZED_COMMAND,m,null);
-				mainThread.getInstance().sendAll(res);
+				send(res);
 			} catch (SQLException e) {
 			}
 					
