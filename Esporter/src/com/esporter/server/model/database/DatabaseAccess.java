@@ -6,11 +6,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.Map.Entry;
-
-import com.esporter.both.types.TypesStable;
-
 import java.util.Timer;
 import java.util.TimerTask;
+
+import com.esporter.both.types.TypesStable;
 
 import oracle.jdbc.pool.OracleDataSource;
 

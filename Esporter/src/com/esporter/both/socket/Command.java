@@ -2,7 +2,6 @@ package com.esporter.both.socket;
 
 import java.io.Serializable;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.Map;
 
 import com.esporter.both.types.Types;

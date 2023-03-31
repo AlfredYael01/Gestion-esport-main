@@ -1,9 +1,7 @@
 package com.esporter.client.model.user;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.EnumMap;
-import java.util.HashMap;
 
 import com.esporter.both.data.Data;
 import com.esporter.both.socket.Command;
