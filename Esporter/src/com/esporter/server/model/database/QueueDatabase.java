@@ -38,8 +38,6 @@ public class QueueDatabase<T> {
 			
 			queue.put(new SimpleEntry<>(ID.addAndGet(1),s));
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 			Thread.currentThread().interrupt();
 		}
 		return ID.get();
@@ -49,8 +47,6 @@ public class QueueDatabase<T> {
 		try {
 			queue.put(new SimpleEntry<>(id,s));
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 			Thread.currentThread().interrupt();
 		}
 	}
@@ -59,8 +55,6 @@ public class QueueDatabase<T> {
 		try {
 			return queue.take();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 			return null;
 		}
 	}

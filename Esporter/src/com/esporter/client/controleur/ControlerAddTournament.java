@@ -32,7 +32,6 @@ public class ControlerAddTournament extends MasterControler implements ActionLis
 					try {
 						tournamentStart = Timestamp.valueOf(create.getTxtDateStartTournament().getText() + " 00:00:00");
 					} catch (IllegalArgumentException e1) {
-						e1.printStackTrace();
 						JOptionPane.showMessageDialog(null, "Format de date invalide","Error", JOptionPane.ERROR_MESSAGE);
 						return;
 					}
@@ -49,8 +48,7 @@ public class ControlerAddTournament extends MasterControler implements ActionLis
 					}
 				}
 			} catch (ExceptionInvalidPermission e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				
 			}
 			break;
 		case "ADD_TOURNAMENT_DATE":

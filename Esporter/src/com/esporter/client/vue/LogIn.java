@@ -82,8 +82,7 @@ public class LogIn extends JPanel{
 		try {
 			lblPicture.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("images/AvatarLogin.jpg"))));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
 		}
 		GridBagConstraints gbc_lblPicture = new GridBagConstraints();
 		gbc_lblPicture.anchor = GridBagConstraints.WEST;

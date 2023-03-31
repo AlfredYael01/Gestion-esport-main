@@ -38,7 +38,6 @@ public class ControlerModifyTournament extends MasterControler implements Action
 					try {
 						tournamentStart = Timestamp.valueOf(editPage.getTxtDateStartTournament().getText() + " 00:00:00");
 					} catch (IllegalArgumentException e1) {
-						e1.printStackTrace();
 						JOptionPane.showMessageDialog(null, "Format de date invalide","Error", JOptionPane.ERROR_MESSAGE);
 						return;
 					}
@@ -56,8 +55,7 @@ public class ControlerModifyTournament extends MasterControler implements Action
 					}
 				}
 			} catch (ExceptionInvalidPermission e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+
 			}
 			break;
 		case "MODIFY_TOURNAMENT_CANCEL":

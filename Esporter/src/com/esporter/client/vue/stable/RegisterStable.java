@@ -221,7 +221,6 @@ public class RegisterStable extends JPanel {
 			}
 			lblPictureChooser.setIcon(new ImageIcon(path));
 		} catch(IOException e) {
-			e.printStackTrace();
 		}
 	}
 	

@@ -58,8 +58,7 @@ public class ControlerRegisterStable extends MasterControler implements ActionLi
 					try {
 						ImageIO.write(image, "png", blob);
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+
 					}
 					InputStream is = new ByteArrayInputStream(blob.toByteArray());
 					BufferedImage bf = ImageIO.read(is);
@@ -94,25 +93,25 @@ public class ControlerRegisterStable extends MasterControler implements ActionLi
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	

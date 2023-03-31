@@ -402,7 +402,6 @@ public class AddPlayer extends JDialog {
 				throw new IllegalArgumentException("L'image n'a pas le bon ratio (1)");
 			} 
 		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
 

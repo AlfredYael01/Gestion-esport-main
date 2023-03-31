@@ -50,7 +50,7 @@ public class Calendar extends DataJPanel implements com.esporter.client.vue.comp
 		dateFilter = date;
 		gameFilter = game;
 		renderer = new LinkedList<RendererCalendar>();
-		ArrayList<TypesTournament> tournamentFiltered = MasterFrame.getInstance().getUser().getData().listFilteredTournament(date, game);
+		List<TypesTournament> tournamentFiltered = MasterFrame.getInstance().getUser().getData().listFilteredTournament(date, game);
 		System.out.println(tournamentFiltered.isEmpty());
 		if(tournamentFiltered.isEmpty() || tournamentFiltered == null ) {
 			System.out.println("isEmpty");
@@ -145,7 +145,7 @@ public class Calendar extends DataJPanel implements com.esporter.client.vue.comp
 
 			@Override
 			public void insertUpdate(DocumentEvent e) {
-				// TODO Auto-generated method stub
+				
 				System.out.println("ok1");
 				createListTournament(Date.valueOf(txtDate.getText()), gameFilter);
 				revalidate();
@@ -155,7 +155,7 @@ public class Calendar extends DataJPanel implements com.esporter.client.vue.comp
 
 			@Override
 			public void removeUpdate(DocumentEvent e) {
-				// TODO Auto-generated method stub
+				
 			}
 
 			@Override
@@ -210,7 +210,7 @@ public class Calendar extends DataJPanel implements com.esporter.client.vue.comp
 
 			@Override
 			public void removeUpdate(DocumentEvent e) {
-				// TODO Auto-generated method stub
+				
 				
 			}
 
@@ -274,12 +274,12 @@ public class Calendar extends DataJPanel implements com.esporter.client.vue.comp
 	
 	@Override
 	public void setGame(TypesGame game) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void setChosenDate(Timestamp chosenDate) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	

@@ -62,7 +62,6 @@ public class DatabaseAccess {
 							try {
 								database.wait();
 							} catch (InterruptedException e) {
-								e.printStackTrace();
 								Thread.currentThread().interrupt();
 							}
 						Entry<Integer, Query> entry = in.next();
@@ -86,7 +85,6 @@ public class DatabaseAccess {
 								int integer = cstmt.getInt(1);
 								rs.setInteger(integer);
 							} catch (SQLException e1) {
-								e1.printStackTrace();
 								rs.setError(true);
 							}
 							
@@ -101,7 +99,6 @@ public class DatabaseAccess {
 									cstmt2.executeUpdate();
 								}
 							} catch (SQLException e2) {
-								e2.printStackTrace();
 								rs.setError(true);
 							}
 
@@ -117,7 +114,6 @@ public class DatabaseAccess {
 									rs.setResultSet(st.executeQuery(r.getQuery()));
 								}
 							} catch (SQLException e1) {
-								e1.printStackTrace();
 								rs.setError(true);
 							}
 
@@ -132,13 +128,11 @@ public class DatabaseAccess {
 									rs.setResultSet(st1.executeQuery(r.getQuery()));
 								}
 							} catch (SQLException e1) {
-								e1.printStackTrace();
 								rs.setError(true);
 							}finally {
 								try {
 									st1.close();
 								} catch (SQLException e) {
-									e.printStackTrace();
 								}
 							}
 							break;
@@ -160,13 +154,11 @@ public class DatabaseAccess {
 								int entier = insert.getInt(1);
 								rs.setInteger(entier);
 							} catch (SQLException e1) {
-								e1.printStackTrace();
 								rs.setError(true);
 							} finally {
 								try {
 									insert.close();
 								} catch (SQLException e) {
-									e.printStackTrace();
 								}
 							}
 
@@ -188,13 +180,11 @@ public class DatabaseAccess {
 								modify.executeUpdate();
 							}
 						} catch (SQLException e1) {
-							e1.printStackTrace();
 							rs.setError(true);
 						} finally {
 							try {
 								modify.close();
 							} catch (SQLException e) {
-								e.printStackTrace();
 							}
 						}
 
@@ -224,8 +214,6 @@ public class DatabaseAccess {
 					System.out.println("DB is alive");
 				}
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
 		}
 	}

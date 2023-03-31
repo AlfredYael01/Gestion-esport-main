@@ -11,6 +11,6 @@ public class Home extends JPanel{
 
 	
 	public Home() {
-		// TODO Auto-generated constructor stub
+
 	}
 }

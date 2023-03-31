@@ -1,6 +1,7 @@
 package com.esporter.both.socket;
 
 import java.io.Serializable;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,18 +15,18 @@ public class Command implements Serializable{
 	 */
 	private static final long serialVersionUID = -8562553476003862463L;
 	private CommandName name;
-	private Map<TypesID,Types> info = new HashMap<>();
+	private EnumMap<TypesID,Types> info = new EnumMap<>(TypesID.class);
 	private ListSynchronzedCommand sm;
 	
 	
 	
-	public Command(CommandName name, Map<TypesID,Types> info) {
+	public Command(CommandName name, EnumMap<TypesID,Types> info) {
 		this.name = name;
 		this.info = info;
 		this.sm = null;
 	}
 	
-	public Command(CommandName name, Map<TypesID,Types> info, ListSynchronzedCommand sm) {
+	public Command(CommandName name, EnumMap<TypesID,Types> info, ListSynchronzedCommand sm) {
 		this.name = name;
 		this.info = info;
 		this.sm = sm;

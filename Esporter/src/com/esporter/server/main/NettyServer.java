@@ -25,7 +25,7 @@ public class NettyServer {
 
     // constructor
     public NettyServer(int port) {
-		// TODO Auto-generated constructor stub
+
     	this.port = port;
     	
 	}

@@ -6,7 +6,7 @@ import com.esporter.both.socket.Response;
 
 public class WaitingFor {
 	
-	private AtomicReferenceArray<Response> goal;
+	private AtomicReferenceArray<Response> goals;
 	private Response actualState;
 	private Thread t;
 	
@@ -15,20 +15,19 @@ public class WaitingFor {
 	}
 	
 	public void waitFor(Response... goal) {
-		this.goal = new AtomicReferenceArray<>(goal);
+		this.goals = new AtomicReferenceArray<>(goal);
 		actualState=null;
 		t = new Thread(new Runnable() {
 			@Override
 			public void run() {
 				System.out.println("Waiting for "+goal);
 				while (continueWaiting()) {
-					synchronized (t) {
+					synchronized (goals) {
 
 						try {
-							t.wait();
+							goals.wait();
 							System.out.println("out of sleep");
 						} catch (InterruptedException e) {
-							e.printStackTrace();
 							Thread.currentThread().interrupt();
 						}
 					}
@@ -47,8 +46,8 @@ public class WaitingFor {
 	
 	public boolean continueWaiting() {
 		if(actualState != null) {
-			for (int i = 0; i<goal.length();i++) {
-				if (actualState.equals(goal.get(i))) {
+			for (int i = 0; i<goals.length();i++) {
+				if (actualState.equals(goals.get(i))) {
 					return false;
 				}
 			}
@@ -58,9 +57,9 @@ public class WaitingFor {
 	
 	public  void setActualState(Response actualState) {
 		
-		synchronized (t) {
+		synchronized (goals) {
 			this.actualState = actualState;
-			t.notifyAll();
+			goals.notifyAll();
 		}
 		
 	}

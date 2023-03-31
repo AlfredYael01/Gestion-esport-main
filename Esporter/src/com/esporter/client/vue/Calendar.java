@@ -55,7 +55,7 @@ public class Calendar extends DataJPanel implements com.esporter.client.vue.comp
 		chosenDate = date;
 		game = jeu;
 		this.renderer = new LinkedList<RendererCalendar>();
-		ArrayList<TypesTournament> tournoisfiltreJeu = MasterFrame.getInstance().getUser().getData().listFilteredTournament(date, jeu);
+		List<TypesTournament> tournoisfiltreJeu = MasterFrame.getInstance().getUser().getData().listFilteredTournament(date, jeu);
 		System.out.println(tournoisfiltreJeu.isEmpty());
 		if(tournoisfiltreJeu.isEmpty() || tournoisfiltreJeu == null ) {
 			ifEmpty.setText("Il n'existe aucun tournoi correspondant aux critères recherchés");

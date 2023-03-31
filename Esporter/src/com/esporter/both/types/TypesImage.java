@@ -32,8 +32,7 @@ public class TypesImage implements Types, Serializable {
 		try {
 			 bufferedimage = ImageIO.read(new ByteArrayInputStream(decodedBytes));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
 		}
 		return bufferedimage;
 	}

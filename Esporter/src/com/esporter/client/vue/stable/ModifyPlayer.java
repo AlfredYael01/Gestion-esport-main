@@ -362,7 +362,6 @@ public class ModifyPlayer extends JDialog {
 			lblPlayerImageIcon.setIcon(new ImageIcon(path));
 			image = ImageIO.read(selFile);
 		} catch(IOException e) {
-			e.printStackTrace();
 		}
 	}
 	

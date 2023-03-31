@@ -22,13 +22,11 @@ public class ControlerRegistration extends MasterControler implements ActionList
 					reg.dispose();
 				} catch (ExceptionInvalidPermission e1) {
 					
-					e1.printStackTrace();
 				}
 			}else {
 				try {
 					MasterFrame.getInstance().getUser().unregisterTournament(reg.getTournament().getId(), TypesGame.gameToInt(reg.getTournament().getGame()));
 				} catch (ExceptionInvalidPermission e1) {
-					e1.printStackTrace();
 				};
 				reg.dispose();
 			}

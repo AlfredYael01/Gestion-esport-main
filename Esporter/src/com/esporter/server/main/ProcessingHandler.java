@@ -25,8 +25,11 @@ public class ProcessingHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
     		Command c = null;
 
-    		if (msg instanceof Command)
+    		if (msg instanceof Command) {
     			c = (Command)msg;
+    		} else {
+    			return;
+    		}
     		System.out.println("Message recu : "+c.getName());
     		ConnectionClient client = getClientData(ctx);
     		if(client.getIsLogin() && c!=null) {

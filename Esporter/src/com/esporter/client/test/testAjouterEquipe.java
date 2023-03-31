@@ -21,7 +21,6 @@ public class testAjouterEquipe {
 					testAjouterEquipe window = new testAjouterEquipe();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
-					e.printStackTrace();
 				}
 			}
 		});

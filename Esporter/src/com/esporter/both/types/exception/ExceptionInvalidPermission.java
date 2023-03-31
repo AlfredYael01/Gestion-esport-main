@@ -9,22 +9,18 @@ public class ExceptionInvalidPermission extends Exception{
 
 	public ExceptionInvalidPermission() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public ExceptionInvalidPermission(String message, Throwable cause) {
 		super(message, cause);
-		// TODO Auto-generated constructor stub
 	}
 
 	public ExceptionInvalidPermission(String message) {
 		super(message);
-		// TODO Auto-generated constructor stub
 	}
 
 	public ExceptionInvalidPermission(Throwable cause) {
 		super(cause);
-		// TODO Auto-generated constructor stub
 	}
 	
 	

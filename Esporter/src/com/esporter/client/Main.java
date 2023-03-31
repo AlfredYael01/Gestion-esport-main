@@ -20,9 +20,9 @@ public class Main {
 			});
 			MasterFrame.getInstance().getFrame().setVisible(true);
 		} catch (UnknownHostException e) {
-			e.printStackTrace();
+
 		} catch (IOException e) {
-			e.printStackTrace();
+
 		}
 		
 	}

@@ -44,7 +44,7 @@ public class ControlerLogin extends MasterControler implements ActionListener, K
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
@@ -72,7 +72,7 @@ public class ControlerLogin extends MasterControler implements ActionListener, K
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 

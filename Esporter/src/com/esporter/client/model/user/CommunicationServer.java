@@ -3,6 +3,7 @@ package com.esporter.client.model.user;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.Date;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,8 +57,7 @@ public class CommunicationServer{
 			netty.run(IP, PORT);
 			System.out.println("Done");
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
 			reconnect();
 		}
 		
@@ -79,7 +79,6 @@ public class CommunicationServer{
 		try {
 			Thread.sleep(reconnectTime*1000);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -108,8 +107,6 @@ public class CommunicationServer{
 				}
 				
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 				Thread.currentThread().interrupt();
 			}
 		}
@@ -117,7 +114,7 @@ public class CommunicationServer{
 	}
 	
 	public void deleteTournament(int t) {
-		HashMap<TypesID, Types> m = new HashMap<>();
+		EnumMap<TypesID, Types> m = new EnumMap<>(TypesID.class);
 		m.put(TypesID.TOURNAMENT, new TypesInteger(t));
 		Command c = new Command(CommandName.DELETE_TOURNAMENT, m);
 		netty.send(c);
@@ -125,14 +122,14 @@ public class CommunicationServer{
 	
 	
 	public void sendLogin(String username, String password) {
-		HashMap<TypesID, Types> m = new HashMap<>();
+		EnumMap<TypesID, Types> m = new EnumMap<>(TypesID.class);
 		m.put(TypesID.LOGIN, new TypesLogin(username, password));
 		Command c = new Command(CommandName.LOGIN, m);
 		netty.send(c);
 	}
 	
 	public void registerTournament(int idTournament) {
-		HashMap<TypesID, Types> m = new HashMap<>();
+		EnumMap<TypesID, Types> m = new EnumMap<>(TypesID.class);
 		m.put(TypesID.TOURNAMENT, new TypesInteger(idTournament));
 		m.put(TypesID.PLAYER, new TypesInteger(((TypesPlayer)user.getInfo()).getId()));
 		Command c = new Command(CommandName.REGISTER_TOURNAMENT, m);
@@ -140,7 +137,7 @@ public class CommunicationServer{
 	}
 	
 	public void unregisterTournament(int idTournament, int idGame) {
-		HashMap<TypesID, Types> m = new HashMap<>();
+		EnumMap<TypesID, Types> m = new EnumMap<>(TypesID.class);
 		m.put(TypesID.TOURNAMENT, new TypesInteger(idTournament));
 		m.put(TypesID.PLAYER, new TypesInteger(((TypesPlayer)user.getInfo()).getId()));
 		m.put(TypesID.GAME, new TypesInteger(idGame));
@@ -149,21 +146,21 @@ public class CommunicationServer{
 	}
 	
 	public void addTeam(TypesRegisterTeam team) {
-		HashMap<TypesID, Types> m = new HashMap<>();
+		EnumMap<TypesID, Types> m = new EnumMap<>(TypesID.class);
 		m.put(TypesID.TEAM, team);
 		Command c = new Command(CommandName.ADD_TEAM, m);
 		netty.send(c);
 	}
 	
 	public void modifyTeam(TypesTeam team) {
-		HashMap<TypesID, Types> m = new HashMap<>();
+		EnumMap<TypesID, Types> m = new EnumMap<>(TypesID.class);
 		m.put(TypesID.TEAM, team);
 		Command c = new Command(CommandName.MODIFY_TEAM, m);
 		netty.send(c);
 	}
 	
 	public void addTournament(TypesTournament t) {
-		HashMap<TypesID, Types> m = new HashMap<>();
+		EnumMap<TypesID, Types> m = new EnumMap<>(TypesID.class);
 		m.put(TypesID.TOURNAMENT, t);
 		Command c = new Command(CommandName.ADD_TOURNAMENT, m);
 		netty.send(c);
@@ -201,7 +198,7 @@ public class CommunicationServer{
 	
 
 	public void modifyTournament(TypesTournament t) {
-		HashMap<TypesID, Types> m = new HashMap<>();
+		EnumMap<TypesID, Types> m = new EnumMap<>(TypesID.class);
 		m.put(TypesID.TOURNAMENT, t);
 		Command c = new Command(CommandName.MODIFY_TOURNAMENT, m);
 		netty.send(c);
@@ -209,7 +206,7 @@ public class CommunicationServer{
 	
 	
 	public void changeScore(TypesMatch match, int idTournament, int idPool) {
-		HashMap<TypesID, Types> m = new HashMap<>();
+		EnumMap<TypesID, Types> m = new EnumMap<>(TypesID.class);
 		m.put(TypesID.MATCH, match);
 		m.put(TypesID.TOURNAMENT, new TypesInteger(idTournament));
 		m.put(TypesID.POOL, new TypesInteger(idPool));
@@ -218,7 +215,7 @@ public class CommunicationServer{
 	}
 	
 	public void registerStable(TypesStable s, TypesLogin l) {
-		HashMap<TypesID, Types> m = new HashMap<>();
+		EnumMap<TypesID, Types> m = new EnumMap<>(TypesID.class);
 		m.put(TypesID.STABLE, s);
 		m.put(TypesID.LOGIN, l);
 		Command c = new Command(CommandName.STABLE,m);

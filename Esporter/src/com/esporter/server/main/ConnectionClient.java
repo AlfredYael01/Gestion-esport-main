@@ -74,10 +74,8 @@ public class ConnectionClient {
 			System.out.println(r.getInteger());
 			return r.getInteger();
 		} catch (SQLException s) {
-			s.printStackTrace();
 			return -1;
 		} catch (InterruptedException e) {
-			e.printStackTrace();
 			Thread.currentThread().interrupt();
 			return -1;
 		}
@@ -96,12 +94,10 @@ public class ConnectionClient {
 			m.put(TypesID.TOURNAMENT, t);
 			mainThread.getInstance().miseAJourData(m);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
 			Thread.currentThread().interrupt();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
 			return -1;
 		}
 		return 1;
@@ -162,8 +158,6 @@ public class ConnectionClient {
 				ResponseObject res = new ResponseObject(Response.SYNCHRONIZED_COMMAND,m,null);
 				mainThread.getInstance().sendAll(res);
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
 					
 				break;
@@ -180,7 +174,6 @@ public class ConnectionClient {
 		try {
 			ImageIO.write(s.getLogo().getImage(), "png", os);
 		} catch (IOException e) {
-			e.printStackTrace();
 		}
 		InputStream is = new ByteArrayInputStream(os.toByteArray());
 		q.setInputStream(is);
@@ -202,8 +195,6 @@ public class ConnectionClient {
 			mainThread.getInstance().sendAll(res);
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		
 		
@@ -225,7 +216,6 @@ public class ConnectionClient {
 			DatabaseAccess.getInstance().getData(q);
 			DatabaseAccess.getInstance().getData(new Query(Query.remplissagePoule(Pool, idTournoi, TypesGame.gameToInt(jeu), match.getWinner(), match.getTeam1(), match.getTeam2()),typeRequete.PROCEDURE));
 		} catch (SQLException e) {
-			e.printStackTrace();
 		}
 		
 		TypesPool pool = mainThread.getInstance().getData().getCalendar().get(idTournoi).getPool().get(Pool-1);
@@ -251,15 +241,12 @@ public class ConnectionClient {
 			listP = mainThread.getInstance().getPool(t, TypesGame.gameToInt(t.getGame()));
 			mainThread.getInstance().getData().getCalendar().get(t.getId()).setPool(listP);
 		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
 			Thread.currentThread().interrupt();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
 		}
 		
 		
@@ -271,13 +258,10 @@ public class ConnectionClient {
 				listP = mainThread.getInstance().getPool(t, TypesGame.gameToInt(t.getGame()));
 				mainThread.getInstance().getData().getCalendar().get(t.getId()).setPool(listP);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				
-				e.printStackTrace();
+
 				Thread.currentThread().interrupt();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+
 			}
 			
 		}
@@ -348,11 +332,9 @@ public class ConnectionClient {
 				try {
 					DatabaseAccess.getInstance().getData(new Query(Query.setScore(team.getStable().getId(),TypesGame.gameToInt(jeu) , point),typeRequete.PROCEDURE));
 				} catch (IllegalArgumentException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+
 				}
 			}
 			for(TypesRanking ranking : mainThread.getInstance().getData().getRanking().values()) {
@@ -444,8 +426,7 @@ public class ConnectionClient {
 			r = new Query(Query.removeTeam(idEquipe),typeRequete.QUERY);
 			DatabaseAccess.getInstance().getData(r);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
 		}
 
 
@@ -461,7 +442,7 @@ public class ConnectionClient {
 			try {
 				ImageIO.write(player.getImage().getImage(), "png", os);
 			} catch (IOException e) {
-				e.printStackTrace();
+
 			}
 			InputStream is = new ByteArrayInputStream(os.toByteArray());
 			r.setInputStream(is);
@@ -471,8 +452,7 @@ public class ConnectionClient {
 					System.out.println("Error on insert");
 				}
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+
 			}
 		}
 		mainThread.getInstance().getData().getStables().get(team.getStable().getId()).getTeams().put(team.getId(), team);
@@ -492,8 +472,7 @@ public class ConnectionClient {
 			}
 			mainThread.getInstance().deleteData(TypesID.TOURNAMENT, new TypesInteger(t));
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
 		}
 	}
 
@@ -556,7 +535,8 @@ public class ConnectionClient {
 			mainThread.getInstance().miseAJourData(m);
 	
 		} catch (InterruptedException | SQLException e) {
-			e.printStackTrace();
+
+			Thread.currentThread().interrupt();
 			error("Vous etes deja inscrit");
 		}
 	}
@@ -602,8 +582,7 @@ public class ConnectionClient {
 	
 	
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
 		}
 	
 	}
@@ -677,9 +656,11 @@ public class ConnectionClient {
 				ResponseObject r = new ResponseObject(Response.LOGIN, m, null);
 				send(r);
 				setIsLogin(true);
-			} catch (Exception e) {
-				e.printStackTrace();
+			} catch (SQLException e) {
+
 				ErrorLogin();
+			} catch (IOException e) {
+
 			}
 	
 	

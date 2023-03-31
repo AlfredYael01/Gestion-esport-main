@@ -36,7 +36,6 @@ public class ControlerModifyPlayer extends MasterControler implements ActionList
 			birthDate = Timestamp.valueOf(mp.getTxtBirthDate().getText() + " 00:00:00");
 			contractEndDate = Timestamp.valueOf(mp.getTxtEndContractDate().getText() + " 00:00:00");
 			} catch (IllegalArgumentException e1){
-				e1.printStackTrace();
 			}
 			
 
@@ -86,25 +85,25 @@ public class ControlerModifyPlayer extends MasterControler implements ActionList
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 

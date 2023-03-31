@@ -93,15 +93,12 @@ public class ErrorPanel extends JPanel {
 								instance.wait();
 								System.out.println("Thread error Wake up");
 							} catch (InterruptedException e1) {
-								e1.printStackTrace();
 								Thread.currentThread().interrupt();
 							}
 						} else {
 							try {
 								instance.wait();
 							} catch (InterruptedException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
 								Thread.currentThread().interrupt();
 							}
 

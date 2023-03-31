@@ -70,7 +70,6 @@ public class mainThread {
 				//Stop all client
 
 			} catch (InterruptedException e) {
-				e.printStackTrace();
 				Thread.currentThread().interrupt();
 			} finally {
 				netty.shutdownGracefully();//Stop server
@@ -86,7 +85,6 @@ public class mainThread {
 					try {
 						c.getChannel().close().sync();
 					} catch (Exception e) {
-						e.printStackTrace();
 					}
 				}
 				
@@ -95,12 +93,11 @@ public class mainThread {
 
 			
 		} catch (IOException e) {
-			e.printStackTrace();
+
 		} catch (SQLException e1) {
-			e1.printStackTrace();
+
 		} catch (InterruptedException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
+
 			Thread.currentThread().interrupt();
 		}
 	}
@@ -253,7 +250,7 @@ public class mainThread {
 			}
 			return stableAndScore;
 		} catch (SQLException e) {
-			e.printStackTrace();
+
 			return new ConcurrentHashMap<>();
 		}
 	}

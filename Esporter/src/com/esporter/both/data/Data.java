@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -57,7 +57,7 @@ public class Data implements Serializable, Types {
 		this.stables = stables;
 	}
 	
-	public ArrayList<TypesStable> listStables() {
+	public List<TypesStable> listStables() {
 		Collection<TypesStable> values;
 		synchronized (this) {
 			values = this.stables.values();
@@ -67,7 +67,7 @@ public class Data implements Serializable, Types {
 		return listOfValues;
 	}
 	
-	public ArrayList<TypesTournament> listSortedTournaments() {
+	public List<TypesTournament> listSortedTournaments() {
 		Collection<TypesTournament> values;
 		synchronized (this) {
 			values = this.calendar.values();
@@ -77,9 +77,9 @@ public class Data implements Serializable, Types {
 		return listOfTournamentInfo;
 	}
 	
-	public ArrayList<TypesTournament> listFilteredTournament(Timestamp date, TypesGame game) {
+	public List<TypesTournament> listFilteredTournament(Timestamp date, TypesGame game) {
 		
-		ArrayList<TypesTournament>  listOfTournamentInfo = listSortedTournaments();
+		List<TypesTournament>  listOfTournamentInfo = listSortedTournaments();
 		ArrayList<TypesTournament> sortedFiltered = new ArrayList<>();
 		if (date!=null && game!=null) {
 			for (TypesTournament tournament : listOfTournamentInfo) {
@@ -87,13 +87,13 @@ public class Data implements Serializable, Types {
 					sortedFiltered.add(tournament);
 				}
 			}
-		} else if (date!=null && game == null) {
+		} else if (date!=null) {
 			for (TypesTournament tournament : listOfTournamentInfo) {
 				if (tournament.getRegisterDate().compareTo(date)==0) {
 					sortedFiltered.add(tournament);
 				}
 			}
-		} else if (game!=null && date == null) {
+		} else if (game!=null) {
 			for (TypesTournament tournament : listOfTournamentInfo) {
 				if (tournament.getGame().compareTo(game)==0) {
 					sortedFiltered.add(tournament);

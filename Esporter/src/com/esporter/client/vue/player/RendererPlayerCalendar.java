@@ -122,8 +122,7 @@ public class RendererPlayerCalendar extends DataJPanel implements RendererCalend
 		try {
 			lblArrowIcon.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("../images/Chevron.png"))));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
 		}
 		
 		lblArrowIcon.setVisible(false);

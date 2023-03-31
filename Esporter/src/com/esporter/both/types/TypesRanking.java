@@ -74,7 +74,7 @@ public class TypesRanking implements Types, Serializable{
 		int previousRank =0;
 		for (TypesStable e : list) {
 			if (ranking.get(previousRank) != null) {
-				if (stables.get(e.getId()) == stables.get(ranking.get(previousRank).get(0).getId())) {
+				if (stables.get(e.getId()).equals(stables.get(ranking.get(previousRank).get(0).getId()))) {
 					ranking.get(previousRank).add(e);
 				} else {
 					ranking.put(rank, new ArrayList<>());
